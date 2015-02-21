@@ -14,6 +14,7 @@ Author: Kyle Moy, 2/19/15
 
 // Module Libraries
 #include "SM_Racing.h"
+#include "Display.h"
 
 
 /*----------------------------- Module Defines ----------------------------*/
@@ -220,7 +221,7 @@ static ES_Event DuringStraight1(ES_Event Event) {
 	ES_Event ReturnEvent = Event; // Assume no re-mapping or consumption
 	// Process ES_ENTRY, ES_ENTRY_HISTORY & ES_EXIT events
 	if ((Event.EventType == ES_ENTRY) || (Event.EventType == ES_ENTRY_HISTORY)) {
-		printf("\r\n		(3) SM_Racing: STRAIGHT1\r\n");
+		if(DisplayEntryStateTransitions && DisplaySM_Racing) printf("SM3_Racing: STRAIGHT1\r\n");
 	} else if ( Event.EventType == ES_EXIT ) {
 		
 	} else {
@@ -233,7 +234,7 @@ static ES_Event DuringCorner1(ES_Event Event) {
 	ES_Event ReturnEvent = Event; // Assume no re-mapping or consumption
 	// Process ES_ENTRY, ES_ENTRY_HISTORY & ES_EXIT events
 	if ((Event.EventType == ES_ENTRY) || (Event.EventType == ES_ENTRY_HISTORY)) {
-		printf("\r\n		(3) SM_Racing: CORNER1\r\n");
+		if(DisplayEntryStateTransitions && DisplaySM_Racing) printf("SM3_Racing: CORNER1\r\n");
 	} else if ( Event.EventType == ES_EXIT ) {
 		
 	} else {
@@ -246,7 +247,7 @@ static ES_Event DuringStraight2(ES_Event Event) {
 	ES_Event ReturnEvent = Event; // Assume no re-mapping or consumption
 	// Process ES_ENTRY, ES_ENTRY_HISTORY & ES_EXIT events
 	if ((Event.EventType == ES_ENTRY) || (Event.EventType == ES_ENTRY_HISTORY)) {
-		printf("\r\n		(3) SM_Racing: STRAIGHT2\r\n");
+		if(DisplayEntryStateTransitions && DisplaySM_Racing) printf("SM3_Racing: STRAIGHT2\r\n");
 	} else if ( Event.EventType == ES_EXIT ) {
 		
 	} else {
@@ -259,7 +260,7 @@ static ES_Event DuringCorner2(ES_Event Event) {
 	ES_Event ReturnEvent = Event; // Assume no re-mapping or consumption
 	// Process ES_ENTRY, ES_ENTRY_HISTORY & ES_EXIT events
 	if ((Event.EventType == ES_ENTRY) || (Event.EventType == ES_ENTRY_HISTORY)) {
-		printf("\r\n		(3) SM_Racing: CORNER2\r\n");
+		if(DisplayEntryStateTransitions && DisplaySM_Racing) printf("SM3_Racing: CORNER2\r\n");
 	} else if ( Event.EventType == ES_EXIT ) {
 		
 	} else {
@@ -272,7 +273,7 @@ static ES_Event DuringStraight3(ES_Event Event) {
 	ES_Event ReturnEvent = Event; // Assume no re-mapping or consumption
 	// Process ES_ENTRY, ES_ENTRY_HISTORY & ES_EXIT events
 	if ((Event.EventType == ES_ENTRY) || (Event.EventType == ES_ENTRY_HISTORY)) {
-		printf("\r\n		(3) SM_Racing: STRAIGHT3\r\n");
+		if(DisplayEntryStateTransitions && DisplaySM_Racing) printf("SM3_Racing: STRAIGHT3\r\n");
 	} else if ( Event.EventType == ES_EXIT ) {
 		
 	} else {
@@ -285,7 +286,7 @@ static ES_Event DuringCorner3(ES_Event Event) {
 	ES_Event ReturnEvent = Event; // Assume no re-mapping or consumption
 	// Process ES_ENTRY, ES_ENTRY_HISTORY & ES_EXIT events
 	if ((Event.EventType == ES_ENTRY) || (Event.EventType == ES_ENTRY_HISTORY)) {
-		printf("\r\n		(3) SM_Racing: CORNER3\r\n");
+		if(DisplayEntryStateTransitions && DisplaySM_Racing) printf("SM3_Racing: CORNER3\r\n");
 	} else if ( Event.EventType == ES_EXIT ) {
 		
 	} else {
@@ -298,7 +299,7 @@ static ES_Event DuringStraight4(ES_Event Event) {
 	ES_Event ReturnEvent = Event; // Assume no re-mapping or consumption
 	// Process ES_ENTRY, ES_ENTRY_HISTORY & ES_EXIT events
 	if ((Event.EventType == ES_ENTRY) || (Event.EventType == ES_ENTRY_HISTORY)) {
-		printf("\r\n		(3) SM_Racing: STRAIGHT4\r\n");
+		if(DisplayEntryStateTransitions && DisplaySM_Racing) printf("SM_Racing3: STRAIGHT4\r\n");
 	} else if ( Event.EventType == ES_EXIT ) {
 		
 	} else {
@@ -311,7 +312,7 @@ static ES_Event DuringCorner4(ES_Event Event) {
 	ES_Event ReturnEvent = Event; // Assume no re-mapping or consumption
 	// Process ES_ENTRY, ES_ENTRY_HISTORY & ES_EXIT events
 	if ((Event.EventType == ES_ENTRY) || (Event.EventType == ES_ENTRY_HISTORY)) {
-		printf("\r\n		(3) SM_Racing: CORNER4\r\n");
+		if(DisplayEntryStateTransitions && DisplaySM_Racing) printf("SM3_Racing: CORNER4\r\n");
 	} else if ( Event.EventType == ES_EXIT ) {
 		
 	} else {

@@ -7,7 +7,7 @@ Description:
 Author: Kyle Moy, 2/18/15
 ****************************************************************************/
 
-//#define TEST	// For using the test harness
+//#define TEST
 
 
 /*----------------------------- Include Files -----------------------------*/
@@ -38,19 +38,50 @@ Author: Kyle Moy, 2/18/15
 // Module Libraries
 #include "DRS.h"
 #include "SM_DRS.h"
+#include "Display.h"
 
 /*----------------------------- Module Defines ----------------------------*/
 #define BitsPerNibble 	4
 #define TicksPerMS 		40000
 #define ALL_BITS 		(0xFF<<2)
 
+// Query Game Status - DRS Response Byte Masks
+#define LAPS_REMAINING_MASK		0x07	// Bits 0-2
+#define FLAG_STATUS_MASK			0x18	// Bits 3-4
+#define OBSTACLE_STATUS_MASK	0x40	// Bit 6
+#define TARGET_STATUS_MASK		0x80	// Bit 7
+
+// Query Game Status - DRS Response Byte Values
+#define WAITING_FOR_START 	0x00	// 0x00 on Bits 3-4
+#define FLAG_DROPPED				0x08	// 0x01 on Bits 3-4
+#define CAUTION_FLAG				0x10	// 0x02 on Bits 3-4
+#define RACE_OVER						0x18	// 0x03 on Bits 3-4
+#define OBSTACLE_COMPLETED	0x40	// 1 on Bit 6
+#define TARGET_SUCCESSFUL		0x80	// 1 on Bit 7
+#define INVALID_READ 				0xFF
+
 
 /*---------------------------- Module Functions ---------------------------*/
 
 
 /*---------------------------- Module Variables ---------------------------*/
+// The current query being processed;
+uint8_t CurrentQuery;
+
 // An 8-byte array to store the SPI data
 static uint8_t DRS_Data[8] =  {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+
+// Initializes the data structures for the KART data
+//		uint16_t 	KartX;
+//		uint16_t 	KartY;
+//		int16_t 	KartTheta;
+//		uint8_t		LapsRemaining;
+//		bool		ObstacleCompleted;
+//		bool		TargetSuccess;
+//		Flag_t	FlagStatus;
+Kart_t Kart1 = {0, 0, 0, 0, false, false, Flag_Waiting};
+Kart_t Kart2 = {0, 0, 0, 0, false, false, Flag_Waiting};
+Kart_t Kart3 = {0, 0, 0, 0, false, false, Flag_Waiting};
 
 /*------------------------------ Module Code ------------------------------*/
 /****************************************************************************
@@ -58,10 +89,10 @@ Function: 		DRS_Initialize
 Parameters: 	void
 Returns:			void
 Description:	Initializes the DRS SSI on Tiva Pins A2-A5
-				A2: SSI Module 0 Clock (SCK)
-				A3: SSI Module 0 Frame Signal (SS)
-				A4: SSI Module 0 Receive (SDI)
-				A5: SSI Module 0 Transmit (SDO)
+				A2: SSI Module 0 Clock (SCK), output
+				A3: SSI Module 0 Frame Signal (SS), output
+				A4: SSI Module 0 Transmit (SDO), input
+				A5: SSI Module 0 Receive (SDI), output
 ****************************************************************************/
 void DRS_Initialize(void) {
 		// Enable clock to GPIO Port A
@@ -97,14 +128,14 @@ void DRS_Initialize(void) {
     // Configure the SSI clock source to the system clock
     HWREG(SSI0_BASE + SSI_O_CC) |= SSI_CC_CS_SYSPLL;
     // Configure the clock pre-scaler
-    HWREG(SSI0_BASE + SSI_O_CPSR) |= 0x08;
-    // Configure the clock rate (SCR) for 33 microsecond Bit Rate
-		// Bit Rate = SYSCLK / (CPDVSR*(1+SCR)), SYSCLK = 40MHz, CPDVSR = 8 => SCR = 164
-    HWREG(SSI0_BASE + SSI_O_CR0) |= 164<<8;
+    HWREG(SSI0_BASE + SSI_O_CPSR) |= 0x10;
+    // Configure the clock rate (SCR) for 66us period (33us SCK high, 33us SCK low)
+		// Bit Rate = SYSCLK / (CPDVSR*(1+SCR)), SYSCLK = 40MHz, CPDVSR = 16 => SCR = 164
+    HWREG(SSI0_BASE + SSI_O_CR0) |=  164<<8;
     // Configure the phase & polarity (SPH, SPO), mode (FRF), data size (DSS)
     HWREG(SSI0_BASE + SSI_O_CR0) |= (SSI_CR0_SPH | SSI_CR0_SPO | SSI_CR0_FRF_MOTO | SSI_CR0_DSS_8);
     // Locally enable interrupts on TXRIS
-    HWREG(SSI0_BASE + SSI_O_IM) |= SSI_IM_EOTIM;
+    HWREG(SSI0_BASE + SSI_O_IM) |= SSI_RIS_TXRIS;
     // Make sure the SSI is enabled for operation
     HWREG(SSI0_BASE + SSI_O_CR1) |= SSI_CR1_SSE;
 		// Enable the SSI0 interrupt in the NVIC
@@ -125,6 +156,9 @@ Description:	End of Transfer (EOT) interrupt response handler
 							Posts a new DRS_Read event to the DRS state machine
 ****************************************************************************/
 void DRS_EOTIntHandler(void) {
+	// Clear the source of the interrupt
+	HWREG(SSI0_BASE+SSI_O_ICR) = SSI_ICR_RORIC;
+	
 	// Check that SPI is not transmitting before reading the receive register
 	if ((HWREG(SSI0_BASE + SSI_O_SR) & SSI_SR_BSY) != SSI_SR_BSY) {
 		// Read the 8 bytes into SPI_Data
@@ -132,6 +166,18 @@ void DRS_EOTIntHandler(void) {
 			DRS_Data[i] = HWREG(SSI0_BASE + SSI_O_DR);
 		}
 	}
+	if (DRS_ConsoleDisplay)
+			printf("DRS_Data = 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x\r\n", \
+				DRS_Data[0], DRS_Data[1], DRS_Data[2], DRS_Data[3], DRS_Data[4], DRS_Data[5], DRS_Data[6], DRS_Data[7]);
+	
+	// We'll only process this information in the test harness
+	// In the actual implentation, DRS_StoreData will be called in the SM
+	#ifdef TEST
+	printf("DRS_Data = 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x\r\n", \
+		DRS_Data[0], DRS_Data[1], DRS_Data[2], DRS_Data[3], DRS_Data[4], DRS_Data[5], DRS_Data[6], DRS_Data[7]);
+	DRS_StoreData();
+	PrintKartData();
+	#endif
  	// Post NewRead event to DRS
  	ES_Event Event = {E_DRS_EOT};
  	PostDRS_SM(Event);
@@ -147,16 +193,20 @@ Returns:			bool, true if query was successfully sent, false if not
 Description:	Query the DRS with the CurrentQuery
 ****************************************************************************/
 bool DRS_SendQuery(uint8_t Query) {	
+	// Set the module variable
+	CurrentQuery = Query;
+	
 	// Check if the data output FIFO queue is empty
 	if((HWREG(SSI0_BASE + SSI_O_SR) & SSI_SR_TFE) == SSI_SR_TFE) {
+		// Unmask the SSI transmit interrupt (SSI_IM_TXIM) to enable EOT interrupt 
+		HWREG(SSI0_BASE + SSI_O_IM) |= SSI_IM_TXIM;
+		
 		// Write query byte to the data output register
 		HWREG(SSI0_BASE + SSI_O_DR) = Query;
 		// Write 0x00 to the data output register 7 times
 		for (int i = 1; i < 8; i++) {
 			HWREG(SSI0_BASE + SSI_O_DR) = 0x00;
 		}	
-		// Unmask the SSI transmit interrupt (SSI_IM_TXIM) to enable EOT interrupt 
-		HWREG(SSI0_BASE + SSI_O_IM) |= SSI_IM_TXIM;
 		return true;
 	}
 	return false;
@@ -164,40 +214,176 @@ bool DRS_SendQuery(uint8_t Query) {
 
 
 /****************************************************************************
-Function:		DRS_PrintData
+Function:			DRS_StoreData
 Parameters:		none
-Returns:		bool true if successful
-Description:	Retrives the data from RS_Data based on the current query.
+Returns:			bool true if successful
+Description:	Stores the DRS_Data to the appropriate Kart variable
 ****************************************************************************/
-void DRS_PrintData(void) {
-	printf("DRS_Data: %#02x %#02x %#02x %#02x %#02x %#02x %#02x %#02x\r\n", \
-		DRS_Data[0], DRS_Data[1], DRS_Data[2], DRS_Data[3], DRS_Data[4], DRS_Data[5], DRS_Data[6], DRS_Data[7]);
+bool DRS_StoreData(void) {
+	// Pointer to the Kart struct that will be updated
+	Kart_t *Kart;
+	
+	// Check if the current query is a GAME_STATUS_QUERY
+	if (CurrentQuery == GAME_STATUS_QUERY) {
+		// Process SS1 (match status for Kart1), Response Byte 3
+		// Process SS2 (match status for Kart2), Response Byte 4
+		// Process SS3 (match status for Kart3), Response Byte 5
+		for (int byte = 3; byte <= 5; byte++) {
+			// Set the Kart to update
+			switch (byte) {
+				case 3: Kart = &Kart1; break;
+				case 4: Kart = &Kart2; break;
+				case 5: Kart = &Kart3; break;
+			}
+			// Record the game status data to the Kart
+			Kart->LapsRemaining = DRS_Data[byte] & LAPS_REMAINING_MASK;
+			switch (DRS_Data[byte] & FLAG_STATUS_MASK) {
+				case WAITING_FOR_START:
+					Kart->FlagStatus = Flag_Waiting; break;
+				case FLAG_DROPPED:
+					Kart->FlagStatus = Flag_Dropped; break;
+				case CAUTION_FLAG:
+					Kart->FlagStatus = Flag_Caution; break;
+				case RACE_OVER:
+					Kart->FlagStatus = Flag_Finished; break;
+			}
+			Kart->ObstacleCompleted = DRS_Data[byte] & OBSTACLE_STATUS_MASK;
+			Kart->TargetSuccess = DRS_Data[byte] & TARGET_STATUS_MASK;
+		}
+		
+	// If not a GAME_STATUS_QUERY, then current query must be a KART_QUERY
+	} else {
+		// Set the Kart to update
+		switch (CurrentQuery) {
+			case KART1_QUERY: Kart = &Kart1; break;
+			case KART2_QUERY: Kart = &Kart2; break;
+			case KART3_QUERY: Kart = &Kart3; break;
+		}
+		// Record the Kart data
+		Kart->KartX = DRS_Data[2]<<8 | DRS_Data[3]; // PXm (Byte 2) | PXl (Byte 3)
+		Kart->KartY = DRS_Data[4]<<8 | DRS_Data[5]; // PYm (Byte 4) | PYl (Byte 5)
+		Kart->KartTheta = DRS_Data[6]<<8 | DRS_Data[7]; // Om (Byte 6) | Ol (Byte 7)
+	}
+	return true;
 }
 
 
-/*------------------------- Private Function Code -------------------------*/
+/****************************************************************************
+Function: 		GetKartData
+Parameters:		uint8_t KartNumber, the Kart number to get
+Returns:			Kart_t, the Kart_t struct of the KartNumber
+Description:	Returns the struct data for a Kart:
+					uint16_t 	KartX;
+					uint16_t 	KartY;
+					uint16_t 	KartTheta;
+					uint8_t		LapsRemaining;
+					bool		ObstacleCompleted;
+					bool		TargetSuccess;
+					Flag_t	FlagStatus;
+****************************************************************************/
+Kart_t GetKartData(uint8_t KartNumber) {
+	switch (KartNumber) {
+		case 1:
+			return Kart1;
+		case 2:
+			return Kart2;
+		case 3:
+		default:
+			return Kart3;
+	}
+}
+
+/****************************************************************************
+Function:			PrintKartData
+Parameters:		void
+Returns:			void
+Description:	Prints the Kart data to console
+****************************************************************************/
+void PrintKartData(void) {
+	Kart_t Kart;
+	for (uint8_t KartNumber = 1; KartNumber <= 3; KartNumber++) {
+		printf("\r\nKart %d Data\r\n", KartNumber);
+		switch (KartNumber) {
+			case 1:
+				Kart = Kart1; break;
+			case 2:
+				Kart = Kart2; break;
+			case 3:
+			default:
+				Kart = Kart3; break;
+		}
+		printf("X Position = %d\r\n", Kart.KartX);
+		printf("Y Position = %d\r\n", Kart.KartY);
+		printf("Orientation = %d\r\n", Kart.KartTheta);
+		printf("Laps Remaining = %d\r\n", Kart.LapsRemaining);
+		printf("Flag Status = ");
+		switch (Kart.FlagStatus) {
+			case Flag_Waiting: printf("Flag_Waiting\r\n"); break;
+			case Flag_Dropped: printf("Flag_Dropped\r\n"); break;
+			case Flag_Caution: printf("Flag_Caution\r\n"); break;
+			case Flag_Finished: printf("Flag_Finished\r\n"); break;
+		}
+		printf("Obstacle Complete = %s\r\n", Kart.ObstacleCompleted ? "true" : "false");
+		printf("Target Success = %s\r\n", Kart.TargetSuccess ? "true" : "false");
+	}
+}
+
+/****************************************************************************
+Function:			PrintKartDataTableFormat
+Parameters:		void
+Returns:			void
+Description:	Prints the Kart data to console
+****************************************************************************/
+void PrintKartDataTableFormat(void) {
+	printf("\r\n| Kart # |  X  |  Y  | Theta | Laps Left | Flag Status | Obstacle | Target |\r\n");
+	printf("|--------|-----|-----|-------|-----------|-------------|----------|--------|\r\n");
+	Kart_t Kart;
+	for (uint8_t KartNumber = 1; KartNumber <= 3; KartNumber++) {
+		switch (KartNumber) {
+		case 1:
+			Kart = Kart1; break;
+		case 2:
+			Kart = Kart2; break;
+		case 3:
+		default:
+			Kart = Kart3; break;
+		}
+		printf("| Kart %d |", KartNumber);
+		printf(" %3d |", Kart.KartX);
+		printf(" %3d |", Kart.KartY);
+		printf(" %5d |", Kart.KartTheta);
+		printf("     %d     |", Kart.LapsRemaining);
+		switch (Kart.FlagStatus) {
+			case Flag_Waiting: printf(" %10s  |", "Waiting"); break;
+			case Flag_Dropped: printf(" %10s  |", "Dropped"); break;
+			case Flag_Caution: printf(" %10s  |", "Caution"); break;
+			case Flag_Finished: printf(" %10s  |", "Finished"); break;
+		}
+		printf("  %5s   |", Kart.ObstacleCompleted ? "True" : "False");
+		printf(" %5s  |\r\n", Kart.TargetSuccess ? "True" : "False");
+	}
+}
 
 /*------------------------------ Test Harness -----------------------------*/
 #ifdef TEST 
-
-/* Test Harness Includes / Defines */ 
 #include "termio.h" 
-#define clrScrn() 	printf("\x1b[2J")
-#define goHome()	printf("\x1b[1,1H")
-#define clrLine()	printf("\x1b[K")
-
 /* Test Harness for the DRS SPI Module */ 
 int main(void) 
 { 
 	_HW_Timer_Init(ES_Timer_RATE_1mS);
 	TERMIO_Init();
 	clrScrn();
-	printf("In Test Harness for the DRS SPI Module\n\r");
+	printf("In Test Harness for the DRS Module\n\r");
 	DRS_Initialize();
 	uint8_t Query = GAME_STATUS_QUERY;
-	printf("Query: %#02x\n\r", Query);
+	printf("Query = 0x%02x ", Query);
+	switch(Query) {
+		case GAME_STATUS_QUERY: printf("(GAME_STATUS_QUERY)\r\n"); break;
+		case KART1_QUERY: printf("(KART1_QUERY)\r\n"); break;
+		case KART2_QUERY: printf("(KART2_QUERY)\r\n"); break;
+		case KART3_QUERY: printf("(KART3_QUERY)\r\n"); break;
+	}
 	DRS_SendQuery(Query);
-	
 	return 0; 
 } 
 #endif 

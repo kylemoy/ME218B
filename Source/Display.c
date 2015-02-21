@@ -29,6 +29,7 @@ Description:	Updates the console with the robot's state information
 ****************************************************************************/
 void UpdateDisplay(void) {
 	clrScrn();
+	// Right now, not using this function yet
 }
 
 /****************************************************************************

@@ -22,22 +22,22 @@ Author: Kyle Moy, 2/16/15
 // Module Libraries
 #include "DRS.h"
 #include "SM_DRS.h"
+#include "Display.h"
 
 
 /*----------------------------- Module Defines ----------------------------*/
 // Interval between two successive transfers, should be at least 2ms
 // Keep it under 10ms since DRS updates at 100Hz
 // But want it as fast as possible so data from the four queries is updated
-#define COMMAND_INTERVAL 3	*	100 // For debugging, * 100
+#define COMMAND_INTERVAL 3 * 10 // For debugging, * 100
 
 // If a command takes longer than this duration, then something is probably wrong
 // We'll timeout and go back to the waiting state
-#define COMMAND_TIMEOUT 50	*	100 // For debugging, * 100
+#define COMMAND_TIMEOUT 50 * 10  // For debugging, * 100
 
 
 /*---------------------------- Module Functions ---------------------------*/
 static uint8_t GetNextQuery(void);
-static bool StoreData(void);
 static ES_Event DuringWaitingForQuery(ES_Event Event);
 static ES_Event DuringQuerying(ES_Event Event);
 static ES_Event DuringReading(ES_Event Event);
@@ -50,10 +50,7 @@ static DRSState_t CurrentState;
 static uint8_t CurrentQuery;	// Keep track of the current query
 static uint8_t LastQuery;		// Save the last query in case of transfer failure
 
-static uint8_t MyKart;	 // Our Kart number
-static KART_t Kart1;		 // Data for Kart1
-static KART_t Kart2;		 // Data for Kart2
-static KART_t Kart3;		 // Data for Kart3
+//static uint8_t MyKart;	// Our Kart number, initialized in InitDRS_SM function
 
 
 /*------------------------------ Module Code ------------------------------*/
@@ -70,7 +67,7 @@ bool InitDRS_SM (uint8_t Priority) {
 	DRS_Initialize();
 	// Initialize the Kart Number switch hardware
 	// For now, assume we are Kart1
-	MyKart = 1;
+	//MyKart = 1;
 	// Set the CurrentState to WaitingForQuery
 	CurrentState = WAITING_FOR_QUERY;
 	// Now let the Run function initialize the state machine
@@ -128,17 +125,26 @@ ES_Event RunDRS_SM (ES_Event CurrentEvent) {
 					case E_NEW_DRS_QUERY: 
 						// Get the next query to send
 						CurrentQuery = GetNextQuery();
-						printf("Current Query = %#02x\r\n", CurrentQuery);
+						if (DRS_ConsoleDisplay) clrScrn();
+						if (DisplaySM_DRS || DRS_ConsoleDisplay) {
+							printf("Query = %#02x ", CurrentQuery);
+							switch(CurrentQuery) {
+								case GAME_STATUS_QUERY: printf("(GAME_STATUS_QUERY)\r\n"); break;
+								case KART1_QUERY: printf("(KART1_QUERY)\r\n"); break;
+								case KART2_QUERY: printf("(KART2_QUERY)\r\n"); break;
+								case KART3_QUERY: printf("(KART3_QUERY)\r\n"); break;
+							}
+						}
 						if(DRS_SendQuery(CurrentQuery)) {
 							// Query was successful, transition to READING
-							printf("DRS query successful\r\n");
+							if (DisplaySM_DRS) printf("DRS query successful\r\n");
 							NextState = READING;
 							MakeTransition = true;
 						}
 						else
 						{
 							// Query was unsuccessful, transition back to WAITING_FOR_QUERY
-							printf("DRS query unsuccessful\r\n");
+							if (DisplaySM_DRS) printf("DRS query unsuccessful\r\n");
 							CurrentQuery = LastQuery;
 							NextState = WAITING_FOR_QUERY;
 							MakeTransition = true;
@@ -147,7 +153,7 @@ ES_Event RunDRS_SM (ES_Event CurrentEvent) {
 						
 					case ES_TIMEOUT : 
 						// No EOT interrupt was received and we timed out, so let's start over
-						printf("ES_TIMEOUT during QUERYING\r\n");
+						if (DisplaySM_DRS) printf("ES_TIMEOUT during QUERYING\r\n");
 						NextState = WAITING_FOR_QUERY;
 						MakeTransition = true;
 						// Reset current query to last successful query
@@ -165,7 +171,8 @@ ES_Event RunDRS_SM (ES_Event CurrentEvent) {
 				switch (CurrentEvent.EventType) {
 					// EOT interrupt occured
 					case E_DRS_EOT:
-						if(StoreData()) {
+						if(DRS_StoreData()) {
+							if (DRS_ConsoleDisplay) PrintKartDataTableFormat();
 							// Data was successfully stored, transitioning to WAITING_FOR_QUERY
 							NextState = WAITING_FOR_QUERY;
 							MakeTransition = true;
@@ -180,7 +187,7 @@ ES_Event RunDRS_SM (ES_Event CurrentEvent) {
 						
 					case ES_TIMEOUT : 
 						// No EOT interrupt was received and we timed out, so let's start over
-						printf("ES_TIMEOUT during READING\r\n");
+						if (DisplaySM_DRS) printf("ES_TIMEOUT during READING\r\n");
 						NextState = WAITING_FOR_QUERY;
 						MakeTransition = true;
 						// Reset current query to last successful query
@@ -219,30 +226,6 @@ DRSState_t QueryDRS_SM(void) {
 	return CurrentState;
 }
 
-/****************************************************************************
-Function: 		GetMyKartData
-Parameters:		none
-Returns:			KART_t, the data for our Kart
-Description:	Returns the struct data for our Kart:
-					uint16_t 	KartX;
-					uint16_t 	KartY;
-					uint16_t 	KartTheta;
-					uint8_t		LapsRemaining;
-					bool		ObstacleCompleted;
-					bool		TargetSuccess;
-					Flag_t	FlagStatus;
-****************************************************************************/
-KART_t GetMyKartData(void) {
-	switch (MyKart) {
-		default:
-		case 1:
-			return Kart1;
-		case 2:
-			return Kart2;
-		case 3:
-			return Kart3;
-	}
-}
 
 /*------------------------- Private Function Code -------------------------*/
 /****************************************************************************
@@ -260,30 +243,17 @@ static uint8_t GetNextQuery(void) {
 			NextQuery = KART1_QUERY;
 			break;
 		case KART1_QUERY : 	
-			NextQuery = GAME_STATUS_QUERY;
-			break;
-		case KART2_QUERY :				
 			NextQuery = KART2_QUERY;
 			break;
-		case KART3_QUERY : 	
+		case KART2_QUERY :				
 			NextQuery = KART3_QUERY;
+			break;
+		case KART3_QUERY : 	
+			NextQuery = GAME_STATUS_QUERY;
 			break;
 		default : NextQuery = GAME_STATUS_QUERY;
 	}
 	return NextQuery;
-}
-
-
-/****************************************************************************
-Function:			StoreData
-Parameters:		none
-Returns:			bool, true if the data was valid, false if data was invalid (0xFF)
-Description:	Stores the data from the DRS read into the appropriate data struct.
-****************************************************************************/
-static bool StoreData(void) {
-	DRS_PrintData();
-	bool ReturnVal = true;
-	return ReturnVal;
 }
 
 
@@ -296,7 +266,7 @@ Description:	Processes the events for this state, assume no consumption
 static ES_Event DuringWaitingForQuery(ES_Event Event) {
 	// process ES_ENTRY & ES_EXIT events
 	if (Event.EventType == ES_ENTRY) {
-		printf("\r\n(1) SM_DRS: WAITING_FOR_QUERY\r\n");
+		if (DisplayEntryStateTransitions && DisplaySM_DRS) printf("SM1_DRS: WAITING_FOR_QUERY\r\n");
 		// Start a timer to create a time interval between commands
 		ES_Timer_InitTimer(DRS_TIMER, COMMAND_INTERVAL);
 	} else if (Event.EventType == ES_EXIT) {
@@ -318,7 +288,7 @@ Description:	Processes the events for this state, assume no consumption
 static ES_Event DuringQuerying(ES_Event Event) {
 	// process ES_ENTRY & ES_EXIT events
 	if (Event.EventType == ES_ENTRY) {
-		printf("\r\n(1) SM_DRS: QUERYING\r\n");
+		if (DisplayEntryStateTransitions && DisplaySM_DRS) printf("SM1_DRS: QUERYING\r\n");
 		// Start a command timeout timer in case something goes wrong
 		ES_Timer_InitTimer(DRS_TIMER, COMMAND_TIMEOUT);
 	} else if (Event.EventType == ES_EXIT) {
@@ -338,7 +308,7 @@ Description:	Processes the events for this state, assume no consumption
 static ES_Event DuringReading(ES_Event Event) {
 	// process ES_ENTRY & ES_EXIT events
 	if (Event.EventType == ES_ENTRY) {
-		printf("\r\n(1) SM_DRS: READING\r\n");
+		if (DisplayEntryStateTransitions && DisplaySM_DRS) printf("SM1_DRS: READING\r\n");
 		// Start a command timeout timer in case something goes wrong
 		ES_Timer_InitTimer(DRS_TIMER, COMMAND_TIMEOUT);
 	} else if (Event.EventType == ES_EXIT) {

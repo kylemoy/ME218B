@@ -19,6 +19,7 @@ ES_Event RunMasterSM(ES_Event CurrentEvent);
 void StartMasterSM(ES_Event CurrentEvent);
 bool PostMasterSM(ES_Event ThisEvent);
 bool InitMasterSM(uint8_t Priority);
+MasterState_t QueryMasterSM(void);
 
 #endif /*SM_MASTER_H */
 

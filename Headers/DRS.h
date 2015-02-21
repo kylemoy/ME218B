@@ -19,25 +19,33 @@ Author: Kyle Moy, 2/18/15
 #define KART2_QUERY 				0x5A
 #define KART3_QUERY 				0x7E
 
-// Query Game Status - DRS Response Byte Masks
-#define LAPS_REMAINING_MASK		0x07	// Bits 0-2
-#define FLAG_STATUS_MASK			0x18	// Bits 3-4
-#define OBSTACLE_STATUS_MASK	0x40	// Bit 6
-#define TARGET_STATUS_MASK		0x80	// Bit 7
+// Flag type definitions
+typedef enum {
+	Flag_Waiting,
+	Flag_Dropped,
+	Flag_Caution,
+	Flag_Finished
+} Flag_t;
 
-// Query Game Status - DRS Response Byte Values
-#define WAITING_FOR_START 	0x00	// 0x00 on Bits 3-4
-#define FLAG_DROPPED				0x04	// 0x01 on Bits 3-4
-#define CAUTION_FLAG				0x08	// 0x02 on Bits 3-4
-#define RACE_OVER						0x09	// 0x03 on Bits 3-4
-#define OBSTACLE_COMPLETED	0x40	// 1 on Bit 6
-#define TARGET_SUCCESSFUL		0x80	// 1 on Bit 7
-#define INVALID_READ 				0xFF
+// Data structure for holding Kart information
+typedef struct {
+	uint16_t 	KartX;
+	uint16_t 	KartY;
+	int16_t 	KartTheta;
+	uint8_t		LapsRemaining;
+	bool		ObstacleCompleted;
+	bool		TargetSuccess;
+	Flag_t	FlagStatus;
+} Kart_t;
+
 
 /*----------------------- Public Function Prototypes ----------------------*/
 void DRS_Initialize(void);
 void DRS_EOTIntHandler(void);
 bool DRS_SendQuery(uint8_t Query);
-void DRS_PrintData(void);
+bool DRS_StoreData(void);
+Kart_t GetKartData(uint8_t KartNumber);
+void PrintKartData(void);
+void PrintKartDataTableFormat(void);
 
 #endif /* DRS_H */

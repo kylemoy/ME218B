@@ -14,6 +14,7 @@ Author: Kyle Moy, 2/18/15
 // Module Libraries
 #include "SM_Master.h"
 #include "SM_Playing.h"
+#include "Display.h"
 
 /*---------------------------- Module Functions ---------------------------*/
 static ES_Event DuringWaitingStart(ES_Event Event);
@@ -144,6 +145,17 @@ void StartMasterSM(ES_Event CurrentEvent) {
 }
 
 
+/****************************************************************************
+Function: 		QueryMasterSM
+Parameters: 	none
+Returns: 			MasterState_t, the current state of the Master state machine
+Description: 	Returns the current state of the Master state machine.
+****************************************************************************/
+MasterState_t QueryMasterSM(void) {
+	return CurrentState;
+}
+
+
 /*------------------------- Private Function Code -------------------------*/
 
 static ES_Event DuringWaitingStart(ES_Event Event) {
@@ -151,7 +163,7 @@ static ES_Event DuringWaitingStart(ES_Event Event) {
 	// Process ES_ENTRY, ES_ENTRY_HISTORY & ES_EXIT events
 	if ((Event.EventType == ES_ENTRY) || (Event.EventType == ES_ENTRY_HISTORY)) {
 		// Implement any entry actions required for this state machine
-		printf("\r\n(1) SM_Master: WAITING_START\r\n");
+		if(DisplayEntryStateTransitions && DisplaySM_Master) printf("SM1_Master: WAITING_START\r\n");
 		// after that start any lower level machines that run in this state
 		//StartLowerLevelSM( Event );
 		// repeat the StartxxxSM() functions for concurrent state machines
@@ -176,7 +188,7 @@ static ES_Event DuringPlaying(ES_Event Event) {
 	ES_Event ReturnEvent = Event; // Assume no re-mapping or consumption
 	// Process ES_ENTRY, ES_ENTRY_HISTORY & ES_EXIT events
 	if ((Event.EventType == ES_ENTRY) || (Event.EventType == ES_ENTRY_HISTORY)) {
-		printf("\r\n(1) SM_Master: PLAYING\r\n");
+		if(DisplayEntryStateTransitions && DisplaySM_Master) printf("SM1_Master: PLAYING\r\n");
 		StartPlayingSM(Event);
 	} else if (Event.EventType == ES_EXIT) {
 		
@@ -190,7 +202,7 @@ static ES_Event DuringWaitingFinish(ES_Event Event) {
 	ES_Event ReturnEvent = Event; // Assume no re-mapping or consumption
 	// Process ES_ENTRY, ES_ENTRY_HISTORY & ES_EXIT events
 	if ((Event.EventType == ES_ENTRY) || (Event.EventType == ES_ENTRY_HISTORY)) {
-		printf("\r\n(1) SM_Master: WAITING_FINISHED\r\n");
+		if(DisplayEntryStateTransitions && DisplaySM_Master) printf("SM1_Master: WAITING_FINISHED\r\n");
 	} else if (Event.EventType == ES_EXIT) {
 		
 	} else {

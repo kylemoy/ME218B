@@ -14,7 +14,7 @@ Author: Kyle Moy, 2/18/15
 // Module Libraries
 #include "SM_Playing.h"
 #include "SM_Racing.h"
-
+#include "Display.h"
 
 /*----------------------------- Module Defines ----------------------------*/
 #define ENTRY_STATE RACING
@@ -141,7 +141,7 @@ static ES_Event DuringRacing(ES_Event Event) {
 	// Process ES_ENTRY, ES_ENTRY_HISTORY & ES_EXIT events
 	if ((Event.EventType == ES_ENTRY) || (Event.EventType == ES_ENTRY_HISTORY)) {
 		// Implement any entry actions required for this state machine
-		printf("\r\n	(2) SM_Playing: RACING\r\n");
+		if(DisplayEntryStateTransitions && DisplaySM_Playing) printf("SM2_Playing: RACING\r\n");
 		// after that start any lower level machines that run in this state
 		StartRacingSM(Event);
 		// repeat the StartxxxSM() functions for concurrent state machines
@@ -166,7 +166,7 @@ static ES_Event DuringCrossingObstacle(ES_Event Event) {
 	ES_Event ReturnEvent = Event; // Assume no re-mapping or consumption
 	// Process ES_ENTRY, ES_ENTRY_HISTORY & ES_EXIT events
 	if ((Event.EventType == ES_ENTRY) || (Event.EventType == ES_ENTRY_HISTORY)) {
-		printf("\r\n	(2) SM_Playing: CROSSING_OBSTACLE\r\n");
+		if(DisplayEntryStateTransitions && DisplaySM_Playing) printf("SM2_Playing: CROSSING_OBSTACLE\r\n");
 	} else if ( Event.EventType == ES_EXIT ) {
 		
 	} else {
@@ -179,7 +179,7 @@ static ES_Event DuringBallLaunching(ES_Event Event) {
 	ES_Event ReturnEvent = Event; // Assume no re-mapping or consumption
 	// Process ES_ENTRY, ES_ENTRY_HISTORY & ES_EXIT events
 	if ((Event.EventType == ES_ENTRY) || (Event.EventType == ES_ENTRY_HISTORY)) {
-		printf("\r\n	(2) SM_Playing: BALL_LAUNCHING\r\n");
+		if(DisplayEntryStateTransitions && DisplaySM_Playing) printf("SM2_Playing: BALL_LAUNCHING\r\n");
 	} else if ( Event.EventType == ES_EXIT ) {
 		
 	} else {

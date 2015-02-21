@@ -11,6 +11,7 @@ Author: Kyle Moy, 2/18/15
 #include "ES_Framework.h"
 #include "MapKeys.h"
 #include "SM_Master.h"
+#include "Display.h"
 
 
 /*---------------------------- Module Variables ---------------------------*/
@@ -54,8 +55,8 @@ ES_Event RunMapKeys(ES_Event ThisEvent) {
 		switch (toupper(ThisEvent.EventParam)) {
 			
 			// (1) SM_Master Event Triggers
-			case 'Q': ThisEvent.EventType = E_RACE_STARTED; printf("E_RACE_STARTED\r\n"); break;
-			case 'W': ThisEvent.EventType = E_RACE_FINISHED; printf("E_RACE_FINISHED\r\n"); break;
+			case 'Q': ThisEvent.EventType = E_RACE_STARTED; break;
+			case 'W': ThisEvent.EventType = E_RACE_FINISHED; break;
 			
 			// (1)SM_Master->(2)SM_Playing Event Triggers
 			case 'A': ThisEvent.EventType = E_OBSTACLE_COMPLETED; break;
@@ -63,17 +64,19 @@ ES_Event RunMapKeys(ES_Event ThisEvent) {
 			
 			// (1)SM_Master->(2)SM_Playing->(3)SM_Racing Event Triggers
 			// Look at Keyboard Numpad for track layout
-			case '3': ThisEvent.EventType = E_CORNER1_ENTRY; printf("E_CORNER1_ENTRY\r\n"); break;
-			case '6': ThisEvent.EventType = E_CORNER1_EXIT; printf("E_CORNER1_EXIT\r\n"); break;
-			case '9': ThisEvent.EventType = E_CORNER2_ENTRY; printf("E_CORNER2_ENTRY\r\n"); break;
-			case '8': ThisEvent.EventType = E_CORNER2_EXIT; printf("E_CORNER2_EXIT\r\n"); break;
-			case '7': ThisEvent.EventType = E_CORNER3_ENTRY; printf("E_CORNER3_ENTRY\r\n"); break;
-			case '4': ThisEvent.EventType = E_CORNER3_EXIT; printf("E_CORNER3_EXIT\r\n"); break;
-			case '1': ThisEvent.EventType = E_CORNER4_ENTRY; printf("E_CORNER4_ENTRY\r\n"); break;
-			case '2': ThisEvent.EventType = E_CORNER4_EXIT; printf("E_CORNER4_EXIT\r\n"); break;
+			case '3': ThisEvent.EventType = E_CORNER1_ENTRY; break;
+			case '6': ThisEvent.EventType = E_CORNER1_EXIT; break;
+			case '9': ThisEvent.EventType = E_CORNER2_ENTRY; break;
+			case '8': ThisEvent.EventType = E_CORNER2_EXIT; break;
+			case '7': ThisEvent.EventType = E_CORNER3_ENTRY; break;
+			case '4': ThisEvent.EventType = E_CORNER3_EXIT; break;
+			case '1': ThisEvent.EventType = E_CORNER4_ENTRY; break;
+			case '2': ThisEvent.EventType = E_CORNER4_EXIT; break;
 		}
 		PostMasterSM(ThisEvent);
+		PostDisplay(ThisEvent);
 	}
+	
   return ReturnEvent;
 }
 
