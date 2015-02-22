@@ -14,7 +14,7 @@ Author: Kyle Moy, 2/21/15
 #include <stdint.h>
 
 /*----------------------------- Module Defines ----------------------------*/
-// The ten gamefield positions
+// The gamefield positions
 typedef enum {
 	Straight1,
 	Corner1,
@@ -25,7 +25,8 @@ typedef enum {
 	Straight4,
 	Corner4,
 	BallShootingArea,
-	ObstacleCrossingArea
+	ObstacleCrossingArea,
+	Undefined
 } GamefieldPosition_t;
 
 // The bounding lines (see Racing_Positions.xlsx for data)
@@ -36,9 +37,9 @@ typedef enum {
 #define Ycenter 100
 #define Ytop 156
 
-
 /*----------------------- Public Function Prototypes ----------------------*/
 GamefieldPosition_t GetGamefieldPosition(uint8_t Xcoord, uint8_t Ycoord);
+const char * GamefieldPositionString(GamefieldPosition_t GamefieldPosition);
 
 #endif /*GamefieldPositions_H */
 

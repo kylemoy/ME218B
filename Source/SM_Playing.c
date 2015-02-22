@@ -82,7 +82,7 @@ ES_Event RunPlayingSM(ES_Event CurrentEvent) {
 			// Process any events
 			if (CurrentEvent.EventType != ES_NO_EVENT) { // If an event is active
 				switch (CurrentEvent.EventType) {
-					case E_BALL_LAUNCHING_COMPLETED:
+					case E_TARGET_SUCCESS:
 						NextState = RACING;
 						MakeTransition = true;
 						ReturnEvent.EventType = ES_NO_EVENT;

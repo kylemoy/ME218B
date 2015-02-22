@@ -11,17 +11,22 @@ Author: Kyle Moy, 2/19/15
 /*----------------------------- Display Defines ---------------------------*/
 // Displays the DRS information on the console, uses up the entire screen
 // so make sure to disable all other displays when using this one.
-#define DRS_ConsoleDisplay true
-
+#define DRS_ConsoleDisplay false
+	
 // Choose to what to display
-#define DisplayEntryStateTransitions false
-#define DisplayEvents false
+#define DisplayEntryStateTransitions true
+#define DisplayEvents true
+#define DisplayEvents_DRS false
 
 // Choose which state machines to display
 #define DisplaySM_DRS false
-#define DisplaySM_Master false
-#define DisplaySM_Playing false
-#define DisplaySM_Racing false
+#define DisplaySM_Master true
+#define DisplaySM_Playing true
+#define DisplaySM_Racing true
+	
+// Display the gamefield positional changes of the Karts
+#define DisplayGamefieldPositions true	// All Karts
+#define DisplayMyGamefieldPosition true	// Just Our Kart
 	
 	
 /*----------------------------- Module Defines ----------------------------*/
@@ -32,7 +37,6 @@ Author: Kyle Moy, 2/19/15
 
 
 /*----------------------- Public Function Prototypes ----------------------*/
-void UpdateDisplay(void);
 bool InitDisplay(uint8_t Priority);
 bool PostDisplay(ES_Event ThisEvent);
 ES_Event RunDisplay(ES_Event ThisEvent);

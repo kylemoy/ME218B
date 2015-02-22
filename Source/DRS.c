@@ -42,6 +42,7 @@ Author: Kyle Moy, 2/18/15
 #include "DRS.h"
 #include "SM_DRS.h"
 #include "Display.h"
+#include "SM_Master.h"
 
 /*----------------------------- Module Defines ----------------------------*/
 #define BitsPerNibble 	4
@@ -74,17 +75,20 @@ uint8_t CurrentQuery;
 // An 8-byte array to store the SPI data
 static uint8_t DRS_Data[8] =  {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
-// Initializes the data structures for the KART data
-//		uint16_t 	KartX;
-//		uint16_t 	KartY;
-//		int16_t 	KartTheta;
-//		uint8_t		LapsRemaining;
-//		bool		ObstacleCompleted;
-//		bool		TargetSuccess;
-//		Flag_t	FlagStatus;
-Kart_t Kart1 = {0, 0, 0, 0, false, false, Flag_Waiting};
-Kart_t Kart2 = {0, 0, 0, 0, false, false, Flag_Waiting};
-Kart_t Kart3 = {0, 0, 0, 0, false, false, Flag_Waiting};
+// Initializes the data structures for the Kart data
+//		uint16_t 						KartX;
+//		uint16_t 						KartY;
+//		int16_t 						KartTheta;
+//		uint8_t							LapsRemaining;
+//		bool								ObstacleCompleted;
+//		bool								TargetSuccess;
+//		Flag_t							FlagStatus;
+//		GamefieldPosition_t GamefieldPosition
+Kart_t Kart1 = {0, 0, 0, 0, false, false, Flag_Waiting, Undefined};
+Kart_t Kart2 = {0, 0, 0, 0, false, false, Flag_Waiting, Undefined};
+Kart_t Kart3 = {0, 0, 0, 0, false, false, Flag_Waiting, Undefined};
+
+Kart_t *MyKart;;	// Our Kart, initialized in DRS_Initialize function
 
 /*------------------------------ Module Code ------------------------------*/
 /****************************************************************************
@@ -148,6 +152,10 @@ void DRS_Initialize(void) {
 			__enable_irq();
 		// Print to console if successful initialization
 		printf("DRS Initialized\n\r");
+		
+		// Initialize the Kart Number switch hardware
+		// For now, assume we are Kart1
+		MyKart = &Kart2;
 }
 
 
@@ -242,13 +250,48 @@ bool DRS_StoreData(void) {
 				case WAITING_FOR_START:
 					Kart->FlagStatus = Flag_Waiting; break;
 				case FLAG_DROPPED:
+					// Post an E_RACE_STARTED event if the FlagStatus changes to Flag_Dropped
+					// Only do this for one Kart, to avoid triggering three events.
+					if (byte == 3 && Kart->FlagStatus != Flag_Dropped) {
+						ES_Event Event = {E_RACE_STARTED};
+						PostMasterSM(Event);
+					}
 					Kart->FlagStatus = Flag_Dropped; break;
 				case CAUTION_FLAG:
+					// Post an E_RACE_CAUTION event if the FlagStatus changes to Flag_Caution
+					// Only do this for one Kart, to avoid triggering three events.
+					if (byte == 3 && Kart->FlagStatus != Flag_Caution) {
+						ES_Event Event = {E_RACE_CAUTION};
+						PostMasterSM(Event);
+					}
 					Kart->FlagStatus = Flag_Caution; break;
 				case RACE_OVER:
+					// Post an E_RACE_FINISHED event if the FlagStatus changes to Flag_Finished
+					// Only do this for one Kart, to avoid triggering three events.
+					if (byte == 3 && Kart->FlagStatus != Flag_Finished) {
+						ES_Event Event = {E_RACE_FINISHED};
+						PostMasterSM(Event);
+					}
 					Kart->FlagStatus = Flag_Finished; break;
 			}
+			// Post an E_OBSTACLE_COMPLETED event if our ObstacleCompleted status changes
+			// from false to true.
+			if (Kart->ObstacleCompleted == false && 
+				  (DRS_Data[byte] & OBSTACLE_STATUS_MASK) &&
+					Kart == MyKart) {
+						ES_Event Event = {E_OBSTACLE_COMPLETED};
+						PostMasterSM(Event);
+			}
 			Kart->ObstacleCompleted = DRS_Data[byte] & OBSTACLE_STATUS_MASK;
+			
+			// Post an E_TARGET_SUCCESS event if our TargetSuccess status changes
+			// from false to true.
+			if (Kart->TargetSuccess == false && 
+				  DRS_Data[byte] & TARGET_STATUS_MASK &&
+					Kart == MyKart) {
+						ES_Event Event = {E_TARGET_SUCCESS};
+						PostMasterSM(Event);
+			}
 			Kart->TargetSuccess = DRS_Data[byte] & TARGET_STATUS_MASK;
 		}
 		
@@ -264,6 +307,69 @@ bool DRS_StoreData(void) {
 		Kart->KartX = DRS_Data[2]<<8 | DRS_Data[3]; // PXm (Byte 2) | PXl (Byte 3)
 		Kart->KartY = DRS_Data[4]<<8 | DRS_Data[5]; // PYm (Byte 4) | PYl (Byte 5)
 		Kart->KartTheta = DRS_Data[6]<<8 | DRS_Data[7]; // Om (Byte 6) | Ol (Byte 7)
+		
+		
+		
+		// Check if our gamefield position has changed
+		GamefieldPosition_t NewGamefieldPosition = GetGamefieldPosition(Kart->KartX, Kart->KartY);
+		if (Kart->GamefieldPosition != NewGamefieldPosition) {
+			int KartNumber;
+			if (Kart == &Kart1) KartNumber = 1;
+			if (Kart == &Kart2) KartNumber = 2;
+			if (Kart == &Kart3) KartNumber = 3;
+			
+			// Post an event if this is our Kart
+			if (Kart == MyKart) {
+				if (Kart->GamefieldPosition == Straight1 && NewGamefieldPosition == Corner1) {
+					ES_Event Event = {E_CORNER1_ENTRY};
+					PostMasterSM(Event);
+				} else if (Kart->GamefieldPosition == Corner1 && NewGamefieldPosition == Straight2) {
+					ES_Event Event = {E_CORNER1_EXIT};
+					PostMasterSM(Event);
+				} else if (Kart->GamefieldPosition == Straight2 && NewGamefieldPosition == Corner2) {
+					ES_Event Event = {E_CORNER2_ENTRY};
+					PostMasterSM(Event);
+				} else if (Kart->GamefieldPosition == Corner2 && NewGamefieldPosition == Straight3) {
+					ES_Event Event = {E_CORNER2_EXIT};
+					PostMasterSM(Event);
+				} else if (Kart->GamefieldPosition == Straight3 && NewGamefieldPosition == Corner3) {
+					ES_Event Event = {E_CORNER3_ENTRY};
+					PostMasterSM(Event);
+				} else if (Kart->GamefieldPosition == Corner3 && NewGamefieldPosition == Straight4) {
+					ES_Event Event = {E_CORNER3_EXIT};
+					PostMasterSM(Event);
+				} else if (Kart->GamefieldPosition == Straight4 && NewGamefieldPosition == Corner4) {
+					ES_Event Event = {E_CORNER4_ENTRY};
+					PostMasterSM(Event);
+				} else if (Kart->GamefieldPosition == Corner4 && NewGamefieldPosition == Straight1) {
+					ES_Event Event = {E_CORNER4_EXIT};
+					PostMasterSM(Event);
+				}
+			}
+			
+			// Print statements to the display (don't print if transitioning from Undefined)
+			if (Kart->GamefieldPosition != Undefined) {
+				if (DisplayMyGamefieldPosition && Kart == MyKart)
+					printf("My Kart (Kart %d): X = %d, Y = %d, Laps Left = %d, Obstacle = %d, Target = %d, Gamefield Position = %s\r\n", \
+					KartNumber, GetKartData(KartNumber).KartX, GetKartData(KartNumber).KartY, GetKartData(KartNumber).LapsRemaining, \
+					GetKartData(KartNumber).ObstacleCompleted, GetKartData(KartNumber).TargetSuccess, \
+					GamefieldPositionString(NewGamefieldPosition));
+//					printf("My Kart (Kart %d) transitioned from %s to %s\r\n", KartNumber, \
+//					GamefieldPositionString(Kart->GamefieldPosition), \
+//					GamefieldPositionString(GetGamefieldPosition(Kart->KartX, Kart->KartY)));
+				else if (DisplayGamefieldPositions)
+					printf("Kart %d: X = %d, Y = %d, Laps Left = %d, Obstacle = %d, Target = %d, Gamefield Position = %s\r\n", \
+					KartNumber, GetKartData(KartNumber).KartX, GetKartData(KartNumber).KartY, GetKartData(KartNumber).LapsRemaining, \
+					GetKartData(KartNumber).ObstacleCompleted, GetKartData(KartNumber).TargetSuccess, \
+					GamefieldPositionString(NewGamefieldPosition));
+//					printf("Kart %d transitioned from %s to %s\r\n", KartNumber, \
+//					GamefieldPositionString(Kart->GamefieldPosition), \
+			  GamefieldPositionString(GetGamefieldPosition(Kart->KartX, Kart->KartY)));
+			}
+			
+			// Update the gamefield position
+			Kart->GamefieldPosition = NewGamefieldPosition;
+		}
 	}
 	return true;
 }

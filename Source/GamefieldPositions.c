@@ -13,6 +13,7 @@ Author: Kyle Moy, 2/21/15
 
 /*---------------------------- Module Variables ---------------------------*/
 
+
 /*------------------------------ Module Code ------------------------------*/
 
 /****************************************************************************
@@ -23,6 +24,8 @@ Returns:			GamefieldPosition_t, the gamefield position the point is in
 Description:	Return the gamefield position that a point is in
 ****************************************************************************/
 GamefieldPosition_t GetGamefieldPosition(uint8_t Xcoord, uint8_t Ycoord) {
+	if (Xcoord == 0 && Ycoord == 0)
+		return Undefined;
 	if (Xcoord < Xright) {
 		if (Ycoord < Ybottom)
 			return Corner1;
@@ -49,3 +52,20 @@ GamefieldPosition_t GetGamefieldPosition(uint8_t Xcoord, uint8_t Ycoord) {
 			return Corner3;
 	}
 }
+
+const char * GamefieldPositionString(GamefieldPosition_t GamefieldPosition) {
+	switch (GamefieldPosition) {
+		case Straight1: return "Straight1";
+		case Corner1: return "Corner1";
+		case Straight2: return "Straight2";
+		case Corner2: return "Corner2";
+		case Straight3: return "Straight3";
+		case Corner3: return "Corner3";
+		case Straight4: return "Straight4";
+		case Corner4: return "Corner4";
+		case BallShootingArea: return "BallShootingArea";
+		case ObstacleCrossingArea: return "ObstacleCrossingArea";
+		case Undefined: default: return "Undefined";
+	}
+}
+

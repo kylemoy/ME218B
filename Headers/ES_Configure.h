@@ -259,11 +259,12 @@ typedef enum {  ES_NO_EVENT = 0,
                 /* User-defined events start here */
 										// SM_Master Events
 										E_RACE_STARTED,
+										E_RACE_CAUTION,
 										E_RACE_FINISHED,
 			
 										// SM_Playing Events
 										E_OBSTACLE_COMPLETED,
-										E_BALL_LAUNCHING_COMPLETED,
+										E_TARGET_SUCCESS,
 	
 										// SM_Racing Events
 										E_CORNER1_ENTRY,

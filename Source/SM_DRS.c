@@ -27,13 +27,15 @@ Author: Kyle Moy, 2/16/15
 
 /*----------------------------- Module Defines ----------------------------*/
 // Interval between two successive transfers, should be at least 2ms
-// Keep it under 10ms since DRS updates at 100Hz
+// Keep it over 2ms (minimum between commands)
+// DRS updates every 100ms (10Hz), so it doesn't make sense to go too fast
+// Since we have four commands, let's go with 25ms
 // But want it as fast as possible so data from the four queries is updated
-#define COMMAND_INTERVAL 3 * 10 // For debugging, * 100
+#define COMMAND_INTERVAL 25
 
 // If a command takes longer than this duration, then something is probably wrong
 // We'll timeout and go back to the waiting state
-#define COMMAND_TIMEOUT 50 * 10  // For debugging, * 100
+#define COMMAND_TIMEOUT 50 *10 // For debugging, * 100
 
 
 /*---------------------------- Module Functions ---------------------------*/
@@ -50,8 +52,6 @@ static DRSState_t CurrentState;
 static uint8_t CurrentQuery;	// Keep track of the current query
 static uint8_t LastQuery;		// Save the last query in case of transfer failure
 
-//static uint8_t MyKart;	// Our Kart number, initialized in InitDRS_SM function
-
 
 /*------------------------------ Module Code ------------------------------*/
 /****************************************************************************
@@ -65,9 +65,6 @@ bool InitDRS_SM (uint8_t Priority) {
 	MyPriority = Priority;
 	// Initializes the DRS hardware
 	DRS_Initialize();
-	// Initialize the Kart Number switch hardware
-	// For now, assume we are Kart1
-	//MyKart = 1;
 	// Set the CurrentState to WaitingForQuery
 	CurrentState = WAITING_FOR_QUERY;
 	// Now let the Run function initialize the state machine
@@ -99,6 +96,9 @@ ES_Event RunDRS_SM (ES_Event CurrentEvent) {
 	DRSState_t NextState = CurrentState;
   ES_Event EntryEventKind = {ES_ENTRY, 0}; // Default to normal entry to new state
 	ES_Event ReturnEvent = {ES_NO_EVENT, 0}; // Assume no error
+	
+	// Pass any events to the Display service
+	if (DisplayEvents_DRS) PostDisplay(CurrentEvent);
 	
 	switch(CurrentState) {
 		case WAITING_FOR_QUERY: 

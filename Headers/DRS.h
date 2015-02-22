@@ -11,6 +11,7 @@ Author: Kyle Moy, 2/18/15
 #define DRS_H
 
 /*----------------------------- Include Files -----------------------------*/
+#include "GamefieldPositions.h"
 
 /*----------------------------- Module Defines ----------------------------*/
 // Command Queries Byte
@@ -36,6 +37,7 @@ typedef struct {
 	bool		ObstacleCompleted;
 	bool		TargetSuccess;
 	Flag_t	FlagStatus;
+	GamefieldPosition_t GamefieldPosition;
 } Kart_t;
 
 

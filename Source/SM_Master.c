@@ -68,6 +68,9 @@ ES_Event RunMasterSM(ES_Event CurrentEvent) {
 	ES_Event EntryEventKind = {ES_ENTRY, 0};// Default to normal entry to new state
 	ES_Event ReturnEvent = {ES_NO_EVENT, 0}; // Assume no error
 
+	// Run the Display service to display the event
+	RunDisplay(CurrentEvent);
+	
 	switch(CurrentState) {
 		case WAITING_START:
 			// Execute During function for WAITING_START.

@@ -22,17 +22,6 @@ static uint8_t MyPriority;
 
 /*---------------------------- Module Functions ---------------------------*/
 /****************************************************************************
-Function: 		UpdateDisplay
-Parameters:		void
-Returns:			void
-Description:	Updates the console with the robot's state information
-****************************************************************************/
-void UpdateDisplay(void) {
-	clrScrn();
-	// Right now, not using this function yet
-}
-
-/****************************************************************************
 Function: 		InitDisplay
 Parameters:		uint8_t Priority, the priority of this service
 Returns:			bool, false if error in initialization, true otherwise
@@ -49,7 +38,7 @@ bool InitDisplay(uint8_t Priority) {
 
 /****************************************************************************
 Function: 		PostDisplay
-Parameters:		EF_Event ThisEvent, the event to post to the queue
+Parameters:		ES_Event ThisEvent, the event to post to the queue
 Returns:			bool, false if the Enqueue operation failed, true otherwise
 Description:	Posts an event to this state machine's queue
 ****************************************************************************/
@@ -66,21 +55,18 @@ Description:	Prints display to console
 ES_Event RunDisplay(ES_Event ThisEvent) {
   ES_Event ReturnEvent;
   ReturnEvent.EventType = ES_NO_EVENT; // assume no errors
-	// Display timer timeout, time to update the display
-	if (ThisEvent.EventType == ES_TIMEOUT) {
-     UpdateDisplay();
-     ES_Timer_InitTimer(DISPLAY_TIMER, DISPLAY_UPDATE_TIME);
-	}
+
 	// An event occurred, print it to the console if DisplayEvents is enabled
 	if (DisplayEvents) {
 		switch (ThisEvent.EventType) {
 			// SM_Playing Events
 			case E_RACE_STARTED: printf("(EVENT) E_RACE_STARTED\r\n"); break;
 			case E_RACE_FINISHED: printf("(EVENT) E_RACE_FINISHED\r\n"); break;
+			case E_RACE_CAUTION: printf("(EVENT) E_RACE_CAUTION\r\n"); break;
 			
 			// SM_Master Events
 			case E_OBSTACLE_COMPLETED: printf("(EVENT) E_OBSTACLE_COMPLETED\r\n"); break;
-			case E_BALL_LAUNCHING_COMPLETED: printf("(EVENT) E_BALL_LAUNCHING_COMPLETED\r\n"); break;
+			case E_TARGET_SUCCESS: printf("(EVENT) E_TARGET_SUCCESS\r\n"); break;
 			
 			// SM_Racing Events
 			case E_CORNER1_ENTRY: printf("(EVENT) E_CORNER1_ENTRY\r\n"); break;
