@@ -8,7 +8,10 @@ Author: Kyle Moy, 2/18/15
 ****************************************************************************/
 
 //#define TEST
-
+// For testing the DRS, it's better to run the main program with the 
+// DRS_ConsoleDisplay on in Display.h. This will run the state machine
+// and continually update the DRS, whereas this Test Harness is just
+// for testing the transmission of a single command query.
 
 /*----------------------------- Include Files -----------------------------*/
 // C Libraries
@@ -182,8 +185,6 @@ void DRS_EOTIntHandler(void) {
  	ES_Event Event = {E_DRS_EOT};
  	PostDRS_SM(Event);
 }
-
-
 
 
 /****************************************************************************
