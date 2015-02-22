@@ -92,7 +92,7 @@ Kart_t *MyKart;;	// Our Kart, initialized in DRS_Initialize function
 
 /*------------------------------ Module Code ------------------------------*/
 /****************************************************************************
-Function: 		DRS_Initialize 
+Function: 		InitializeDRS 
 Parameters: 	void
 Returns:			void
 Description:	Initializes the DRS SSI on Tiva Pins A2-A5
@@ -101,7 +101,7 @@ Description:	Initializes the DRS SSI on Tiva Pins A2-A5
 				A4: SSI Module 0 Transmit (SDO), input
 				A5: SSI Module 0 Receive (SDI), output
 ****************************************************************************/
-void DRS_Initialize(void) {
+void InitializeDRS(void) {
 		// Enable clock to GPIO Port A
     HWREG(SYSCTL_RCGCGPIO) |= SYSCTL_RCGCGPIO_R0;
     // Enable clock to SSI Module 0
@@ -155,18 +155,18 @@ void DRS_Initialize(void) {
 		
 		// Initialize the Kart Number switch hardware
 		// For now, assume we are Kart1
-		MyKart = &Kart2;
+		MyKart = &Kart1;
 }
 
 
 /****************************************************************************
-Function:		DRS_EOTIntHandler
+Function:		EOTIntHandler
 Parameters:	none
 Returns:		none
 Description:	End of Transfer (EOT) interrupt response handler
 							Posts a new DRS_Read event to the DRS state machine
 ****************************************************************************/
-void DRS_EOTIntHandler(void) {
+void EOTIntHandler(void) {
 	// Clear the source of the interrupt
 	HWREG(SSI0_BASE+SSI_O_ICR) = SSI_ICR_RORIC;
 	
@@ -186,7 +186,7 @@ void DRS_EOTIntHandler(void) {
 	#ifdef TEST
 	printf("DRS_Data = 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x\r\n", \
 		DRS_Data[0], DRS_Data[1], DRS_Data[2], DRS_Data[3], DRS_Data[4], DRS_Data[5], DRS_Data[6], DRS_Data[7]);
-	DRS_StoreData();
+	StoreData();
 	PrintKartData();
 	#endif
  	// Post NewRead event to DRS
@@ -196,12 +196,12 @@ void DRS_EOTIntHandler(void) {
 
 
 /****************************************************************************
-Function: 		DRS_SendQuery
+Function: 		SendQuery
 Parameters:		uint8_t Query, the query to be sent
 Returns:			bool, true if query was successfully sent, false if not
 Description:	Query the DRS with the CurrentQuery
 ****************************************************************************/
-bool DRS_SendQuery(uint8_t Query) {	
+bool SendQuery(uint8_t Query) {	
 	// Set the module variable
 	CurrentQuery = Query;
 	
@@ -223,12 +223,12 @@ bool DRS_SendQuery(uint8_t Query) {
 
 
 /****************************************************************************
-Function:			DRS_StoreData
+Function:			StoreData
 Parameters:		none
 Returns:			bool true if successful
 Description:	Stores the DRS_Data to the appropriate Kart variable
 ****************************************************************************/
-bool DRS_StoreData(void) {
+bool StoreData(void) {
 	// Pointer to the Kart struct that will be updated
 	Kart_t *Kart;
 	

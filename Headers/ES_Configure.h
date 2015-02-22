@@ -29,7 +29,7 @@
 /****************************************************************************/
 // This macro determines that nuber of services that are *actually* used in
 // a particular application. It will vary in value from 1 to MAX_NUM_SERVICES
-#define NUM_SERVICES 4
+#define NUM_SERVICES 5
 
 /****************************************************************************/
 // These are the definitions for Service 0, the lowest priority service.
@@ -92,11 +92,11 @@
 // These are the definitions for Service 4
 #if NUM_SERVICES > 4
 // the header file with the public function prototypes
-#define SERV_4_HEADER "TestHarnessService4.h"
+#define SERV_4_HEADER "DriveMotorsService.h"
 // the name of the Init function
-#define SERV_4_INIT InitTestHarnessService4
+#define SERV_4_INIT InitDriveMotorsService
 // the name of the run function
-#define SERV_4_RUN RunTestHarnessService4
+#define SERV_4_RUN RunDriveMotorsService
 // How big should this services Queue be?
 #define SERV_4_QUEUE_SIZE 3
 #endif
@@ -278,7 +278,11 @@ typedef enum {  ES_NO_EVENT = 0,
 			
 										// SM_DRS Events
 										E_NEW_DRS_QUERY,
-										E_DRS_EOT
+										E_DRS_EOT,
+										
+										// Motor Events
+										E_MOTOR_TIMEOUT
+										
 							} ES_EventTyp_t ;
 
 /****************************************************************************/
@@ -287,7 +291,7 @@ typedef enum {  ES_NO_EVENT = 0,
 // services are on that distribution list.
 #define NUM_DIST_LISTS 1
 #if NUM_DIST_LISTS > 0 
-#define DIST_LIST0 PostMapKeys, PostMasterSM, PostDRS_SM, PostDisplay
+#define DIST_LIST0 PostMapKeys, PostMasterSM, PostDRS_SM, PostDisplay, PostDriveMotorsService
 #endif
 #if NUM_DIST_LISTS > 1 
 #define DIST_LIST1 PostTemplateFSM
@@ -328,7 +332,7 @@ typedef enum {  ES_NO_EVENT = 0,
 #define TIMER_UNUSED ((pPostFunc)0)
 #define TIMER0_RESP_FUNC PostDRS_SM
 #define TIMER1_RESP_FUNC PostDisplay
-#define TIMER2_RESP_FUNC TIMER_UNUSED
+#define TIMER2_RESP_FUNC PostDriveMotorsService
 #define TIMER3_RESP_FUNC TIMER_UNUSED
 #define TIMER4_RESP_FUNC TIMER_UNUSED
 #define TIMER5_RESP_FUNC TIMER_UNUSED
@@ -352,5 +356,6 @@ typedef enum {  ES_NO_EVENT = 0,
 
 #define DRS_TIMER 0
 #define DISPLAY_TIMER 1
+#define DRIVE_MOTOR_TIMER 2
 
 #endif /* CONFIGURE_H */

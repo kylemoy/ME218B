@@ -36,6 +36,7 @@ typedef enum {
 #define Ybottom 40
 #define Ycenter 100
 #define Ytop 156
+#define CornerEntry 30 // Extends the corner entry beyond the corner box
 
 /*----------------------- Public Function Prototypes ----------------------*/
 GamefieldPosition_t GetGamefieldPosition(uint8_t Xcoord, uint8_t Ycoord);

@@ -28,6 +28,9 @@ Author: Kyle Moy, 2/19/15
 #define DisplayGamefieldPositions true	// All Karts
 #define DisplayMyGamefieldPosition true	// Just Our Kart
 	
+// Display what the motor is doing
+#define DisplayMotorInfo true
+	
 	
 /*----------------------------- Module Defines ----------------------------*/
 #define clrScrn() 	puts("\x1b[2J")

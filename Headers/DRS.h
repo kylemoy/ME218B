@@ -42,10 +42,10 @@ typedef struct {
 
 
 /*----------------------- Public Function Prototypes ----------------------*/
-void DRS_Initialize(void);
-void DRS_EOTIntHandler(void);
-bool DRS_SendQuery(uint8_t Query);
-bool DRS_StoreData(void);
+void InitializeDRS(void);
+void EOTIntHandler(void);
+bool SendQuery(uint8_t Query);
+bool StoreData(void);
 Kart_t GetKartData(uint8_t KartNumber);
 void PrintKartData(void);
 void PrintKartDataTableFormat(void);

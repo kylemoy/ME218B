@@ -15,6 +15,7 @@ Author: Kyle Moy, 2/19/15
 // Module Libraries
 #include "SM_Racing.h"
 #include "Display.h"
+#include "DriveMotors.h"
 
 
 /*----------------------------- Module Defines ----------------------------*/
@@ -73,6 +74,9 @@ ES_Event RunRacingSM(ES_Event CurrentEvent) {
 			// Process any events
 			if (CurrentEvent.EventType != ES_NO_EVENT) { // If an event is active
 				switch (CurrentEvent.EventType) {
+					case E_MOTOR_TIMEOUT:
+						// After turning is complete
+						DriveForward();
 					case E_CORNER1_EXIT:
 						NextState = STRAIGHT2;
 						MakeTransition = true;
@@ -103,6 +107,9 @@ ES_Event RunRacingSM(ES_Event CurrentEvent) {
 			// Process any events
 			if (CurrentEvent.EventType != ES_NO_EVENT) { // If an event is active
 				switch (CurrentEvent.EventType) {
+					case E_MOTOR_TIMEOUT:
+						// After turning is complete
+						DriveForward();
 					case E_CORNER2_EXIT:
 						NextState = STRAIGHT3;
 						MakeTransition = true;
@@ -133,6 +140,9 @@ ES_Event RunRacingSM(ES_Event CurrentEvent) {
 			// Process any events
 			if (CurrentEvent.EventType != ES_NO_EVENT) { // If an event is active
 				switch (CurrentEvent.EventType) {
+					case E_MOTOR_TIMEOUT:
+						// After turning is complete
+						DriveForward();
 					case E_CORNER3_EXIT:
 						NextState = STRAIGHT4;
 						MakeTransition = true;
@@ -163,6 +173,9 @@ ES_Event RunRacingSM(ES_Event CurrentEvent) {
 			// Process any events
 			if (CurrentEvent.EventType != ES_NO_EVENT) { // If an event is active
 				switch (CurrentEvent.EventType) {
+					case E_MOTOR_TIMEOUT:
+						// After turning is complete
+						DriveForward();
 					case E_CORNER4_EXIT:
 						NextState = STRAIGHT1;
 						MakeTransition = true;
@@ -222,6 +235,7 @@ static ES_Event DuringStraight1(ES_Event Event) {
 	// Process ES_ENTRY, ES_ENTRY_HISTORY & ES_EXIT events
 	if ((Event.EventType == ES_ENTRY) || (Event.EventType == ES_ENTRY_HISTORY)) {
 		if(DisplayEntryStateTransitions && DisplaySM_Racing) printf("SM3_Racing: STRAIGHT1\r\n");
+		DriveForward();
 	} else if ( Event.EventType == ES_EXIT ) {
 		
 	} else {
@@ -235,6 +249,8 @@ static ES_Event DuringCorner1(ES_Event Event) {
 	// Process ES_ENTRY, ES_ENTRY_HISTORY & ES_EXIT events
 	if ((Event.EventType == ES_ENTRY) || (Event.EventType == ES_ENTRY_HISTORY)) {
 		if(DisplayEntryStateTransitions && DisplaySM_Racing) printf("SM3_Racing: CORNER1\r\n");
+		//DriveLeftCorner();
+		RotateCCW90();
 	} else if ( Event.EventType == ES_EXIT ) {
 		
 	} else {
@@ -248,6 +264,7 @@ static ES_Event DuringStraight2(ES_Event Event) {
 	// Process ES_ENTRY, ES_ENTRY_HISTORY & ES_EXIT events
 	if ((Event.EventType == ES_ENTRY) || (Event.EventType == ES_ENTRY_HISTORY)) {
 		if(DisplayEntryStateTransitions && DisplaySM_Racing) printf("SM3_Racing: STRAIGHT2\r\n");
+		DriveForward();
 	} else if ( Event.EventType == ES_EXIT ) {
 		
 	} else {
@@ -261,6 +278,8 @@ static ES_Event DuringCorner2(ES_Event Event) {
 	// Process ES_ENTRY, ES_ENTRY_HISTORY & ES_EXIT events
 	if ((Event.EventType == ES_ENTRY) || (Event.EventType == ES_ENTRY_HISTORY)) {
 		if(DisplayEntryStateTransitions && DisplaySM_Racing) printf("SM3_Racing: CORNER2\r\n");
+		//DriveLeftCorner();
+		RotateCCW90();
 	} else if ( Event.EventType == ES_EXIT ) {
 		
 	} else {
@@ -274,6 +293,7 @@ static ES_Event DuringStraight3(ES_Event Event) {
 	// Process ES_ENTRY, ES_ENTRY_HISTORY & ES_EXIT events
 	if ((Event.EventType == ES_ENTRY) || (Event.EventType == ES_ENTRY_HISTORY)) {
 		if(DisplayEntryStateTransitions && DisplaySM_Racing) printf("SM3_Racing: STRAIGHT3\r\n");
+		DriveForward();
 	} else if ( Event.EventType == ES_EXIT ) {
 		
 	} else {
@@ -287,6 +307,8 @@ static ES_Event DuringCorner3(ES_Event Event) {
 	// Process ES_ENTRY, ES_ENTRY_HISTORY & ES_EXIT events
 	if ((Event.EventType == ES_ENTRY) || (Event.EventType == ES_ENTRY_HISTORY)) {
 		if(DisplayEntryStateTransitions && DisplaySM_Racing) printf("SM3_Racing: CORNER3\r\n");
+		//DriveLeftCorner();
+		RotateCCW90();
 	} else if ( Event.EventType == ES_EXIT ) {
 		
 	} else {
@@ -300,6 +322,7 @@ static ES_Event DuringStraight4(ES_Event Event) {
 	// Process ES_ENTRY, ES_ENTRY_HISTORY & ES_EXIT events
 	if ((Event.EventType == ES_ENTRY) || (Event.EventType == ES_ENTRY_HISTORY)) {
 		if(DisplayEntryStateTransitions && DisplaySM_Racing) printf("SM_Racing3: STRAIGHT4\r\n");
+		DriveForward();
 	} else if ( Event.EventType == ES_EXIT ) {
 		
 	} else {
@@ -313,6 +336,8 @@ static ES_Event DuringCorner4(ES_Event Event) {
 	// Process ES_ENTRY, ES_ENTRY_HISTORY & ES_EXIT events
 	if ((Event.EventType == ES_ENTRY) || (Event.EventType == ES_ENTRY_HISTORY)) {
 		if(DisplayEntryStateTransitions && DisplaySM_Racing) printf("SM3_Racing: CORNER4\r\n");
+		//DriveLeftCorner();
+		RotateCCW90();
 	} else if ( Event.EventType == ES_EXIT ) {
 		
 	} else {

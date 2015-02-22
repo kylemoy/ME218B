@@ -18,6 +18,10 @@ Author: Kyle Moy, 2/18/15
 #include "ES_Framework.h"
 #include "ES_Timers.h"
 
+// Moduel Libraries
+#include "DRS.h"
+#include "DriveMotors.h"
+
 
 /*----------------------------- Module Defines ----------------------------*/
 #define clrScrn() 	puts("\x1b[2J")
@@ -27,8 +31,6 @@ Author: Kyle Moy, 2/18/15
 int main (void)
 {
   ES_Return_t ErrorType;
-    
-	// Hardware initialization functions can go here
 	
 	// Set the clock to run at 40MhZ using the PLL and 16MHz external crystal
   SysCtlClockSet(SYSCTL_SYSDIV_5 | SYSCTL_USE_PLL | SYSCTL_OSC_MAIN
@@ -43,7 +45,12 @@ int main (void)
 	printf("Kenji Bowers, Alex Lin, Kyle Moy, & John Schoech\r\n");
 	printf("Go Speed Racer, Go!\r\n");
 	printf("%s %s\n",__TIME__, __DATE__);
-	printf("\n\r\n");
+	printf("\r\n");
+    
+	// Hardware initialization functions can go here
+	InitializeDRS();
+	InitializeDriveMotors();
+	printf("\r\n");
 
 // Initialize the Events and Services Framework and Start Running It
   ErrorType = ES_Initialize(ES_Timer_RATE_10mS);

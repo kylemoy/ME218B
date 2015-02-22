@@ -467,6 +467,11 @@
               <FileType>1</FileType>
               <FilePath>.\Source\DriveMotors.c</FilePath>
             </File>
+            <File>
+              <FileName>DriveMotorsService.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Source\DriveMotorsService.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -526,6 +531,11 @@
               <FileName>DriveMotors.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\Headers\DriveMotors.h</FilePath>
+            </File>
+            <File>
+              <FileName>DriveMotorsService.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Headers\DriveMotorsService.h</FilePath>
             </File>
           </Files>
         </Group>

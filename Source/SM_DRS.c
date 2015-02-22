@@ -63,8 +63,6 @@ Description:	Initializes the DRS state machine
 bool InitDRS_SM (uint8_t Priority) {
 	ES_Event ThisEvent;
 	MyPriority = Priority;
-	// Initializes the DRS hardware
-	DRS_Initialize();
 	// Set the CurrentState to WaitingForQuery
 	CurrentState = WAITING_FOR_QUERY;
 	// Now let the Run function initialize the state machine
@@ -135,7 +133,7 @@ ES_Event RunDRS_SM (ES_Event CurrentEvent) {
 								case KART3_QUERY: printf("(KART3_QUERY)\r\n"); break;
 							}
 						}
-						if(DRS_SendQuery(CurrentQuery)) {
+						if(SendQuery(CurrentQuery)) {
 							// Query was successful, transition to READING
 							if (DisplaySM_DRS) printf("DRS query successful\r\n");
 							NextState = READING;
@@ -171,7 +169,7 @@ ES_Event RunDRS_SM (ES_Event CurrentEvent) {
 				switch (CurrentEvent.EventType) {
 					// EOT interrupt occured
 					case E_DRS_EOT:
-						if(DRS_StoreData()) {
+						if(StoreData()) {
 							if (DRS_ConsoleDisplay) PrintKartDataTableFormat();
 							// Data was successfully stored, transitioning to WAITING_FOR_QUERY
 							NextState = WAITING_FOR_QUERY;
@@ -243,7 +241,7 @@ static uint8_t GetNextQuery(void) {
 			NextQuery = KART1_QUERY;
 			break;
 		case KART1_QUERY : 	
-			NextQuery = KART2_QUERY;
+			NextQuery = GAME_STATUS_QUERY;
 			break;
 		case KART2_QUERY :				
 			NextQuery = KART3_QUERY;
