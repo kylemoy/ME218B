@@ -90,6 +90,7 @@ ES_Event RunPlayingSM(ES_Event CurrentEvent) {
 				switch (CurrentEvent.EventType) {
 					case E_BALL_LAUNCHING_FINISH:
 						NextState = RACING;
+					  EntryEventKind.EventType = ES_ENTRY_HISTORY;
 						MakeTransition = true;
 						ReturnEvent.EventType = ES_NO_EVENT;
 						break;
@@ -152,7 +153,7 @@ static ES_Event DuringRacing(ES_Event Event) {
 		StartRacingSM(Event);
 		// repeat the StartxxxSM() functions for concurrent state machines
 		// on the lower level
-	} else if ( Event.EventType == ES_EXIT ) {
+	} else if (Event.EventType == ES_EXIT) {
 		// on exit, give the lower levels a chance to clean up first
 		//RunLowerLevelSM(Event);
 		// repeat for any concurrently running state machines
@@ -160,7 +161,7 @@ static ES_Event DuringRacing(ES_Event Event) {
 	} else {
     // do the 'during' function for this state
 		// run any lower level state machine
-		ReturnEvent = RunRacingSM(Event);
+		RunRacingSM(Event);
 		// repeat for any concurrent lower level machines
 		// do any activity that is repeated as long as we are in this state
 	}

@@ -18,6 +18,7 @@ Author: Kyle Moy, 2/19/15
 #include "DriveMotors.h"
 #include "SM_Navigation.h"
 #include "GamefieldPositions.h"
+#include "SM_Master.h"
 
 
 /*----------------------------- Module Defines ----------------------------*/
@@ -36,8 +37,8 @@ static ES_Event DuringCorner4(ES_Event Event);
 
 /*---------------------------- Module Variables ---------------------------*/
 static RacingState_t CurrentState;
-static bool WillCrossObstacle = false;
-static bool WillBallLaunch = false;
+static bool WillCrossObstacle = true;
+static bool WillBallLaunch = true;
 
 
 /*------------------------------ Module Code ------------------------------*/
@@ -96,10 +97,6 @@ ES_Event RunRacingSM(ES_Event CurrentEvent) {
     case STRAIGHT2:
 			// Execute During function for STRAIGHT2.
 			CurrentEvent = DuringStraight2(CurrentEvent);
-			// If we're going to launch the ball this lap, transition to SM_BallLaunching
-			if (WillBallLaunch) {
-				
-			}
 			// Process any events
 			if (CurrentEvent.EventType != ES_NO_EVENT) { // If an event is active
 				switch (CurrentEvent.EventType) {
@@ -240,7 +237,7 @@ void StartRacingSM(ES_Event CurrentEvent) {
 /****************************************************************************
 Function:			QueryRacingSM
 Parameters:		None
-Returns:			PlayingState_t, the current state of the Racing state machine
+Returns:			RacingState_t, the current state of the Racing state machine
 Description:	Returns the current state of the Racing state machine
 ****************************************************************************/
 RacingState_t QueryRacingSM(void) {
@@ -287,9 +284,14 @@ static ES_Event DuringStraight2(ES_Event Event) {
 	// Process ES_ENTRY, ES_ENTRY_HISTORY & ES_EXIT events
 	if ((Event.EventType == ES_ENTRY) || (Event.EventType == ES_ENTRY_HISTORY)) {
 		if(DisplayEntryStateTransitions && DisplaySM_Racing) printf("SM3_Racing: STRAIGHT2\r\n");
-		SetTargetTheta(North);
-		SetTargetPosition(Corner2X, Corner2Y);
-		StartNavigationSM(Event);
+		if (WillBallLaunch && Event.EventType != ES_ENTRY_HISTORY) {
+			ES_Event Event = {E_BALL_LAUNCHING_START};
+			PostMasterSM(Event);
+		} else {
+			SetTargetTheta(North);
+			SetTargetPosition(Corner2X, Corner2Y);
+			StartNavigationSM(Event);
+		}
 	} else if ( Event.EventType == ES_EXIT ) {
 		
 	} else {
@@ -319,9 +321,14 @@ static ES_Event DuringStraight3(ES_Event Event) {
 	// Process ES_ENTRY, ES_ENTRY_HISTORY & ES_EXIT events
 	if ((Event.EventType == ES_ENTRY) || (Event.EventType == ES_ENTRY_HISTORY)) {
 		if(DisplayEntryStateTransitions && DisplaySM_Racing) printf("SM3_Racing: STRAIGHT3\r\n");
-		SetTargetTheta(West);
-		SetTargetPosition(Corner3X, Corner3Y);
-		StartNavigationSM(Event);
+		if (WillCrossObstacle) {
+			ES_Event Event = {E_OBSTACLE_CROSSING_START};
+			PostMasterSM(Event);
+		} else {
+			SetTargetTheta(West);
+			SetTargetPosition(Corner3X, Corner3Y);
+			StartNavigationSM(Event);
+		}
 	} else if ( Event.EventType == ES_EXIT ) {
 		
 	} else {
