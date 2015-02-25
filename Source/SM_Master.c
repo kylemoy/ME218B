@@ -111,6 +111,11 @@ ES_Event RunMasterSM(ES_Event CurrentEvent) {
 			// Process any events
 			if (CurrentEvent.EventType != ES_NO_EVENT) { // If an event is active
 				switch (CurrentEvent.EventType) {
+					case E_RACE_STARTED:
+						NextState = PLAYING;
+						MakeTransition = true;
+						ReturnEvent.EventType = ES_NO_EVENT;
+						break;
 					default:
 						break;
 				}

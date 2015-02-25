@@ -8,11 +8,12 @@ Author: Kyle Moy, 2/21/15
 ****************************************************************************/
 
 /*----------------------------- Include Files -----------------------------*/
+#include <math.h>
 #include "GamefieldPositions.h"
 
 
-/*---------------------------- Module Variables ---------------------------*/
-
+/*----------------------------- Module Defines ----------------------------*/
+#define PI 3.14159265
 
 /*------------------------------ Module Code ------------------------------*/
 
@@ -65,6 +66,24 @@ GamefieldPosition_t GetGamefieldPosition(uint8_t Xcoord, uint8_t Ycoord) {
 			return Corner3;
 	}
 }
+
+/****************************************************************************
+Function: 		GetAngle
+Parameters:		uint8_t Xcoord, the X coordinate
+						  uint8_t Ycoord, the Y coordinate
+							uint8_t Xtarget, the target X coordinate
+							uint8_t Ytarget, the target Y coordinate
+Returns:			double, the angle between the current point and the target point
+Description:	Return the angle between the current point and the target point
+****************************************************************************/
+double GetAngle(uint8_t Xcoord, uint8_t Ycoord, uint8_t Xtarget, uint8_t Ytarget) {
+	double deltaX = Xtarget - Xcoord;
+	double deltaY = Ytarget - Ycoord;
+	double angle = atan2(deltaY, deltaX) * 180 / PI;
+	return angle + 180;
+}
+
+	
 
 const char * GamefieldPositionString(GamefieldPosition_t GamefieldPosition) {
 	switch (GamefieldPosition) {

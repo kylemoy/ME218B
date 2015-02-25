@@ -65,8 +65,10 @@ ES_Event RunDisplay(ES_Event ThisEvent) {
 			case E_RACE_CAUTION: printf("(EVENT) E_RACE_CAUTION\r\n"); break;
 			
 			// SM_Master Events
-			case E_OBSTACLE_COMPLETED: printf("(EVENT) E_OBSTACLE_COMPLETED\r\n"); break;
-			case E_TARGET_SUCCESS: printf("(EVENT) E_TARGET_SUCCESS\r\n"); break;
+			case E_OBSTACLE_CROSSING_START: printf("(EVENT) E_OBSTACLE_CROSSING_START\r\n"); break;
+			case E_OBSTACLE_CROSSING_FINISH: printf("(EVENT) E_OBSTACLE_CROSSING_FINISH\r\n"); break;
+			case E_BALL_LAUNCHING_START: printf("(EVENT) E_BALL_LAUNCHING_START\r\n"); break;
+			case E_BALL_LAUNCHING_FINISH: printf("(EVENT) E_BALL_LAUNCHING_FINISH\r\n"); break;
 			
 			// SM_Racing Events
 			case E_CORNER1_ENTRY: printf("(EVENT) E_CORNER1_ENTRY\r\n"); break;
@@ -86,4 +88,17 @@ ES_Event RunDisplay(ES_Event ThisEvent) {
 		}
 	}
   return ReturnEvent;
+}
+
+/****************************************************************************
+Function:			PrintMyKartStatus
+Parameters:		void
+Returns:			void
+Description:	Prints our Kart status
+****************************************************************************/
+void PrintMyKartStatus(void) {
+	printf("My Kart: X = %d, Y = %d, Theta = %d, Laps Left = %d, Obstacle = %d, Target = %d, Gamefield Position = %s\r\n", \
+					GetMyKart().KartX, GetMyKart().KartY, GetMyKart().KartTheta, GetMyKart().LapsRemaining, \
+					GetMyKart().ObstacleCompleted, GetMyKart().TargetSuccess, \
+					GamefieldPositionString(GetMyKart().GamefieldPosition));
 }

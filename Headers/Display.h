@@ -43,6 +43,7 @@ Author: Kyle Moy, 2/19/15
 bool InitDisplay(uint8_t Priority);
 bool PostDisplay(ES_Event ThisEvent);
 ES_Event RunDisplay(ES_Event ThisEvent);
+void PrintMyKartStatus(void);
 
 #endif /*Display_H */
 

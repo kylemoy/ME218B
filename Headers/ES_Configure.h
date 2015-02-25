@@ -263,8 +263,10 @@ typedef enum {  ES_NO_EVENT = 0,
 										E_RACE_FINISHED,
 			
 										// SM_Playing Events
-										E_OBSTACLE_COMPLETED,
-										E_TARGET_SUCCESS,
+										E_BALL_LAUNCHING_START,
+										E_BALL_LAUNCHING_FINISH,
+										E_OBSTACLE_CROSSING_START,
+										E_OBSTACLE_CROSSING_FINISH,
 	
 										// SM_Racing Events
 										E_CORNER1_ENTRY,
@@ -275,13 +277,22 @@ typedef enum {  ES_NO_EVENT = 0,
 										E_CORNER3_EXIT,
 										E_CORNER4_ENTRY,
 										E_CORNER4_EXIT,
+										
+										// SM_Ball_Launching Events
+										E_TARGET_SUCCESS,
+										
+										// SM_Obstacle_Crossing Events
+										E_OBSTACLE_COMPLETED,
 			
 										// SM_DRS Events
 										E_NEW_DRS_QUERY,
 										E_DRS_EOT,
 										
 										// Motor Events
-										E_MOTOR_TIMEOUT
+										E_MOTOR_TIMEOUT,
+										
+										// Navigation Events
+										E_DRS_UPDATED
 										
 							} ES_EventTyp_t ;
 

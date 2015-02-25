@@ -52,11 +52,17 @@ ES_Event RunPlayingSM(ES_Event CurrentEvent) {
 			// Process any events
 			if (CurrentEvent.EventType != ES_NO_EVENT) { // If an event is active
 				switch (CurrentEvent.EventType) {
-//					case E_RACE_STARTED:
-//						NextState = PLAYING;
-//						MakeTransition = true;
-//						ReturnEvent.EventType = ES_NO_EVENT;
-//						break;
+					case E_OBSTACLE_CROSSING_START:
+						NextState = CROSSING_OBSTACLE;
+						MakeTransition = true;
+						ReturnEvent.EventType = ES_NO_EVENT;
+						break;
+					
+					case E_BALL_LAUNCHING_START:
+						NextState = BALL_LAUNCHING;
+						MakeTransition = true;
+						ReturnEvent.EventType = ES_NO_EVENT;
+						break;
 				}
 			}
 			break;
@@ -67,7 +73,7 @@ ES_Event RunPlayingSM(ES_Event CurrentEvent) {
 			// Process any events
 			if (CurrentEvent.EventType != ES_NO_EVENT) { // If an event is active
 				switch (CurrentEvent.EventType) {
-					case E_OBSTACLE_COMPLETED:
+					case E_OBSTACLE_CROSSING_FINISH:
 						NextState = RACING;
 						MakeTransition = true;
 						ReturnEvent.EventType = ES_NO_EVENT;
@@ -82,14 +88,14 @@ ES_Event RunPlayingSM(ES_Event CurrentEvent) {
 			// Process any events
 			if (CurrentEvent.EventType != ES_NO_EVENT) { // If an event is active
 				switch (CurrentEvent.EventType) {
-					case E_TARGET_SUCCESS:
+					case E_BALL_LAUNCHING_FINISH:
 						NextState = RACING;
 						MakeTransition = true;
 						ReturnEvent.EventType = ES_NO_EVENT;
 						break;
 				}
 			}
-			break;
+			break; 
 	}
 	
 	// If we are making a state transition

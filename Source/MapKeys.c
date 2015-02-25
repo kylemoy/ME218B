@@ -13,6 +13,7 @@ Author: Kyle Moy, 2/18/15
 #include "SM_Master.h"
 #include "Display.h"
 #include "DRS.h"
+#include "DriveMotors.h"
 
 
 /*---------------------------- Module Variables ---------------------------*/
@@ -55,44 +56,69 @@ ES_Event RunMapKeys(ES_Event ThisEvent) {
   {
 		switch (toupper(ThisEvent.EventParam)) {
 			
+			// Drive Command Triggers
+			case 'W': DriveForward(50, 100); break;
+			case 'S': DriveBackward(50, 100); break;
+			case 'D': RotateCW(60, 10); break;
+			case 'A': RotateCCW(60, 10); break;
+			case ' ': StopMotors(); break;
+			
+			
 			// (1) SM_Master Event Triggers
-			case 'Q': ThisEvent.EventType = E_RACE_STARTED; break;
-			case 'W': ThisEvent.EventType = E_RACE_FINISHED; break;
-			case 'E': ThisEvent.EventType = E_RACE_CAUTION; break;
+			case 'Z': ThisEvent.EventType = E_RACE_STARTED; break;
+			case 'X': ThisEvent.EventType = E_RACE_FINISHED; break;
+			case 'C': ThisEvent.EventType = E_RACE_CAUTION; break;
 			
 			// (1)SM_Master->(2)SM_Playing Event Triggers
-			case 'A': ThisEvent.EventType = E_OBSTACLE_COMPLETED; break;
-			case 'S': ThisEvent.EventType = E_TARGET_SUCCESS; break;
+			case 'V': ThisEvent.EventType = E_BALL_LAUNCHING_START; break;
+			case 'B': ThisEvent.EventType = E_BALL_LAUNCHING_FINISH; break;
+			case 'N': ThisEvent.EventType = E_OBSTACLE_CROSSING_START; break;
+			case 'M': ThisEvent.EventType = E_OBSTACLE_CROSSING_FINISH; break;
 			
 			// (1)SM_Master->(2)SM_Playing->(3)SM_Racing Event Triggers
-			// Look at Keyboard Numpad for track layout
-			case '3': ThisEvent.EventType = E_CORNER1_ENTRY; break;
-			case '6': ThisEvent.EventType = E_CORNER1_EXIT; break;
-			case '9': ThisEvent.EventType = E_CORNER2_ENTRY; break;
-			case '8': ThisEvent.EventType = E_CORNER2_EXIT; break;
-			case '7': ThisEvent.EventType = E_CORNER3_ENTRY; break;
-			case '4': ThisEvent.EventType = E_CORNER3_EXIT; break;
-			case '1': ThisEvent.EventType = E_CORNER4_ENTRY; break;
-			case '2': ThisEvent.EventType = E_CORNER4_EXIT; break;
+			case '1': ThisEvent.EventType = E_CORNER1_ENTRY; break;
+			case '2': ThisEvent.EventType = E_CORNER1_EXIT; break;
+			case '3': ThisEvent.EventType = E_CORNER2_ENTRY; break;
+			case '4': ThisEvent.EventType = E_CORNER2_EXIT; break;
+			case '5': ThisEvent.EventType = E_CORNER3_ENTRY; break;
+			case '6': ThisEvent.EventType = E_CORNER3_EXIT; break;
+			case '7': ThisEvent.EventType = E_CORNER4_ENTRY; break;
+			case '8': ThisEvent.EventType = E_CORNER4_EXIT; break;
 			
 			// Information Queries
-			case 'Z':
-				printf("Kart1: X = %d, Y = %d, Laps Left = %d, Obstacle = %d, Target = %d, Gamefield Position = %s\r\n", \
-					GetKartData(1).KartX, GetKartData(1).KartY, GetKartData(1).LapsRemaining, \
+			case ',':
+				printf("Kart1: X = %d, Y = %d, Theta = %d, Laps Left = %d, Obstacle = %d, Target = %d, Gamefield Position = %s\r\n", \
+					GetKartData(1).KartX, GetKartData(1).KartY, GetKartData(1).KartTheta, GetKartData(1).LapsRemaining, \
 					GetKartData(1).ObstacleCompleted, GetKartData(1).TargetSuccess, \
 					GamefieldPositionString(GetKartData(1).GamefieldPosition));
 				break;
-			case 'X':
-				printf("Kart2: X = %d, Y = %d, Laps Left = %d, Obstacle = %d, Target = %d, Gamefield Position = %s\r\n", \
-					GetKartData(2).KartX, GetKartData(2).KartY, GetKartData(2).LapsRemaining, \
+			case '.':
+				printf("Kart2: X = %d, Y = %d, Theta = %d, Laps Left = %d, Obstacle = %d, Target = %d, Gamefield Position = %s\r\n", \
+					GetKartData(2).KartX, GetKartData(2).KartY, GetKartData(2).KartTheta, GetKartData(2).LapsRemaining, \
 					GetKartData(2).ObstacleCompleted, GetKartData(2).TargetSuccess, \
 					GamefieldPositionString(GetKartData(2).GamefieldPosition));
 				break;
-			case 'C':
-				printf("Kart3: X = %d, Y = %d, Laps Left = %d, Obstacle = %d, Target = %d, Gamefield Position = %s\r\n", \
-					GetKartData(3).KartX, GetKartData(3).KartY, GetKartData(3).LapsRemaining, \
+			case '/':
+				printf("Kart3: X = %d, Y = %d, Theta = %d,  Left = %d, Obstacle = %d, Target = %d, Gamefield Position = %s\r\n", \
+					GetKartData(3).KartX, GetKartData(3).KartY, GetKartData(3).KartTheta, GetKartData(3).LapsRemaining, \
 					GetKartData(3).ObstacleCompleted, GetKartData(3).TargetSuccess, \
 					GamefieldPositionString(GetKartData(3).GamefieldPosition));
+				break;
+			
+			case ';':
+				switch (GetMyKart().GamefieldPosition) {
+					case Straight1: case Corner1:
+						printf("Target Angle to Corner 1 = %f\r\n", GetAngle(GetMyKart().KartX, GetMyKart().KartY, Corner1X, Corner1Y)); break;
+					case Straight2: case Corner2:
+						printf("Target Angle to Corner 2 = %f\r\n", GetAngle(GetMyKart().KartX, GetMyKart().KartY, Corner2X, Corner2Y)); break;
+					case Straight3: case Corner3:
+						printf("Target Angle to Corner 3 = %f\r\n", GetAngle(GetMyKart().KartX, GetMyKart().KartY, Corner3X, Corner3Y)); break;
+					case Straight4: case Corner4:
+						printf("Target Angle to Corner 4 = %f\r\n", GetAngle(GetMyKart().KartX, GetMyKart().KartY, Corner4X, Corner4Y)); break;
+					default:
+						printf("Unable to find a target corner\r\n");
+						break;
+				}
 				break;
 		}
 		PostMasterSM(ThisEvent);

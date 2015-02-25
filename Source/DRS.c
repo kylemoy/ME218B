@@ -75,6 +75,7 @@ uint8_t CurrentQuery;
 // An 8-byte array to store the SPI data
 static uint8_t DRS_Data[8] =  {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
+
 // Initializes the data structures for the Kart data
 //		uint16_t 						KartX;
 //		uint16_t 						KartY;
@@ -88,7 +89,8 @@ Kart_t Kart1 = {0, 0, 0, 0, false, false, Flag_Waiting, Undefined};
 Kart_t Kart2 = {0, 0, 0, 0, false, false, Flag_Waiting, Undefined};
 Kart_t Kart3 = {0, 0, 0, 0, false, false, Flag_Waiting, Undefined};
 
-Kart_t *MyKart;;	// Our Kart, initialized in DRS_Initialize function
+	// Our Kart, initialized in DRS_Initialize function
+Kart_t *MyKart;
 
 /*------------------------------ Module Code ------------------------------*/
 /****************************************************************************
@@ -306,8 +308,11 @@ bool StoreData(void) {
 		// Record the Kart data
 		Kart->KartX = DRS_Data[2]<<8 | DRS_Data[3]; // PXm (Byte 2) | PXl (Byte 3)
 		Kart->KartY = DRS_Data[4]<<8 | DRS_Data[5]; // PYm (Byte 4) | PYl (Byte 5)
-		Kart->KartTheta = DRS_Data[6]<<8 | DRS_Data[7]; // Om (Byte 6) | Ol (Byte 7)
-		
+		Kart->KartTheta = (DRS_Data[6]<<8 | DRS_Data[7]) % 360; // Om (Byte 6) | Ol (Byte 7)
+		if (Kart == MyKart) {
+			ES_Event Event = {E_DRS_UPDATED};
+			PostMasterSM(Event);
+		};
 		
 		
 		// Check if our gamefield position has changed
@@ -350,21 +355,18 @@ bool StoreData(void) {
 			// Print statements to the display (don't print if transitioning from Undefined)
 			if (Kart->GamefieldPosition != Undefined) {
 				if (DisplayMyGamefieldPosition && Kart == MyKart)
-					printf("My Kart (Kart %d): X = %d, Y = %d, Laps Left = %d, Obstacle = %d, Target = %d, Gamefield Position = %s\r\n", \
-					KartNumber, GetKartData(KartNumber).KartX, GetKartData(KartNumber).KartY, GetKartData(KartNumber).LapsRemaining, \
+					printf("My Kart (Kart %d): X = %d, Y = %d, Theta = %d, Laps Left = %d, Obstacle = %d, Target = %d, Gamefield Position = %s\r\n", \
+					KartNumber, GetKartData(KartNumber).KartX, GetKartData(KartNumber).KartY, \
+					GetKartData(KartNumber).KartTheta, GetKartData(KartNumber).LapsRemaining, \
 					GetKartData(KartNumber).ObstacleCompleted, GetKartData(KartNumber).TargetSuccess, \
 					GamefieldPositionString(NewGamefieldPosition));
-//					printf("My Kart (Kart %d) transitioned from %s to %s\r\n", KartNumber, \
-//					GamefieldPositionString(Kart->GamefieldPosition), \
-//					GamefieldPositionString(GetGamefieldPosition(Kart->KartX, Kart->KartY)));
+				
 				else if (DisplayGamefieldPositions)
-					printf("Kart %d: X = %d, Y = %d, Laps Left = %d, Obstacle = %d, Target = %d, Gamefield Position = %s\r\n", \
-					KartNumber, GetKartData(KartNumber).KartX, GetKartData(KartNumber).KartY, GetKartData(KartNumber).LapsRemaining, \
+					printf("Kart %d: X = %d, Y = %d, Theta = %d, Laps Left = %d, Obstacle = %d, Target = %d, Gamefield Position = %s\r\n", \
+					KartNumber, GetKartData(KartNumber).KartX, GetKartData(KartNumber).KartY, \
+					GetKartData(KartNumber).KartTheta, GetKartData(KartNumber).LapsRemaining, \
 					GetKartData(KartNumber).ObstacleCompleted, GetKartData(KartNumber).TargetSuccess, \
 					GamefieldPositionString(NewGamefieldPosition));
-//					printf("Kart %d transitioned from %s to %s\r\n", KartNumber, \
-//					GamefieldPositionString(Kart->GamefieldPosition), \
-			  GamefieldPositionString(GetGamefieldPosition(Kart->KartX, Kart->KartY)));
 			}
 			
 			// Update the gamefield position
@@ -471,6 +473,17 @@ void PrintKartDataTableFormat(void) {
 	}
 }
 
+/****************************************************************************
+Function:			GetMyKart
+Parameters:		void
+Returns:			void
+Description:	Returns our Kart struct
+****************************************************************************/
+Kart_t GetMyKart(void) {
+	return *MyKart;
+}
+
+
 /*------------------------------ Test Harness -----------------------------*/
 #ifdef TEST 
 #include "termio.h" 
@@ -481,7 +494,7 @@ int main(void)
 	TERMIO_Init();
 	clrScrn();
 	printf("In Test Harness for the DRS Module\n\r");
-	DRS_Initialize();
+	InitializeDRS();
 	uint8_t Query = GAME_STATUS_QUERY;
 	printf("Query = 0x%02x ", Query);
 	switch(Query) {
@@ -490,7 +503,7 @@ int main(void)
 		case KART2_QUERY: printf("(KART2_QUERY)\r\n"); break;
 		case KART3_QUERY: printf("(KART3_QUERY)\r\n"); break;
 	}
-	DRS_SendQuery(Query);
+	SendQuery(Query);
 	return 0; 
 } 
 #endif 

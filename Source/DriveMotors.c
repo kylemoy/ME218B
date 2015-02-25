@@ -33,6 +33,7 @@ Author: Kyle Moy, 2/21/15
 // Module Libraries
 #include "DriveMotors.h"
 #include "DriveMotorsService.h"
+#include "DriveMotorPID.h"
 #include "Display.h"
 
 
@@ -207,73 +208,39 @@ void SetMotorDirection(uint8_t Motor, uint8_t Direction) {
 }
 
 /****************************************************************************
-Function: 		RotateCW90
+Function: 		RotateCW
 Parameters: 	void
 Returns: 			void
-Description: 	Rotates the bot clockwise 90 degrees
+Description: 	Rotates the bot clockwise
 ****************************************************************************/
-void RotateCW90(void) {
-	if (DisplayMotorInfo) printf("Rotate CW 90\r\n");
-	SetMotorPWM(LEFT_MOTOR, 25);
-	SetMotorPWM(RIGHT_MOTOR, 25);
+void RotateCW(uint8_t TargetRPM, uint16_t Duration) {
+	if (DisplayMotorInfo) printf("Drive Motors: Rotating CW, TargetRPM = %d\r\n", TargetRPM);
+	SetMotorPWM(LEFT_MOTOR, TargetRPM);
+	SetMotorPWM(RIGHT_MOTOR, TargetRPM);
 	SetMotorDirection(LEFT_MOTOR, FORWARD);
 	SetMotorDirection(RIGHT_MOTOR, BACKWARD);
-	const uint16_t ROTATE_90_TIME = 100;
-	ES_Timer_InitTimer(DRIVE_MOTOR_TIMER, ROTATE_90_TIME);
-	#ifdef TEST
-	uint16_t Time = ES_Timer_GetTime();
-	uint16_t Target = ES_Timer_GetTime() + ROTATE_90_TIME;
-	while (Time != Target)
-		Time = ES_Timer_GetTime();
-	StopMotors();
-	#endif
+	if (Duration != 0) {
+		ES_Timer_InitTimer(DRIVE_MOTOR_TIMER, Duration);
+	}
 }
 
 /****************************************************************************
-Function: 		RotateCCW90
+Function: 		RotateCCW
 Parameters: 	void
 Returns: 			void
-Description: 	Rotates the bot counter-clockwise 90 degrees
+Description: 	Rotates the bot counter-clockwise
 ****************************************************************************/
-void RotateCCW90(void) {
-	if (DisplayMotorInfo) printf("Rotate CCW 90\r\n");
-	SetMotorPWM(LEFT_MOTOR, 0);
-	SetMotorPWM(RIGHT_MOTOR, 35);
+void RotateCCW(uint8_t TargetRPM, uint16_t Duration) {
+	if (DisplayMotorInfo) printf("Drive Motors: Rotating CCW, TargetRPM = %d\r\n", TargetRPM);
+	SetMotorPWM(LEFT_MOTOR, TargetRPM);
+	SetMotorPWM(RIGHT_MOTOR, TargetRPM);
 	SetMotorDirection(LEFT_MOTOR, BACKWARD);
 	SetMotorDirection(RIGHT_MOTOR, FORWARD);
-	const uint16_t ROTATE_90_TIME = 450;
-	ES_Timer_InitTimer(DRIVE_MOTOR_TIMER, ROTATE_90_TIME);
-	#ifdef TEST
-	uint16_t Time = ES_Timer_GetTime();
-	uint16_t Target = ES_Timer_GetTime() + ROTATE_90_TIME;
-	while (Time != Target)
-		Time = ES_Timer_GetTime();
-	StopMotors();
-	#endif
+	if (Duration != 0) {
+		ES_Timer_InitTimer(DRIVE_MOTOR_TIMER, Duration);
+	}
 }
 
-/****************************************************************************
-Function: 		Rotate180
-Parameters: 	void
-Returns: 			void
-Description: 	Rotates the bot 180 degrees
-****************************************************************************/
-void Rotate180(void) {
-	if (DisplayMotorInfo) printf("Rotate 180\r\n");
-	SetMotorPWM(LEFT_MOTOR, 50);
-	SetMotorPWM(RIGHT_MOTOR, 50);
-	SetMotorDirection(LEFT_MOTOR, FORWARD);
-	SetMotorDirection(RIGHT_MOTOR, BACKWARD);
-	const uint16_t ROTATE_180_TIME = 740;
-	ES_Timer_InitTimer(DRIVE_MOTOR_TIMER, ROTATE_180_TIME);
-	#ifdef TEST
-	uint16_t Time = ES_Timer_GetTime();
-	uint16_t Target = ES_Timer_GetTime() + ROTATE_180_TIME;
-	while (Time != Target)
-		Time = ES_Timer_GetTime();
-	StopMotors();
-	#endif
-}
 
 /****************************************************************************
 Function: 		StopMotors
@@ -282,7 +249,7 @@ Returns: 			void
 Description: 	Stops the bot
 ****************************************************************************/
 void StopMotors(void) {
-	if (DisplayMotorInfo) printf("Stop Motors\r\n");
+	if (DisplayMotorInfo) printf("Drive Motors: Stopping\r\n");
 	SetMotorPWM(LEFT_MOTOR, 0);
 	SetMotorPWM(RIGHT_MOTOR, 0);
 }
@@ -293,12 +260,15 @@ Parameters: 	void
 Returns: 			void
 Description: 	Drive the bot forward
 ****************************************************************************/
-void DriveForward(void) {
-	if (DisplayMotorInfo) printf("Drive Forward\r\n");
-	SetMotorPWM(LEFT_MOTOR, 25);
-	SetMotorPWM(RIGHT_MOTOR, 25);
+void DriveForward(uint8_t TargetRPM, uint16_t Duration) {
+	if (DisplayMotorInfo) printf("Drive Motors: Driving Forward, TargetRPM = %d\r\n", TargetRPM);
+	SetMotorPWM(LEFT_MOTOR, TargetRPM);
+	SetMotorPWM(RIGHT_MOTOR, TargetRPM);
 	SetMotorDirection(LEFT_MOTOR, FORWARD);
 	SetMotorDirection(RIGHT_MOTOR, FORWARD);
+	if (Duration != 0) {
+		ES_Timer_InitTimer(DRIVE_MOTOR_TIMER, Duration);
+	}
 }
 
 /****************************************************************************
@@ -307,42 +277,17 @@ Parameters: 	void
 Returns: 			void
 Description: 	Drive the bot backward
 ****************************************************************************/
-void DriveBackward(void) {
-	if (DisplayMotorInfo) printf("Drive Backward\r\n");
-	SetMotorPWM(LEFT_MOTOR, 25);
-	SetMotorPWM(RIGHT_MOTOR, 25);
+void DriveBackward(uint8_t TargetRPM, uint16_t Duration) {
+	if (DisplayMotorInfo) printf("Drive Motors: Driving Backward, TargetRPM = %d\r\n", TargetRPM);
+	SetMotorPWM(LEFT_MOTOR, TargetRPM);
+	SetMotorPWM(RIGHT_MOTOR, TargetRPM);
 	SetMotorDirection(LEFT_MOTOR, BACKWARD);
 	SetMotorDirection(RIGHT_MOTOR, BACKWARD);
+	if (Duration != 0) {
+		ES_Timer_InitTimer(DRIVE_MOTOR_TIMER, Duration);
+	}
 }
 
-/****************************************************************************
-Function: 		DriveLeftCorner
-Parameters: 	void
-Returns: 			void
-Description: 	Drive the bot forward while turning left (for cornering)
-****************************************************************************/
-void DriveLeftCorner(void) {
-	if (DisplayMotorInfo) printf("Drive Left Corner\r\n");
-	SetMotorPWM(LEFT_MOTOR, 25);
-	SetMotorPWM(RIGHT_MOTOR, 50);
-	SetMotorDirection(LEFT_MOTOR, FORWARD);
-	SetMotorDirection(RIGHT_MOTOR, FORWARD);
-}
-
-
-/****************************************************************************
-Function: 		DriveRightCorner
-Parameters: 	void
-Returns: 			void
-Description: 	Drive the bot forward while turning left (for cornering)
-****************************************************************************/
-void DriveRightCorner(void) {
-	if (DisplayMotorInfo) printf("Drive Right Corner\r\n");
-	SetMotorPWM(LEFT_MOTOR, 50);
-	SetMotorPWM(RIGHT_MOTOR, 25);
-	SetMotorDirection(LEFT_MOTOR, FORWARD);
-	SetMotorDirection(RIGHT_MOTOR, FORWARD);
-}
 		
 		
 
@@ -365,32 +310,12 @@ int main(void)
 		// Use keyboard input to control motor
 		char input = getchar();
 		switch (input) {
-			case 'i':
-				printf("LEFT MOTOR, FORWARD\r\n");
-				SetMotorDirection(LEFT_MOTOR, FORWARD);
-				break;
-				
-			case 'k':
-				printf("LEFT MOTOR, BACKWARD\r\n");
-				SetMotorDirection(LEFT_MOTOR, BACKWARD);
-				break;
-				
-			case 'o':
-				printf("RIGHT MOTOR, FORWARD\r\n");
-				SetMotorDirection(RIGHT_MOTOR, FORWARD);
-				break;
-					
-			case 'l':
-				printf("RIGHT MOTOR, BACKWARD\r\n");
-				SetMotorDirection(RIGHT_MOTOR, BACKWARD);
-				break;
-			
 			case 'w':
 				if (RightMotorDirection == BACKWARD && LeftMotorDirection == BACKWARD \
 						&& RightMotorDutyCycle != 0 && LeftMotorDutyCycle != 0)
 					StopMotors();
 				else
-					DriveForward();
+					DriveForward(100, 0);
 				break;
 			
 			case 's':
@@ -398,28 +323,20 @@ int main(void)
 						&& RightMotorDutyCycle != 0 && LeftMotorDutyCycle != 0)
 					StopMotors();
 				else
-					DriveBackward();
+					DriveBackward(150, 0);
 				break;
 			
 			case 'a':
-				RotateCCW90();
+				RotateCCW(40, 0);
 				break;
 			
 			case 'd':
-				RotateCW90();
+				RotateCW(40, 0);
 				break;
 			
-			case 'q':
-				DriveLeftCorner();
-				break;
-			
-			case 'e':
-				DriveRightCorner();
-				break;
-			
-			case 'r':
+			case ' ':
 				StopMotors();
-				break;				
+				break;		
 		}
 	}
 }

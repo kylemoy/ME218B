@@ -12,6 +12,7 @@ Author: Kyle Moy, 2/18/15
 
 /*----------------------------- Include Files -----------------------------*/
 #include "GamefieldPositions.h"
+#include <stdbool.h>
 
 /*----------------------------- Module Defines ----------------------------*/
 // Command Queries Byte
@@ -49,5 +50,6 @@ bool StoreData(void);
 Kart_t GetKartData(uint8_t KartNumber);
 void PrintKartData(void);
 void PrintKartDataTableFormat(void);
+Kart_t GetMyKart(void);
 
 #endif /* DRS_H */

@@ -31,7 +31,7 @@ Author: Kyle Moy, 2/16/15
 // DRS updates every 100ms (10Hz), so it doesn't make sense to go too fast
 // Since we have four commands, let's go with 25ms
 // But want it as fast as possible so data from the four queries is updated
-#define COMMAND_INTERVAL 25
+#define COMMAND_INTERVAL 1
 
 // If a command takes longer than this duration, then something is probably wrong
 // We'll timeout and go back to the waiting state
@@ -241,7 +241,7 @@ static uint8_t GetNextQuery(void) {
 			NextQuery = KART1_QUERY;
 			break;
 		case KART1_QUERY : 	
-			NextQuery = GAME_STATUS_QUERY;
+			NextQuery = KART2_QUERY;
 			break;
 		case KART2_QUERY :				
 			NextQuery = KART3_QUERY;
