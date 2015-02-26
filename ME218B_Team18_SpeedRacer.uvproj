@@ -472,6 +472,36 @@
               <FileType>1</FileType>
               <FilePath>.\Source\DriveMotorsService.c</FilePath>
             </File>
+            <File>
+              <FileName>DriveMotorsEncoder.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Source\DriveMotorsEncoder.c</FilePath>
+            </File>
+            <File>
+              <FileName>DriveMotorsPID.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Source\DriveMotorsPID.c</FilePath>
+            </File>
+            <File>
+              <FileName>SM_Navigation.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Source\SM_Navigation.c</FilePath>
+            </File>
+            <File>
+              <FileName>BallLauncher.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Source\BallLauncher.c</FilePath>
+            </File>
+            <File>
+              <FileName>SM_ObstacleCrossing.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Source\SM_ObstacleCrossing.c</FilePath>
+            </File>
+            <File>
+              <FileName>SM_BallLaunching.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Source\SM_BallLaunching.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -536,6 +566,36 @@
               <FileName>DriveMotorsService.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\Headers\DriveMotorsService.h</FilePath>
+            </File>
+            <File>
+              <FileName>DriveMotorEncoder.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Headers\DriveMotorEncoder.h</FilePath>
+            </File>
+            <File>
+              <FileName>DriveMotorPID.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Headers\DriveMotorPID.h</FilePath>
+            </File>
+            <File>
+              <FileName>SM_Navigation.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Headers\SM_Navigation.h</FilePath>
+            </File>
+            <File>
+              <FileName>BallLauncher.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Headers\BallLauncher.h</FilePath>
+            </File>
+            <File>
+              <FileName>SM_ObstacleCrossing.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Headers\SM_ObstacleCrossing.h</FilePath>
+            </File>
+            <File>
+              <FileName>SM_BallLaunching.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Headers\SM_BallLaunching.h</FilePath>
             </File>
           </Files>
         </Group>
