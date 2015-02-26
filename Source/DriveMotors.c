@@ -34,6 +34,7 @@ Author: Kyle Moy, 2/21/15
 #include "DriveMotors.h"
 #include "DriveMotorsService.h"
 #include "DriveMotorPID.h"
+#include "DriveMotorEncoder.h"
 #include "Display.h"
 
 
@@ -124,6 +125,8 @@ void InitializeDriveMotors(void) {
 	SetMotorDirection(LEFT_MOTOR, FORWARD);
 	SetMotorDirection(RIGHT_MOTOR, FORWARD);
 	
+	InitInputCapturePeriod();
+	InitPeriodicInt();
   printf("DC Motors Initialized.\n\r");
 }
 
@@ -213,12 +216,11 @@ Parameters: 	void
 Returns: 			void
 Description: 	Rotates the bot clockwise
 ****************************************************************************/
-void RotateCW(uint8_t TargetRPM, uint16_t Duration) {
+void RotateCW(uint16_t TargetRPM, uint16_t Duration) {
 	if (DisplayMotorInfo) printf("Drive Motors: Rotating CW, TargetRPM = %d\r\n", TargetRPM);
-	SetMotorPWM(LEFT_MOTOR, TargetRPM);
-	SetMotorPWM(RIGHT_MOTOR, TargetRPM);
 	SetMotorDirection(LEFT_MOTOR, FORWARD);
 	SetMotorDirection(RIGHT_MOTOR, BACKWARD);
+	SetTargetRPM(TargetRPM, TargetRPM);
 	if (Duration != 0) {
 		ES_Timer_InitTimer(DRIVE_MOTOR_TIMER, Duration);
 	}
@@ -230,12 +232,11 @@ Parameters: 	void
 Returns: 			void
 Description: 	Rotates the bot counter-clockwise
 ****************************************************************************/
-void RotateCCW(uint8_t TargetRPM, uint16_t Duration) {
+void RotateCCW(uint16_t TargetRPM, uint16_t Duration) {
 	if (DisplayMotorInfo) printf("Drive Motors: Rotating CCW, TargetRPM = %d\r\n", TargetRPM);
-	SetMotorPWM(LEFT_MOTOR, TargetRPM);
-	SetMotorPWM(RIGHT_MOTOR, TargetRPM);
 	SetMotorDirection(LEFT_MOTOR, BACKWARD);
 	SetMotorDirection(RIGHT_MOTOR, FORWARD);
+	SetTargetRPM(TargetRPM, TargetRPM);
 	if (Duration != 0) {
 		ES_Timer_InitTimer(DRIVE_MOTOR_TIMER, Duration);
 	}
@@ -250,8 +251,7 @@ Description: 	Stops the bot
 ****************************************************************************/
 void StopMotors(void) {
 	if (DisplayMotorInfo) printf("Drive Motors: Stopping\r\n");
-	SetMotorPWM(LEFT_MOTOR, 0);
-	SetMotorPWM(RIGHT_MOTOR, 0);
+	SetTargetRPM(0, 0);
 }
 
 /****************************************************************************
@@ -260,16 +260,33 @@ Parameters: 	void
 Returns: 			void
 Description: 	Drive the bot forward
 ****************************************************************************/
-void DriveForward(uint8_t TargetRPM, uint16_t Duration) {
+void DriveForward(uint16_t TargetRPM, uint16_t Duration) {
 	if (DisplayMotorInfo) printf("Drive Motors: Driving Forward, TargetRPM = %d\r\n", TargetRPM);
-	SetMotorPWM(LEFT_MOTOR, TargetRPM);
-	SetMotorPWM(RIGHT_MOTOR, TargetRPM);
 	SetMotorDirection(LEFT_MOTOR, FORWARD);
 	SetMotorDirection(RIGHT_MOTOR, FORWARD);
+	SetTargetRPM(TargetRPM, TargetRPM);
 	if (Duration != 0) {
 		ES_Timer_InitTimer(DRIVE_MOTOR_TIMER, Duration);
 	}
 }
+
+
+/****************************************************************************
+Function: 		DriveForward
+Parameters: 	void
+Returns: 			void
+Description: 	Drive the bot forward
+****************************************************************************/
+void DriveForwardWithBias(uint16_t TargetRPML, uint16_t TargetRPMR, uint16_t Duration) {
+	//if (DisplayMotorInfo) printf("Drive Motors: Driving Forward with Bias, TargetRPML = %d, TargetRPMR = %d\r\n", TargetRPML, TargetRPMR);
+	SetMotorDirection(LEFT_MOTOR, FORWARD);
+	SetMotorDirection(RIGHT_MOTOR, FORWARD);
+	SetTargetRPM(TargetRPMR, TargetRPML);
+	if (Duration != 0) {
+		ES_Timer_InitTimer(DRIVE_MOTOR_TIMER, Duration);
+	}
+}
+
 
 /****************************************************************************
 Function: 		DriveBackward
@@ -277,10 +294,9 @@ Parameters: 	void
 Returns: 			void
 Description: 	Drive the bot backward
 ****************************************************************************/
-void DriveBackward(uint8_t TargetRPM, uint16_t Duration) {
+void DriveBackward(uint16_t TargetRPM, uint16_t Duration) {
 	if (DisplayMotorInfo) printf("Drive Motors: Driving Backward, TargetRPM = %d\r\n", TargetRPM);
-	SetMotorPWM(LEFT_MOTOR, TargetRPM);
-	SetMotorPWM(RIGHT_MOTOR, TargetRPM);
+	SetTargetRPM(TargetRPM, TargetRPM);
 	SetMotorDirection(LEFT_MOTOR, BACKWARD);
 	SetMotorDirection(RIGHT_MOTOR, BACKWARD);
 	if (Duration != 0) {
@@ -306,6 +322,9 @@ int main(void)
 	_HW_Timer_Init(ES_Timer_RATE_1mS);
 	StopMotors();
 	
+	static int16_t TargetRPM = 500;
+	static uint8_t deltaRPM = 100;
+	
 	while(true){		
 		// Use keyboard input to control motor
 		char input = getchar();
@@ -315,7 +334,7 @@ int main(void)
 						&& RightMotorDutyCycle != 0 && LeftMotorDutyCycle != 0)
 					StopMotors();
 				else
-					DriveForward(100, 0);
+					DriveForward(500, 0);
 				break;
 			
 			case 's':
@@ -337,6 +356,26 @@ int main(void)
 			case ' ':
 				StopMotors();
 				break;		
+			
+			
+			case 'e':
+				DriveForwardWithBias(TargetRPM + deltaRPM, TargetRPM - deltaRPM, 0);
+				break;	
+			
+			
+			case 'q':
+				DriveForwardWithBias(TargetRPM - deltaRPM, TargetRPM + deltaRPM, 0);
+				break;	
+			
+			case 'r':
+				deltaRPM++;
+				printf("DeltaRPM = %d\r\n", deltaRPM);
+				break;	
+			
+			case 'f':
+				deltaRPM--;
+				printf("DeltaRPM = %d\r\n", deltaRPM);
+				break;	
 		}
 	}
 }

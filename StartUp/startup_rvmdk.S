@@ -80,6 +80,10 @@ __heap_limit
 ;******************************************************************************
         EXTERN  SysTickIntHandler
 		EXTERN  EOTIntHandler
+		EXTERN BeaconSensedCaptureResponse
+		EXTERN RDriveCaptureResponse
+		EXTERN LDriveCaptureResponse
+		EXTERN SetRPMResponse
 ;        EXTERN  UARTStdioIntHandler
 
 ;******************************************************************************
@@ -200,9 +204,9 @@ __Vectors
         DCD     IntDefaultHandler           ; Timer 5 subtimer A
         DCD     IntDefaultHandler           ; Timer 5 subtimer B
         DCD     IntDefaultHandler           ; Wide Timer 0 subtimer A
-        DCD     IntDefaultHandler           ; Wide Timer 0 subtimer B
-        DCD     IntDefaultHandler           ; Wide Timer 1 subtimer A
-        DCD     IntDefaultHandler           ; Wide Timer 1 subtimer B
+        DCD     RDriveCaptureResponse       ; Wide Timer 0 subtimer B
+        DCD     LDriveCaptureResponse       ; Wide Timer 1 subtimer A
+        DCD     SetRPMResponse           	; Wide Timer 1 subtimer B
         DCD     IntDefaultHandler           ; Wide Timer 2 subtimer A
         DCD     IntDefaultHandler           ; Wide Timer 2 subtimer B
         DCD     IntDefaultHandler           ; Wide Timer 3 subtimer A

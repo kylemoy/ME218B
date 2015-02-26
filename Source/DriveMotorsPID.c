@@ -135,7 +135,7 @@ uint32_t GetTimeoutCount( void ){
 #include "termio.h"
 int main(void){
 	TERMIO_Init();
-	InitMotors();
+	InitializeDriveMotors();
 	InitInputCapturePeriod();
 	InitPeriodicInt();
 	for(;;)
