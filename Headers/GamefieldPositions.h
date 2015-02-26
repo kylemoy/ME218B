@@ -40,7 +40,7 @@ typedef enum {
 
 // Target points
 #define Corner1X 65
-#define Corner1Y 22
+#define Corner1Y 180 //22
 
 #define Corner2X 64
 #define Corner2Y 187
@@ -51,11 +51,24 @@ typedef enum {
 #define Corner4X 230
 #define Corner4Y 17
 
+#define ObstacleEntryX 67
+#define ObstacleEntryY 67
+
+#define ObstacleExitX 67
+#define ObstacleExitY 67
+
+#define BallLaunchingEntryExitX 67
+#define BallLaunchingEntryExitY 67
+
+#define BallLaunchingX 67
+#define BallLaunchingY 67
+
+
 // Target angles
-#define East 292	// i.e. Direction to Corner1
-#define North 200	// i.e. Direction to Corner2
-#define West 110	// i.e. Direction to Corner3
-#define South 20	// i.e. Direction to Corner4
+#define East 75  // i.e. Direction to Corner1 (Green/Pink facing forward)
+#define North 165	// i.e. Direction to Corner2
+#define West 255	// i.e. Direction to Corner3
+#define South 345	// i.e. Direction to Corner4
 
 /*----------------------- Public Function Prototypes ----------------------*/
 GamefieldPosition_t GetGamefieldPosition(uint8_t Xcoord, uint8_t Ycoord);

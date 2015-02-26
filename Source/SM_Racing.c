@@ -37,8 +37,8 @@ static ES_Event DuringCorner4(ES_Event Event);
 
 /*---------------------------- Module Variables ---------------------------*/
 static RacingState_t CurrentState;
-static bool WillCrossObstacle = true;
-static bool WillBallLaunch = true;
+static bool WillCrossObstacle = false;
+static bool WillBallLaunch = false;
 
 
 /*------------------------------ Module Code ------------------------------*/
@@ -66,11 +66,12 @@ ES_Event RunRacingSM(ES_Event CurrentEvent) {
 			if (CurrentEvent.EventType != ES_NO_EVENT) { // If an event is active
 				switch (CurrentEvent.EventType) {
 //					case E_MOTOR_TIMEOUT:
-					case E_CORNER1_ENTRY:
-						NextState = CORNER1;
-						MakeTransition = true;
-						ReturnEvent.EventType = ES_NO_EVENT;
-						break;
+					// For now, let's stay in Straight1 while we Debug our SM_Navigation module
+					//case E_CORNER1_ENTRY:
+					//	NextState = STRAIGHT2;
+					//	MakeTransition = true;
+					//	ReturnEvent.EventType = ES_NO_EVENT;
+					//	break;
 				}
 			}
 			break;
@@ -102,7 +103,7 @@ ES_Event RunRacingSM(ES_Event CurrentEvent) {
 				switch (CurrentEvent.EventType) {
 					//case E_MOTOR_TIMEOUT:
 					case E_CORNER2_ENTRY:
-						NextState = CORNER2;
+						NextState = STRAIGHT3;
 						MakeTransition = true;
 						ReturnEvent.EventType = ES_NO_EVENT;
 						break;
@@ -137,7 +138,7 @@ ES_Event RunRacingSM(ES_Event CurrentEvent) {
 				switch (CurrentEvent.EventType) {
 					//case E_MOTOR_TIMEOUT:
 					case E_CORNER3_ENTRY:
-						NextState = CORNER3;
+						NextState = STRAIGHT4;
 						MakeTransition = true;
 						ReturnEvent.EventType = ES_NO_EVENT;
 						break;
