@@ -19,6 +19,7 @@ Author: Kyle Moy, 2/19/15
 #include "SM_Navigation.h"
 #include "GamefieldPositions.h"
 #include "SM_Master.h"
+#include "DRS.h"
 
 
 /*----------------------------- Module Defines ----------------------------*/
@@ -67,11 +68,11 @@ ES_Event RunRacingSM(ES_Event CurrentEvent) {
 				switch (CurrentEvent.EventType) {
 //					case E_MOTOR_TIMEOUT:
 					// For now, let's stay in Straight1 while we Debug our SM_Navigation module
-					//case E_CORNER1_ENTRY:
-					//	NextState = STRAIGHT2;
-					//	MakeTransition = true;
-					//	ReturnEvent.EventType = ES_NO_EVENT;
-					//	break;
+					case E_CORNER1_ENTRY:
+						NextState = CORNER1;
+						MakeTransition = true;
+						ReturnEvent.EventType = ES_NO_EVENT;
+						break;
 				}
 			}
 			break;
@@ -86,6 +87,10 @@ ES_Event RunRacingSM(ES_Event CurrentEvent) {
 //						// After turning is complete
 //						//DriveForward();
 //					case E_MOTOR_TIMEOUT:
+					case E_DRS_UPDATED:
+						PrintMyKartStatus();
+						break;
+					
 					case E_CORNER1_EXIT:
 						NextState = STRAIGHT2;
 						MakeTransition = true;
@@ -103,7 +108,7 @@ ES_Event RunRacingSM(ES_Event CurrentEvent) {
 				switch (CurrentEvent.EventType) {
 					//case E_MOTOR_TIMEOUT:
 					case E_CORNER2_ENTRY:
-						NextState = STRAIGHT3;
+						NextState = CORNER2;
 						MakeTransition = true;
 						ReturnEvent.EventType = ES_NO_EVENT;
 						break;
@@ -138,7 +143,7 @@ ES_Event RunRacingSM(ES_Event CurrentEvent) {
 				switch (CurrentEvent.EventType) {
 					//case E_MOTOR_TIMEOUT:
 					case E_CORNER3_ENTRY:
-						NextState = STRAIGHT4;
+						NextState = CORNER3;
 						MakeTransition = true;
 						ReturnEvent.EventType = ES_NO_EVENT;
 						break;
@@ -225,8 +230,17 @@ Description:	Does any required initialization for this state machine
 ****************************************************************************/
 void StartRacingSM(ES_Event CurrentEvent) {
 	if (ES_ENTRY_HISTORY != CurrentEvent.EventType) {
-		// Initialize the state variable
-		CurrentState = STRAIGHT1;
+		// Initialize the state variable based on currnet position
+		switch (GetMyKart().GamefieldPosition) {
+			case Straight1: case Corner4: default:
+				CurrentState = STRAIGHT1; break;
+			case Corner1: case Straight2:
+				CurrentState = STRAIGHT2; break;
+			case Corner2: case Straight3:
+				CurrentState = STRAIGHT3; break;
+			case Corner3: case Straight4:
+				CurrentState = STRAIGHT4; break;
+		}
 	}
   
 	// Let the Run function init the lower level state machines
@@ -253,13 +267,14 @@ static ES_Event DuringStraight1(ES_Event Event) {
 	// Process ES_ENTRY, ES_ENTRY_HISTORY & ES_EXIT events
 	if ((Event.EventType == ES_ENTRY) || (Event.EventType == ES_ENTRY_HISTORY)) {
 		if(DisplayEntryStateTransitions && DisplaySM_Racing) printf("SM3_Racing: STRAIGHT1\r\n");
-		SetTargetTheta(East);
-		SetTargetPosition(Corner1X, Corner1Y);
-		StartNavigationSM(Event);
+		//SetTargetTheta(East);
+		//SetTargetPosition(Corner1X, Corner1Y);
+		//StartNavigationSM(Event);
+		DriveForward(100,0);
 	} else if ( Event.EventType == ES_EXIT ) {
 		
 	} else {
-		RunNavigationSM(Event);
+		//RunNavigationSM(Event);
 	}
 	return(ReturnEvent);
 }
@@ -269,13 +284,14 @@ static ES_Event DuringCorner1(ES_Event Event) {
 	// Process ES_ENTRY, ES_ENTRY_HISTORY & ES_EXIT events
 	if ((Event.EventType == ES_ENTRY) || (Event.EventType == ES_ENTRY_HISTORY)) {
 		if(DisplayEntryStateTransitions && DisplaySM_Racing) printf("SM3_Racing: CORNER1\r\n");
-		SetTargetTheta(North);
-		SetTargetPosition(Corner2X, Corner2Y);
-		StartNavigationSM(Event);
+		//SetTargetTheta(North);
+		//SetTargetPosition(Corner2X, Corner2Y);
+		//StartNavigationSM(Event);
+		DriveForwardWithBias(30, 70, 0);
 	} else if ( Event.EventType == ES_EXIT ) {
 		
 	} else {
-		RunNavigationSM(Event);
+		//RunNavigationSM(Event);
 	}
 	return(ReturnEvent);
 }
@@ -289,14 +305,15 @@ static ES_Event DuringStraight2(ES_Event Event) {
 			ES_Event Event = {E_BALL_LAUNCHING_START};
 			PostMasterSM(Event);
 		} else {
-			SetTargetTheta(North);
-			SetTargetPosition(Corner2X, Corner2Y);
-			StartNavigationSM(Event);
+			//SetTargetTheta(North);
+			//SetTargetPosition(Corner2X, Corner2Y);
+			//StartNavigationSM(Event);
+			DriveForward(100, 0);
 		}
 	} else if ( Event.EventType == ES_EXIT ) {
 		
 	} else {
-		RunNavigationSM(Event);
+		//RunNavigationSM(Event);
 	}
 	return(ReturnEvent);
 }
@@ -306,13 +323,14 @@ static ES_Event DuringCorner2(ES_Event Event) {
 	// Process ES_ENTRY, ES_ENTRY_HISTORY & ES_EXIT events
 	if ((Event.EventType == ES_ENTRY) || (Event.EventType == ES_ENTRY_HISTORY)) {
 		if(DisplayEntryStateTransitions && DisplaySM_Racing) printf("SM3_Racing: CORNER2\r\n");
-		SetTargetTheta(West);
-		SetTargetPosition(Corner3X, Corner3Y);
-		StartNavigationSM(Event);
+		//SetTargetTheta(West);
+		//SetTargetPosition(Corner3X, Corner3Y);
+		//StartNavigationSM(Event);
+		DriveForwardWithBias(30, 70, 0);
 	} else if ( Event.EventType == ES_EXIT ) {
 		
 	} else {
-		RunNavigationSM(Event);
+		//RunNavigationSM(Event);
 	}
 	return(ReturnEvent);
 }
@@ -326,14 +344,15 @@ static ES_Event DuringStraight3(ES_Event Event) {
 			ES_Event Event = {E_OBSTACLE_CROSSING_START};
 			PostMasterSM(Event);
 		} else {
-			SetTargetTheta(West);
-			SetTargetPosition(Corner3X, Corner3Y);
-			StartNavigationSM(Event);
+			//SetTargetTheta(West);
+			//SetTargetPosition(Corner3X, Corner3Y);
+			//StartNavigationSM(Event);
+			DriveForward(100, 0);
 		}
 	} else if ( Event.EventType == ES_EXIT ) {
 		
 	} else {
-		RunNavigationSM(Event);
+		//RunNavigationSM(Event);
 	}
 	return(ReturnEvent);
 }
@@ -343,13 +362,14 @@ static ES_Event DuringCorner3(ES_Event Event) {
 	// Process ES_ENTRY, ES_ENTRY_HISTORY & ES_EXIT events
 	if ((Event.EventType == ES_ENTRY) || (Event.EventType == ES_ENTRY_HISTORY)) {
 		if(DisplayEntryStateTransitions && DisplaySM_Racing) printf("SM3_Racing: CORNER3\r\n");
-		SetTargetTheta(South);
-		SetTargetPosition(Corner4X, Corner4Y);
-		StartNavigationSM(Event);
+		//SetTargetTheta(South);
+		//SetTargetPosition(Corner4X, Corner4Y);
+		//StartNavigationSM(Event);
+		DriveForwardWithBias(30, 70, 0);
 	} else if ( Event.EventType == ES_EXIT ) {
 		
 	} else {
-		RunNavigationSM(Event);
+		//RunNavigationSM(Event);
 	}
 	return(ReturnEvent);
 }
@@ -359,13 +379,14 @@ static ES_Event DuringStraight4(ES_Event Event) {
 	// Process ES_ENTRY, ES_ENTRY_HISTORY & ES_EXIT events
 	if ((Event.EventType == ES_ENTRY) || (Event.EventType == ES_ENTRY_HISTORY)) {
 		if(DisplayEntryStateTransitions && DisplaySM_Racing) printf("SM_Racing3: STRAIGHT4\r\n");
-		SetTargetTheta(South);
-		SetTargetPosition(Corner4X, Corner4Y);
-		StartNavigationSM(Event);
+		//SetTargetTheta(South);
+		//SetTargetPosition(Corner4X, Corner4Y);
+		//StartNavigationSM(Event);
+		DriveForward(100, 0);
 	} else if ( Event.EventType == ES_EXIT ) {
 		
 	} else {
-		RunNavigationSM(Event);
+		//RunNavigationSM(Event);
 	}
 	return(ReturnEvent);
 }
@@ -375,13 +396,14 @@ static ES_Event DuringCorner4(ES_Event Event) {
 	// Process ES_ENTRY, ES_ENTRY_HISTORY & ES_EXIT events
 	if ((Event.EventType == ES_ENTRY) || (Event.EventType == ES_ENTRY_HISTORY)) {
 		if(DisplayEntryStateTransitions && DisplaySM_Racing) printf("SM3_Racing: CORNER4\r\n");
-		SetTargetTheta(East);
-		SetTargetPosition(Corner1X, Corner1Y);
-		StartNavigationSM(Event);
+		//SetTargetTheta(East);
+		//SetTargetPosition(Corner1X, Corner1Y);
+		//StartNavigationSM(Event);
+		DriveForwardWithBias(30, 70, 0);
 	} else if ( Event.EventType == ES_EXIT ) {
 		
 	} else {
-		RunNavigationSM(Event);
+		//RunNavigationSM(Event);
 	}
 	return(ReturnEvent);
 }

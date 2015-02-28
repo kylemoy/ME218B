@@ -79,7 +79,7 @@ void SetRPMResponse( void ){
 	//static float pGain = 1.26;
 	static float pGain = 0.05;//1.92;
 	static float iGain = 0.03;
-	static float dGain = 0.03;
+	static float dGain = 0.00;
 
 	// start by clearing the source of the interrupt
   HWREG(WTIMER1_BASE+TIMER_O_ICR) = TIMER_ICR_TBTOCINT;
@@ -117,6 +117,8 @@ void SetRPMResponse( void ){
 	LastErrorL = RPMErrorL;
 	
 	//SetMotorDirection(1,1); //take this away
+	//SetMotorPWM(RIGHT_MOTOR, 100);
+	//SetMotorPWM(LEFT_MOTOR, 100 );
 	SetMotorPWM(RIGHT_MOTOR, RequestedDutyR);
 	SetMotorPWM(LEFT_MOTOR, RequestedDutyL);
 }

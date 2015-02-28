@@ -39,6 +39,9 @@ static NavigationState_t CurrentState;
 static uint8_t TargetX;
 static uint8_t TargetY;
 static uint16_t TargetTheta;
+static uint8_t Xold = 0;
+static uint8_t Yold = 0;
+static double CalculatedTheta;
 
 
 /*------------------------------ Module Code ------------------------------*/
@@ -92,10 +95,10 @@ ES_Event RunNavigationSM(ES_Event CurrentEvent) {
 				// Variables to store current values
 				uint8_t CurrentX;
 				uint8_t CurrentY;
-				int16_t DeltaY;
-				int16_t DeltaRPM;
-				uint16_t RPMR;
-				uint16_t RPML;
+				//int16_t DeltaY;
+				//int16_t DeltaRPM;
+				//uint16_t RPMR;
+				//uint16_t RPML;
 				
 				switch (CurrentEvent.EventType) {
 					case E_MOTOR_TIMEOUT:
@@ -108,16 +111,17 @@ ES_Event RunNavigationSM(ES_Event CurrentEvent) {
 						CurrentX = GetMyKart().KartX;
 						CurrentY = GetMyKart().KartY;
 						//printf("CurrentX = %d and CurrentY = %d, TargetX = %d and TargetY = %d\r\n", CurrentX, CurrentY, TargetX, TargetY);
-						DeltaY = CurrentY- TargetY;
-						DeltaRPM = DeltaY * 1.5;
-						RPML = 100 + DeltaRPM;
-						RPMR = 100 - DeltaRPM;
-						DriveForwardWithBias(RPML, RPMR, 0);
-						printf("Y = %d, TargetY = %d, DeltaY = %d, Drive Forward with RPML = %d, RPMR = %d\r\n", CurrentY, TargetY, DeltaY, RPML, RPMR);
+						//DeltaY = CurrentY- TargetY;
+						//DeltaRPM = DeltaY * 1.5;
+						//RPML = 100 + DeltaRPM;
+						//RPMR = 100 - DeltaRPM;
+						//DriveForwardWithBias(RPML, RPMR, 0);
+						//printf("Y = %d, TargetY = %d, DeltaY = %d, Drive Forward with RPML = %d, RPMR = %d\r\n", CurrentY, TargetY, DeltaY, RPML, RPMR);
 						//PrintMyKartStatus();
 						
 						if (sqrt(pow(CurrentX - TargetX, 2) + pow(CurrentY - TargetY, 2)) < 10) {
 							printf("CurrentX = %d and CurrentY = %d, TargetX = %d and TargetY = %d have been reached, transition to waiting\r\n", CurrentX, CurrentY, TargetX, TargetY);
+							
 							StopMotors();
 							NextState = WAITING;
 							MakeTransition = true;
@@ -161,7 +165,7 @@ Description:	Does any required initialization for this state machine
 ****************************************************************************/
 void StartNavigationSM(ES_Event CurrentEvent) {
   // Initialize the state variable
-  CurrentState = DRIVING;
+  CurrentState = ORIENTING;
 	// Let the Run function init the lower level state machines
   RunNavigationSM(CurrentEvent);
   return;
@@ -202,8 +206,16 @@ static ES_Event DuringOrienting(ES_Event Event) {
 	if ((Event.EventType == ES_ENTRY) || (Event.EventType == ES_ENTRY_HISTORY)) {
 		if(DisplayEntryStateTransitions && DisplaySM_Racing) printf("SM4_Navigation: ORIENTING\r\n");
 		printf("Rotating towards TargetTheta = %d\r\n", TargetTheta); 
-		RotateCCW(40, 0);
+		//RotateCCW(40, 0);
+		//DriveForwardWithBias(30, 70, 0);
 		//ES_Timer_InitTimer(DRIVE_MOTOR_TIMER, 250);
+		if (Xold != 0 && Yold != 0) {
+			CalculatedTheta = atan2(GetMyKart().KartY - Yold, GetMyKart().KartX - Xold);
+			printf("X1 = %d, Y1 = %d, X2 = %d, Y2 = %d\r\n", Xold, Yold, GetMyKart().KartX, GetMyKart().KartY);
+			printf("Calculated Theta = %f\r\n", CalculatedTheta);
+		}
+		Xold = GetMyKart().KartX;
+		Yold = GetMyKart().KartY;
 	} else if ( Event.EventType == ES_EXIT ) {
 		
 	} else {
@@ -217,7 +229,8 @@ static ES_Event DuringDriving(ES_Event Event) {
 	if ((Event.EventType == ES_ENTRY) || (Event.EventType == ES_ENTRY_HISTORY)) {
 		if(DisplayEntryStateTransitions && DisplaySM_Racing) printf("SM4_Navigation: DRIVING\r\n");
 		printf("Driving towards TargetX = %d, TargetY = %d\r\n", TargetX, TargetY); 
-		DriveForward(100, 0);
+		//DriveForward(100, 0);
+		//DriveForward(100, 0);
 	} else if ( Event.EventType == ES_EXIT ) {
 		
 	} else {

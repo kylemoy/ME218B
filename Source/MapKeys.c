@@ -57,10 +57,10 @@ ES_Event RunMapKeys(ES_Event ThisEvent) {
 		switch (toupper(ThisEvent.EventParam)) {
 			
 			// Drive Command Triggers
-			case 'W': DriveForward(50, 100); break;
-			case 'S': DriveBackward(50, 100); break;
-			case 'D': RotateCW(60, 10); break;
-			case 'A': RotateCCW(60, 10); break;
+			case 'W': DriveForward(100, 100); break;
+			case 'S': DriveBackward(100, 100); break;
+			case 'D': DriveForwardWithBias(70, 30, 50); break;//RotateCW(150, 5); break;
+			case 'A': DriveForwardWithBias(30, 70, 50); break;//RotateCCW(100, 5); break;
 			case ' ': StopMotors(); break;
 			
 			

@@ -30,13 +30,30 @@ typedef enum {
 } GamefieldPosition_t;
 
 // The bounding lines (see Racing_Positions.xlsx for data)
-#define Xleft 205	
-#define Xcenter 147
-#define Xright 89
-#define Ybottom 40
-#define Ycenter 100
-#define Ytop 156
-#define CornerEntry 0 // Extends the corner entry beyond the corner box
+#define Corner1XBound 104
+#define Corner1YBound 32
+#define Corner2XBound 103
+#define Corner2YBound 148
+#define Corner3XBound 219
+#define Corner3YBound 150
+#define Corner4XBound 220
+#define Corner4YBound 35
+
+#define Straight1YBound 29
+#define Straight2XBound 97
+#define Straight3YBound 154 
+#define Straight4XBound 225
+
+#define BallShootingObstacleBound  163
+ 
+#define CornerEntry 35 // Extends the corner entry beyond the corner box
+
+//#define Xleft 205	
+//#define Xcenter 147
+//#define Xright 105
+//#define Ybottom 32
+//#define Ycenter 100
+//#define Ytop 147
 
 // Target points
 #define Corner1X 65

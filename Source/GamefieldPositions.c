@@ -27,44 +27,74 @@ Description:	Return the gamefield position that a point is in
 GamefieldPosition_t GetGamefieldPosition(uint8_t Xcoord, uint8_t Ycoord) {
 	if (Xcoord == 0 && Ycoord == 0)
 		return Undefined;
-	if (Xcoord < Xright) {
-		if (Ycoord < Ybottom)
-			return Corner1;
-		else if (Ycoord < Ytop) {
-			if (Ycoord < Ytop - CornerEntry)
-				return Straight2;
-			else
-				return Corner2;
-		} else
-			return Corner2;
-	} else if (Xcoord < Xleft) {
-		if (Ycoord < Ybottom) {
-			if (Xcoord < Xright + CornerEntry)
-				return Corner1;
-			else
-				return Straight1;
-		} else if (Ycoord < Ytop)
-			if (Xcoord < Xcenter)
-				return BallShootingArea;
-			else
-				return ObstacleCrossingArea;
-		else {
-			if (Xcoord < Xleft - CornerEntry)
-				return Straight3;
-			else
-				return Corner3;
-		}
-	} else {
-		if (Ycoord < Ybottom)
-			return Corner4;
-		else if (Ycoord < Ytop)
-			if (Ycoord < Ybottom + CornerEntry)
-				return Corner4;
-			else
-				return Straight4;
-		else
-			return Corner3;
-	}
+	
+	else if (Xcoord < (Corner1XBound + CornerEntry) && Ycoord < Corner1YBound)
+		return Corner1;
+	
+	else if (Xcoord < Corner2XBound && Ycoord > (Corner2YBound - CornerEntry))
+		return Corner2;
+	
+	else if (Xcoord > (Corner3XBound - CornerEntry) && Ycoord > Corner3YBound)
+		return Corner3;
+	
+	else if (Xcoord > Corner4XBound && Ycoord < (Corner4YBound + CornerEntry))
+		return Corner4;
+	
+	else if (Xcoord < Straight2XBound)
+		return Straight2;
+	
+	else if (Xcoord > Straight4XBound)
+		return Straight4;
+	
+	else if (Ycoord < Straight1YBound)
+		return Straight1;
+	
+	else if (Ycoord > Straight3YBound)
+		return Straight3;
+	
+	else if (Xcoord < BallShootingObstacleBound)
+		return BallShootingArea;
+	
+	else
+		return ObstacleCrossingArea;
+//	if (Xcoord < Xright) {
+//		if (Ycoord < Ybottom)
+//			return Corner1;
+//		else if (Ycoord < Ytop) {
+//			if (Ycoord < Ytop - CornerEntry)
+//				return Straight2;
+//			else
+//				return Corner2;
+//		} else
+//			return Corner2;
+//	} else if (Xcoord < Xleft) {
+//		if (Ycoord < Ybottom) {
+//			if (Xcoord < Xright + CornerEntry)
+//				return Corner1;
+//			else
+//				return Straight1;
+//		} else if (Ycoord < Ytop)
+//			if (Xcoord < Xcenter)
+//				return BallShootingArea;
+//			else
+//				return ObstacleCrossingArea;
+//		else {
+//			if (Xcoord < Xleft - CornerEntry)
+//				return Straight3;
+//			else
+//				return Corner3;
+//		}
+//	} else {
+//		if (Ycoord < Ybottom)
+//			return Corner4;
+//		else if (Ycoord < Ytop)
+//			if (Ycoord < Ybottom + CornerEntry)
+//				return Corner4;
+//			else
+//				return Straight4;
+//		else
+//			return Corner3;
+//	}
 }
 
 /****************************************************************************
