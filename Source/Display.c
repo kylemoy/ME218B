@@ -65,10 +65,12 @@ ES_Event RunDisplay(ES_Event ThisEvent) {
 			case E_RACE_CAUTION: printf("(EVENT) E_RACE_CAUTION\r\n"); break;
 			
 			// SM_Master Events
-			case E_OBSTACLE_CROSSING_START: printf("(EVENT) E_OBSTACLE_CROSSING_START\r\n"); break;
-			case E_OBSTACLE_CROSSING_FINISH: printf("(EVENT) E_OBSTACLE_CROSSING_FINISH\r\n"); break;
-			case E_BALL_LAUNCHING_START: printf("(EVENT) E_BALL_LAUNCHING_START\r\n"); break;
-			case E_BALL_LAUNCHING_FINISH: printf("(EVENT) E_BALL_LAUNCHING_FINISH\r\n"); break;
+			case E_OBSTACLE_CROSSING_ENTRY: printf("(EVENT) E_OBSTACLE_CROSSING_ENTRY\r\n"); break;
+			case E_OBSTACLE_CROSSING_EXIT: printf("(EVENT) E_OBSTACLE_CROSSING_EXIT\r\n"); break;
+			case E_BALL_LAUNCHING_ENTRY: printf("(EVENT) E_BALL_LAUNCHING_ENTRY\r\n"); break;
+			case E_BALL_LAUNCHING_EXIT: printf("(EVENT) E_BALL_LAUNCHING_EXIT\r\n"); break;
+			case E_BALL_LAUNCHING_COMPLETE: printf("(EVENT) E_BALL_LAUNCHING_COMPLETE\r\n"); break;
+			case E_BALL_LAUNCHING_COMPLETE2: printf("(EVENT) E_BALL_LAUNCHING_COMPLETE2\r\n"); break;
 			
 			// SM_Racing Events
 			case E_CORNER1_ENTRY: printf("(EVENT) E_CORNER1_ENTRY\r\n"); break;
@@ -83,6 +85,9 @@ ES_Event RunDisplay(ES_Event ThisEvent) {
 			// SM_DRS Events
 			case E_NEW_DRS_QUERY: printf("(EVENT) E_NEW_DRS_QUERY\r\n"); break;
 			case E_DRS_EOT: printf("(EVENT) E_DRS_EOT\r\n"); break;
+			
+			// Other Events
+			//case E_BUMP_DETECTED: printf("(EVENT) E_BUMP_DETECTED\r\n"); break;
 			
 			default: break;
 		}

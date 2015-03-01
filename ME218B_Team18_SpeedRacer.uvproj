@@ -502,6 +502,16 @@
               <FileType>1</FileType>
               <FilePath>.\Source\SM_BallLaunching.c</FilePath>
             </File>
+            <File>
+              <FileName>BeaconSensor.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Source\BeaconSensor.c</FilePath>
+            </File>
+            <File>
+              <FileName>BumpSensor.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Source\BumpSensor.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -596,6 +606,16 @@
               <FileName>SM_BallLaunching.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\Headers\SM_BallLaunching.h</FilePath>
+            </File>
+            <File>
+              <FileName>BeaconSensor.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Headers\BeaconSensor.h</FilePath>
+            </File>
+            <File>
+              <FileName>BumpSensor.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Headers\BumpSensor.h</FilePath>
             </File>
           </Files>
         </Group>

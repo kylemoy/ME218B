@@ -1,5 +1,5 @@
 /****************************************************************************
-Module: DriveMotorsService.h
+Module: DriveMotorsService.c
 Description:
 	This module handles the motor timer responses and responds to events.
 Author: Kyle Moy, 2/22/15

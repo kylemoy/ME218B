@@ -9,7 +9,12 @@
 #include "inc/hw_gpio.h"
 #include "bitdefs.h"
 
+// Framework Libraries
+#include "ES_Configure.h"
+#include "ES_Framework.h"
+
 #include "DriveMotorEncoder.h"
+#include "SM_Master.h"
 
 // 40,000 ticks per mS assumes a 40Mhz clock
 #define TicksPerMS 40000
@@ -24,6 +29,11 @@ static uint32_t LastCaptureR;
 static uint32_t LastCaptureL;
 static uint32_t RPMR;
 static uint32_t RPML;
+
+static uint32_t TickCountR = 0;
+static uint32_t TickCountL = 0;
+static uint32_t TickCountAverage = 0;
+static uint32_t TargetTickCount;
 
 // we will use Timer A in Wide Timer 0 to capture the input
 void InitInputCapturePeriod( void ){
@@ -117,6 +127,15 @@ void RDriveCaptureResponse( void ){
 			    
 	//update LastCapture to prepare for the next edge  
   LastCaptureR = ThisCaptureR;
+	
+	// Update the tick count
+	TickCountR++;
+	TickCountAverage = (TickCountR + TickCountL) / 2;
+	printf("TickCountAverage = %d\r\n", TickCountAverage);
+	if (TickCountAverage > TargetTickCount) {
+		ES_Event Event = {E_MOTOR_TICK_TIMEOUT, 0};
+		PostMasterSM(Event);
+	}
 }
 
 void LDriveCaptureResponse( void ){
@@ -132,6 +151,16 @@ void LDriveCaptureResponse( void ){
 	
 	//update LastCapture to prepare for the next edge  
   LastCaptureL = ThisCaptureL;
+	
+	// Update the tick count
+	TickCountL++;
+	TickCountAverage = (TickCountR + TickCountL) / 2;
+	printf("TickCountAverage = %d\r\n", TickCountAverage);
+	if (TickCountAverage > TargetTickCount) {
+		ES_Event Event = {E_MOTOR_TICK_TIMEOUT, 0};
+		PostMasterSM(Event);
+	}
+	
 }
 
 uint32_t GetPeriodR( void ){
@@ -155,6 +184,14 @@ uint32_t GetRPML(void){
 	}
 	return RPML;
 }
+
+void SetTargetTickCount(uint32_t NumberOfTicks) {
+	TickCountR = 0;
+	TickCountL = 0;
+	TickCountAverage = 0;
+	TargetTickCount = NumberOfTicks;
+}
+
 /*------------------------------- Footnotes -------------------------------*/
 #ifdef TEST
 #include "termio.h"

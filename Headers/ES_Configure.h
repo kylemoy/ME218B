@@ -263,10 +263,10 @@ typedef enum {  ES_NO_EVENT = 0,
 										E_RACE_FINISHED,
 			
 										// SM_Playing Events
-										E_BALL_LAUNCHING_START,
-										E_BALL_LAUNCHING_FINISH,
-										E_OBSTACLE_CROSSING_START,
-										E_OBSTACLE_CROSSING_FINISH,
+										E_BALL_LAUNCHING_ENTRY,
+										E_BALL_LAUNCHING_EXIT,
+										E_OBSTACLE_CROSSING_ENTRY,
+										E_OBSTACLE_CROSSING_EXIT,
 	
 										// SM_Racing Events
 										E_CORNER1_ENTRY,
@@ -279,9 +279,10 @@ typedef enum {  ES_NO_EVENT = 0,
 										E_CORNER4_EXIT,
 										
 										// SM_Ball_Launching Events
-										E_BALL_LAUNCHING_ENTRY,
-										E_BALL_LAUNCHING_EXIT,
+										E_BALL_LAUNCHING_COMPLETE,
+										E_BALL_LAUNCHING_COMPLETE2,
 										E_TARGET_SUCCESS,
+										E_IR_BEACON_DETECTED,
 										
 										// SM_Obstacle_Crossing Events
 										E_OBSTACLE_COMPLETED,
@@ -292,9 +293,13 @@ typedef enum {  ES_NO_EVENT = 0,
 										
 										// Motor Events
 										E_MOTOR_TIMEOUT,
+										E_MOTOR_TICK_TIMEOUT,
 										
 										// Navigation Events
-										E_DRS_UPDATED
+										E_DRS_UPDATED,
+										
+										// Other Events
+										E_BUMP_DETECTED
 										
 							} ES_EventTyp_t ;
 
@@ -334,7 +339,7 @@ typedef enum {  ES_NO_EVENT = 0,
 
 /****************************************************************************/
 // This is the list of event checking functions 
-#define EVENT_CHECK_LIST Check4Keystroke
+#define EVENT_CHECK_LIST Check4Keystroke, CheckBumpSensor, CheckIRSensor
 
 /****************************************************************************/
 // These are the definitions for the post functions to be executed when the
@@ -370,5 +375,7 @@ typedef enum {  ES_NO_EVENT = 0,
 #define DRS_TIMER 0
 #define DISPLAY_TIMER 1
 #define DRIVE_MOTOR_TIMER 2
+#define BALL_MOTOR_READY_TIMER 3
+#define BALL_LOADER_READY_TIMER 4
 
 #endif /* CONFIGURE_H */

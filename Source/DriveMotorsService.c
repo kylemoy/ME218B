@@ -63,7 +63,7 @@ ES_Event RunDriveMotorsService(ES_Event ThisEvent) {
 	switch (ThisEvent.EventType) {
 		// Motor Timer expired, so stop the motors
 		case ES_TIMEOUT:
-			printf("Motor timer expired, stopping motors\r\n");
+			//printf("Motor timer expired, stopping motors\r\n");
 			StopMotors();
 			// Post this event to the master state machine
 			Event.EventType = E_MOTOR_TIMEOUT;

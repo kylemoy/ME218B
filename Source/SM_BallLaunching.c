@@ -1,9 +1,9 @@
 /****************************************************************************
-Module: SM_Ball_Launching.c
+Module: SM_BallLaunching.c
 Description:
 	The third level state machine for our robot in the BALL_LAUNCHING state.
-	Contains four states: BALL_LAUNCHING_ENTRY1, BALL_LAUNCHING_ENTRY2, 
-												 BALL_LAUNCHING, BALL_LAUNCHING_EXIT
+	Contains four states: BALL_LAUNCHING_ENTRY, BALL_LAUNCHING_IR_ALIGN, 
+												 BALL_LAUNCHING_LAUNCH, BALL_LAUNCHING_EXIT
 Author: Kyle Moy, 2/25/15
 ****************************************************************************/
 
@@ -19,6 +19,7 @@ Author: Kyle Moy, 2/25/15
 #include "SM_Navigation.h"
 #include "GamefieldPositions.h"
 #include "SM_Master.h"
+#include "BallLauncher.h"
 
 
 /*----------------------------- Module Defines ----------------------------*/
@@ -26,12 +27,14 @@ Author: Kyle Moy, 2/25/15
 
 /*---------------------------- Module Functions ---------------------------*/
 static ES_Event DuringBallLaunchingEntry(ES_Event Event);
-static ES_Event DuringBallLaunching(ES_Event Event);
+static ES_Event DuringBallLaunchingIRAlign(ES_Event Event);
+static ES_Event DuringBallLaunchingLaunch(ES_Event Event);
 static ES_Event DuringBallLaunchingExit(ES_Event Event);
 
 
 /*---------------------------- Module Variables ---------------------------*/
 static BallLaunchingState_t CurrentState;
+static uint8_t MotorTimeoutCase = 0;
 
 
 /*------------------------------ Module Code ------------------------------*/
@@ -58,32 +61,80 @@ ES_Event RunBallLaunchingSM(ES_Event CurrentEvent) {
 			// Process any events
 			if (CurrentEvent.EventType != ES_NO_EVENT) { // If an event is active
 				switch (CurrentEvent.EventType) {
-					//case E_CORNER1_ENTRY:
-					//	NextState = CORNER1;
-					//	MakeTransition = true;
-					//	ReturnEvent.EventType = ES_NO_EVENT;
-					//	break;
-					case E_BALL_LAUNCHING_ENTRY:
-						NextState = BALL_LAUNCHING;
-						MakeTransition = true;
-						ReturnEvent.EventType = ES_NO_EVENT;
+					
+					case E_MOTOR_TIMEOUT:
+						if (MotorTimeoutCase == 0) {
+							DriveBackwardsWithBias(100, 100, 150);
+							MotorTimeoutCase = 1;
+						} else if (MotorTimeoutCase == 1) {
+							StopMotors();
+							ES_Timer_InitTimer(DRIVE_MOTOR_TIMER, 50);
+							MotorTimeoutCase = 2;
+						} else if (MotorTimeoutCase == 2) {
+							StopMotors();
+							DriveForwardWithBias(100, 100, 125);
+							MotorTimeoutCase = 3;
+						} else {
+							StopMotors();
+							MotorTimeoutCase = 0;
+							NextState = BALL_LAUNCHING_IR_ALIGN;
+							MakeTransition = true;
+							ReturnEvent.EventType = ES_NO_EVENT;
+						}
 						break;
 				}
 			}
 			break;
 			
-    case BALL_LAUNCHING:
-			// Execute During function for BALL_LAUNCHING.
-			CurrentEvent = DuringBallLaunching(CurrentEvent);
+    case BALL_LAUNCHING_IR_ALIGN:
+			// Execute During function for BALL_LAUNCHING_IR_ALIGN.
+			CurrentEvent = DuringBallLaunchingIRAlign(CurrentEvent);
 			// Process any events
 			if (CurrentEvent.EventType != ES_NO_EVENT) { // If an event is active
 				switch (CurrentEvent.EventType) {
-					//case E_MOTOR_TIMEOUT:
-					//case E_CORNER2_ENTRY:
-					//	NextState = CORNER2;
-					//	MakeTransition = true;
-					//	ReturnEvent.EventType = ES_NO_EVENT;
-					//	break;
+					case E_IR_BEACON_DETECTED:
+						StopMotors();
+						NextState = BALL_LAUNCHING_LAUNCH;
+						MakeTransition = true;
+						ReturnEvent.EventType = ES_NO_EVENT;
+						break;
+						
+				}
+			}
+			break;
+			
+    case BALL_LAUNCHING_LAUNCH:
+			// Execute During function for BALL_LAUNCHING_LAUNCH.
+			CurrentEvent = DuringBallLaunchingLaunch(CurrentEvent);
+			// Process any events
+			if (CurrentEvent.EventType != ES_NO_EVENT) { // If an event is active
+				switch (CurrentEvent.EventType) {
+					
+					case E_MOTOR_TIMEOUT:
+						StopMotors();
+						if (MotorTimeoutCase == 0) {
+							ServoForward();
+							ES_Timer_InitTimer(DRIVE_MOTOR_TIMER, 1000); // Just use the drive motor timer for now
+							MotorTimeoutCase = 1;
+						} else if (MotorTimeoutCase == 1) {
+							ServoReverse();
+							ES_Timer_InitTimer(DRIVE_MOTOR_TIMER, 1000); // Just use the drive motor timer for now
+							MotorTimeoutCase = 2;
+						} else {
+							SetShooterPWM(0);
+							MotorTimeoutCase = 0;
+							NextState = BALL_LAUNCHING_EXIT;
+							MakeTransition = true;
+							ReturnEvent.EventType = ES_NO_EVENT;
+						}
+						break;
+						
+					case E_BALL_LAUNCHING_COMPLETE:
+						NextState = BALL_LAUNCHING_EXIT;
+						MakeTransition = true;
+						ReturnEvent.EventType = ES_NO_EVENT;
+						break;
+						
 				}
 			}
 			break;
@@ -94,12 +145,20 @@ ES_Event RunBallLaunchingSM(ES_Event CurrentEvent) {
 			// Process any events
 			if (CurrentEvent.EventType != ES_NO_EVENT) { // If an event is active
 				switch (CurrentEvent.EventType) {
-					//case E_MOTOR_TIMEOUT:
-					//case E_CORNER2_ENTRY:
-					//	NextState = CORNER2;
-					//	MakeTransition = true;
-					//	ReturnEvent.EventType = ES_NO_EVENT;
-					//	break;
+					case E_BALL_LAUNCHING_COMPLETE2:
+						break;
+					case E_MOTOR_TIMEOUT:
+						StopMotors();
+						if (MotorTimeoutCase == 0) {
+							RotateCCW(40, 60);
+							MotorTimeoutCase = 1;
+						} else {
+							StopMotors();
+							MotorTimeoutCase = 0;
+							ES_Event Event = {E_BALL_LAUNCHING_EXIT, 0};
+							PostMasterSM(Event);
+						}
+						break;
 				}
 			}
 			break;
@@ -155,9 +214,7 @@ static ES_Event DuringBallLaunchingEntry(ES_Event Event) {
 	// Process ES_ENTRY, ES_ENTRY_HISTORY & ES_EXIT events
 	if ((Event.EventType == ES_ENTRY) || (Event.EventType == ES_ENTRY_HISTORY)) {
 		if(DisplayEntryStateTransitions && DisplaySM_Racing) printf("SM3_Ball_Launching: BALL_LAUNCHING_ENTRY1\r\n");
-		//SetTargetTheta(East);
-		//SetTargetPosition(Corner1X, Corner1Y);
-		//StartNavigationSM(Event);
+		RotateCCW(40, 60);
 	} else if ( Event.EventType == ES_EXIT ) {
 		
 	} else {
@@ -166,18 +223,29 @@ static ES_Event DuringBallLaunchingEntry(ES_Event Event) {
 	return(ReturnEvent);
 }
 
-static ES_Event DuringBallLaunching(ES_Event Event) {
+static ES_Event DuringBallLaunchingIRAlign(ES_Event Event) {
 	ES_Event ReturnEvent = Event; // Assume no re-mapping or consumption
 	// Process ES_ENTRY, ES_ENTRY_HISTORY & ES_EXIT events
 	if ((Event.EventType == ES_ENTRY) || (Event.EventType == ES_ENTRY_HISTORY)) {
-		if(DisplayEntryStateTransitions && DisplaySM_Racing) printf("SM3_Obstacle_Crossing: BALL_LAUNCHING\r\n");
-		//SetTargetTheta(North);
-		//SetTargetPosition(Corner2X, Corner2Y);
-		//StartNavigationSM(Event);
+		if(DisplayEntryStateTransitions && DisplaySM_Racing) printf("SM3_Ball_Launching: BALL_LAUNCHING_IR_ALIGN\r\n");
+		RotateCW(30, 0);
 	} else if ( Event.EventType == ES_EXIT ) {
 		
 	} else {
-		//RunNavigationSM(Event);
+	}
+	return(ReturnEvent);
+}
+
+static ES_Event DuringBallLaunchingLaunch(ES_Event Event) {
+	ES_Event ReturnEvent = Event; // Assume no re-mapping or consumption
+	// Process ES_ENTRY, ES_ENTRY_HISTORY & ES_EXIT events
+	if ((Event.EventType == ES_ENTRY) || (Event.EventType == ES_ENTRY_HISTORY)) {
+		if(DisplayEntryStateTransitions && DisplaySM_Racing) printf("SM3_Ball_Launching: BALL_LAUNCHING_LAUNCH\r\n");
+		SetShooterPWM(100);
+		ES_Timer_InitTimer(DRIVE_MOTOR_TIMER, 1000); // Just use the drive motor timer for now
+	} else if ( Event.EventType == ES_EXIT ) {
+		
+	} else {
 	}
 	return(ReturnEvent);
 }
@@ -186,15 +254,12 @@ static ES_Event DuringBallLaunchingExit(ES_Event Event) {
 	ES_Event ReturnEvent = Event; // Assume no re-mapping or consumption
 	// Process ES_ENTRY, ES_ENTRY_HISTORY & ES_EXIT events
 	if ((Event.EventType == ES_ENTRY) || (Event.EventType == ES_ENTRY_HISTORY)) {
-		if(DisplayEntryStateTransitions && DisplaySM_Racing) printf("SM3_Obstacle_Crossing: BALL_LAUNCHING_EXIT\r\n");
-		//SetTargetTheta(North);
-		//SetTargetPosition(Corner2X, Corner2Y);
-		StartNavigationSM(Event);
+		if(DisplayEntryStateTransitions && DisplaySM_Racing) printf("SM3_Ball_Launching: BALL_LAUNCHING_EXIT\r\n");
+		DriveForwardWithBias(100, 100, 150);
 
 	} else if ( Event.EventType == ES_EXIT ) {
 		
 	} else {
-		RunNavigationSM(Event);
 	}
 	return(ReturnEvent);
 }

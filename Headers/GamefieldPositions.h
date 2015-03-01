@@ -46,27 +46,23 @@ typedef enum {
 
 #define BallLaunchingObstacleBound  163
 
-#define ObstacleEntryXBound 175 // X-value that initiates the turn into the obstacle
-#define BallLaunchingEntryYBound 75 // Y-value that initiates the turn into the obstacle
+#define ObstacleEntryXBound 150 // X-value that initiates the turn into the obstacle
+#define BallLaunchingEntryYBound 50 // Y-value that initiates the turn into the obstacle
  
-#define CornerEntry 25 // Extends the corner entry beyond the corner box
 #define CornerExit 0
+#define Corner1Entry 50 // Not being used, using encoder trip
+#define Corner2Entry 25
+#define Corner3Entry 50 // Not being used, using encoder trip
+#define Corner4Entry 40
 
-//#define Xleft 205	
-//#define Xcenter 147
-//#define Xright 105
-//#define Ybottom 32
-//#define Ycenter 100
-//#define Ytop 147
-
-// Target points
+// Target points (not being used right now)
 #define Corner1X 101
 #define Corner1Y 33 //22
 
 #define Corner2X 101
 #define Corner2Y 145
 
-#define Corner3X 217
+#define Corner3X 217 
 #define Corner3Y 149
 
 #define Corner4X 230
@@ -86,10 +82,10 @@ typedef enum {
 
 
 // Target angles
-#define East 75  // i.e. Direction to Corner1 (Green/Pink facing forward)
-#define North 165	// i.e. Direction to Corner2
-#define West 255	// i.e. Direction to Corner3
-#define South 345	// i.e. Direction to Corner4
+//#define East 75  // i.e. Direction to Corner1 (Green/Pink facing forward)
+//#define North 165	// i.e. Direction to Corner2
+//#define West 255	// i.e. Direction to Corner3
+//#define South 345	// i.e. Direction to Corner4
 
 /*----------------------- Public Function Prototypes ----------------------*/
 GamefieldPosition_t GetGamefieldPosition(uint16_t Xcoord, uint16_t Ycoord);

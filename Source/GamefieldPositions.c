@@ -28,16 +28,16 @@ GamefieldPosition_t GetGamefieldPosition(uint16_t Xcoord, uint16_t Ycoord) {
 	if (Xcoord == 0 && Ycoord == 0)
 		return Undefined;
 	
-	else if (Xcoord < (Corner1XBound + CornerEntry) && Ycoord < (Corner1YBound))
+	else if (Xcoord < (Corner1XBound + Corner1Entry) && Ycoord < (Corner1YBound))
 		return Corner1;
 	
-	else if (Xcoord < (Corner2XBound) && Ycoord > (Corner2YBound - CornerEntry))
+	else if (Xcoord < (Corner2XBound) && Ycoord > (Corner2YBound - Corner2Entry))
 		return Corner2;
 	
-	else if (Xcoord > (Corner3XBound - CornerEntry) && Ycoord > (Corner3YBound))
+	else if (Xcoord > (Corner3XBound - Corner3Entry) && Ycoord > (Corner3YBound))
 		return Corner3;
 	
-	else if (Xcoord > (Corner4XBound) && Ycoord < (Corner4YBound + CornerEntry))
+	else if (Xcoord > (Corner4XBound) && Ycoord < (Corner4YBound + Corner4Entry))
 		return Corner4;
 	
 	else if (Xcoord < Straight2XBound)

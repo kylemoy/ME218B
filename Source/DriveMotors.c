@@ -278,6 +278,41 @@ void DriveForward(uint16_t TargetRPM, uint16_t Duration) {
 
 
 /****************************************************************************
+Function: 		DriveForwardWithSetDistance
+Parameters: 	void
+Returns: 			void
+Description: 	Drive the bot forward
+****************************************************************************/
+void DriveForwardWithSetDistance(uint16_t TargetRPM, uint32_t DistanceInMM) {
+	EnablePIDcontrol();
+	SetMotorDirection(LEFT_MOTOR, FORWARD);
+	SetMotorDirection(RIGHT_MOTOR, FORWARD);
+	SetTargetRPM(TargetRPM, TargetRPM);
+	uint32_t NumberOfTicks = DistanceInMM / (3.141592 * 94 / 28); // 94mm diameter, 28 pulse/rev
+	SetTargetTickCount(NumberOfTicks);
+	if (DisplayMotorInfo) printf("Drive Motors: Driving Forward with Set Distance = %d, TargetTicks = %d, TargetRPM = %d\r\n", DistanceInMM, NumberOfTicks, TargetRPM);
+	
+}
+
+
+/****************************************************************************
+Function: 		DriveForwardWithSetDistance
+Parameters: 	void
+Returns: 			void
+Description: 	Drive the bot forward
+****************************************************************************/
+void DriveForwardWithBiasAndSetDistance(uint16_t TargetRPML, uint16_t TargetRPMR, uint32_t DistanceInMM) {
+	EnablePIDcontrol();
+	uint32_t NumberOfTicks = DistanceInMM / (3.141592 * 94 / 28); // 94mm diameter, 28 pulse/rev
+	SetTargetTickCount(NumberOfTicks);
+	SetMotorDirection(LEFT_MOTOR, FORWARD);
+	SetMotorDirection(RIGHT_MOTOR, FORWARD);
+	SetTargetRPM(TargetRPMR, TargetRPML);
+	if (DisplayMotorInfo) printf("Drive Motors: Driving Forward with Set Distance = %d, TargetTicks = %d, TargetRPMR = %d, TargetRPML = %d\r\n", DistanceInMM, NumberOfTicks, TargetRPMR, TargetRPML);
+	
+}
+
+/****************************************************************************
 Function: 		DriveForward
 Parameters: 	void
 Returns: 			void
@@ -288,6 +323,23 @@ void DriveForwardWithBias(uint16_t TargetRPML, uint16_t TargetRPMR, uint16_t Dur
 	EnablePIDcontrol();
 	SetMotorDirection(LEFT_MOTOR, FORWARD);
 	SetMotorDirection(RIGHT_MOTOR, FORWARD);
+	SetTargetRPM(TargetRPMR, TargetRPML);
+	if (Duration != 0) {
+		ES_Timer_InitTimer(DRIVE_MOTOR_TIMER, Duration);
+	}
+}
+
+/****************************************************************************
+Function: 		DriveBackwardsWithBias
+Parameters: 	void
+Returns: 			void
+Description: 	Drive the bot backwards
+****************************************************************************/
+void DriveBackwardsWithBias(uint16_t TargetRPML, uint16_t TargetRPMR, uint16_t Duration) {
+	if (DisplayMotorInfo) printf("Drive Motors: Driving Backwards with Bias, TargetRPML = %d, TargetRPMR = %d\r\n", TargetRPML, TargetRPMR);
+	EnablePIDcontrol();
+	SetMotorDirection(LEFT_MOTOR, BACKWARD);
+	SetMotorDirection(RIGHT_MOTOR, BACKWARD);
 	SetTargetRPM(TargetRPMR, TargetRPML);
 	if (Duration != 0) {
 		ES_Timer_InitTimer(DRIVE_MOTOR_TIMER, Duration);

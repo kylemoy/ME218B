@@ -14,6 +14,7 @@ Author: Kyle Moy, 2/18/15
 #include "Display.h"
 #include "DRS.h"
 #include "DriveMotors.h"
+#include "BallLauncher.h"
 
 
 /*---------------------------- Module Variables ---------------------------*/
@@ -59,10 +60,15 @@ ES_Event RunMapKeys(ES_Event ThisEvent) {
 			// Drive Command Triggers
 			case 'W': DriveForward(100, 100); break;
 			case 'S': DriveBackward(100, 100); break;
-			case 'D': RotateCWwithDuty(40, 5); break; //DriveForwardWithBias(70, 30, 50); break;//RotateCW(150, 5); break;
-			case 'A': RotateCCWwithDuty(40, 10); break; //DriveForwardWithBias(30, 70, 50); break;//RotateCCW(100, 5); break;
+			case 'D': RotateCWwithDuty(40, 5); break; //DriveForwardWithBias(70, 30, 50); break; //RotateCW(150, 5); break;
+			case 'A': RotateCCWwithDuty(40, 5); break; //DriveForwardWithBias(30, 70, 50); break; //RotateCCW(150, 5); break;
 			case ' ': StopMotors(); break;
 			
+			// Shooter Motor Command Triggers
+			case 'U': SetShooterPWM(100); break;
+			case 'I': SetShooterPWM(0); break;
+			case 'O': ServoForward(); break;
+			case 'P': ServoReverse(); break;
 			
 			// (1) SM_Master Event Triggers
 			case 'Z': ThisEvent.EventType = E_RACE_STARTED; break;
@@ -70,10 +76,12 @@ ES_Event RunMapKeys(ES_Event ThisEvent) {
 			case 'C': ThisEvent.EventType = E_RACE_CAUTION; break;
 			
 			// (1)SM_Master->(2)SM_Playing Event Triggers
-			case 'V': ThisEvent.EventType = E_BALL_LAUNCHING_START; break;
-			case 'B': ThisEvent.EventType = E_BALL_LAUNCHING_FINISH; break;
-			case 'N': ThisEvent.EventType = E_OBSTACLE_CROSSING_START; break;
-			case 'M': ThisEvent.EventType = E_OBSTACLE_CROSSING_FINISH; break;
+			case 'V': ThisEvent.EventType = E_BALL_LAUNCHING_ENTRY; break;
+			case 'B': ThisEvent.EventType = E_BALL_LAUNCHING_EXIT; break;
+			case 'N': ThisEvent.EventType = E_BALL_LAUNCHING_COMPLETE; break;
+			case 'M': ThisEvent.EventType = E_BALL_LAUNCHING_COMPLETE2; break;
+			case 'F': ThisEvent.EventType = E_OBSTACLE_CROSSING_ENTRY; break;
+			case 'G': ThisEvent.EventType = E_OBSTACLE_CROSSING_EXIT; break;
 			
 			// (1)SM_Master->(2)SM_Playing->(3)SM_Racing Event Triggers
 			case '1': ThisEvent.EventType = E_CORNER1_ENTRY; break;

@@ -2,8 +2,8 @@
 Module: SM_BallLaunching.h
 Description:
 	The third level state machine for our robot in the BALL_LAUNCHING state.
-	Contains four states: BALL_LAUNCHING_ENTRY1, BALL_LAUNCHING_ENTRY2, 
-												 BALL_LAUNCHING, BALL_LAUNCHING_EXIT
+	Contains four states: BALL_LAUNCHING_ENTRY, BALL_LAUNCHING_IR_ALIGN, 
+												 BALL_LAUNCHING_LAUNCH, BALL_LAUNCHING_EXIT
 Author: Kyle Moy, 2/25/15
 ****************************************************************************/
 
@@ -12,8 +12,8 @@ Author: Kyle Moy, 2/25/15
 
 /*----------------------------- Module Defines ----------------------------*/
 // States of the SM_Ball_Launching state machine
-typedef enum {BALL_LAUNCHING_ENTRY, \
-							BALL_LAUNCHING, BALL_LAUNCHING_EXIT} BallLaunchingState_t;
+typedef enum {BALL_LAUNCHING_ENTRY, BALL_LAUNCHING_IR_ALIGN, \
+						  BALL_LAUNCHING_LAUNCH, BALL_LAUNCHING_EXIT} BallLaunchingState_t;
 
 
 /*----------------------- Public Function Prototypes ----------------------*/

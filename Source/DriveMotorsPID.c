@@ -79,7 +79,7 @@ void SetRPMResponse( void ){
 
 	//static float pGain = 1.26;
 	static float pGain = 0.05;//1.92;
-	static float iGain = 0.03;
+	static float iGain = 0.02;
 	static float dGain = 0.00;
 
 	// start by clearing the source of the interrupt

@@ -15,6 +15,10 @@ Author: Alex Lin, 2/25/15
 
 /*----------------------- Public Function Prototypes ----------------------*/
 void InitializeBallLauncher(void);
-void LaunchBall(void);
-	
-#endif /* BallLauncher_H */
+void SetShooterPWM(uint8_t DutyCycle);
+void ServoForward(void);
+void ServoReverse(void);
+
+#endif 
+
+/* BallLauncher_H */

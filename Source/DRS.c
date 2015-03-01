@@ -157,7 +157,9 @@ void InitializeDRS(void) {
 		
 		// Initialize the Kart Number switch hardware
 		// For now, assume we are Kart1
-		MyKart = &Kart1;
+		MyKart = &Kart3; // Kart1 = Green/Pink
+										 // Kart2 = Yellow/Orange
+									   // Kart3 = Yellow/Blue
 }
 
 
@@ -349,12 +351,12 @@ bool StoreData(void) {
 				} else if (Kart->GamefieldPosition == Corner4 && NewGamefieldPosition == Straight1) {
 					ES_Event Event = {E_CORNER4_EXIT};
 					PostMasterSM(Event);
-				} else if (Kart->GamefieldPosition == Straight2 && NewGamefieldPosition == BallLaunchingArea) {
-					ES_Event Event = {E_BALL_LAUNCHING_ENTRY};
-					PostMasterSM(Event);
-				} else if (Kart->GamefieldPosition == BallLaunchingArea && NewGamefieldPosition == Straight2) {
-					ES_Event Event = {E_BALL_LAUNCHING_EXIT};
-					PostMasterSM(Event);
+				//} else if (Kart->GamefieldPosition == Straight2 && NewGamefieldPosition == BallLaunchingArea) {
+				//	ES_Event Event = {E_BALL_LAUNCHING_ENTRY};
+				//	PostMasterSM(Event);
+				//} else if (Kart->GamefieldPosition == BallLaunchingArea && NewGamefieldPosition == Straight2) {
+				//	ES_Event Event = {E_BALL_LAUNCHING_EXIT};
+				//	PostMasterSM(Event);
 				}
 			}
 			

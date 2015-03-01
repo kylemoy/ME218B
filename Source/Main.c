@@ -21,7 +21,9 @@ Author: Kyle Moy, 2/18/15
 // Moduel Libraries
 #include "DRS.h"
 #include "DriveMotors.h"
-
+#include "BeaconSensor.h"
+#include "BallLauncher.h"
+#include "BumpSensor.h"
 
 /*----------------------------- Module Defines ----------------------------*/
 #define clrScrn() 	puts("\x1b[2J")
@@ -49,7 +51,10 @@ int main (void)
     
 	// Hardware initialization functions can go here
 	InitializeDRS();
+	InitBeaconSensingCapture();
 	InitializeDriveMotors();
+	InitializeBumpSensors();
+	InitializeBallLauncher();
 	printf("\r\n");
 
 // Initialize the Events and Services Framework and Start Running It

@@ -34,11 +34,14 @@ void RotateCCW(uint16_t TargetRPM, uint16_t Duration);
 void DriveForward(uint16_t TargetRPM, uint16_t Duration);
 void DriveForwardWithBias(uint16_t TargetRPML, uint16_t TargetRPMR, uint16_t Duration);
 void DriveBackward(uint16_t TargetRPM, uint16_t Duration);
+void DriveBackwardsWithBias(uint16_t TargetRPML, uint16_t TargetRPMR, uint16_t Duration);
 
 void RotateCWwithDuty(uint16_t Duty, uint16_t Duration);
 void RotateCCWwithDuty(uint16_t Duty, uint16_t Duration);
 void DriveForwardWithDuty(uint16_t TargetRPM, uint16_t Duration);
 void DriveForwardWithBiasWithDuty(uint16_t TargetRPML, uint16_t TargetRPMR, uint16_t Duration);
 
+void DriveForwardWithSetDistance(uint16_t TargetRPM, uint32_t DistanceInMM);
+void DriveForwardWithBiasAndSetDistance(uint16_t TargetRPML, uint16_t TargetRPMR, uint32_t DistanceInMM);
 #endif /* DriveMotors_H */
 

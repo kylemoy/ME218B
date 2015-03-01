@@ -14,6 +14,8 @@ Author: Kyle Moy, 2/18/15
 // Module Libraries
 #include "SM_Playing.h"
 #include "SM_Racing.h"
+#include "SM_BallLaunching.h"
+#include "SM_ObstacleCrossing.h"
 #include "Display.h"
 #include "DriveMotors.h"
 
@@ -53,17 +55,18 @@ ES_Event RunPlayingSM(ES_Event CurrentEvent) {
 			// Process any events
 			if (CurrentEvent.EventType != ES_NO_EVENT) { // If an event is active
 				switch (CurrentEvent.EventType) {
-					case E_OBSTACLE_CROSSING_START:
+					case E_OBSTACLE_CROSSING_ENTRY:
 						NextState = CROSSING_OBSTACLE;
 						MakeTransition = true;
 						ReturnEvent.EventType = ES_NO_EVENT;
 						break;
 					
-					case E_BALL_LAUNCHING_START:
+					case E_BALL_LAUNCHING_ENTRY:
 						NextState = BALL_LAUNCHING;
 						MakeTransition = true;
 						ReturnEvent.EventType = ES_NO_EVENT;
 						break;
+					
 				}
 			}
 			break;
@@ -74,7 +77,7 @@ ES_Event RunPlayingSM(ES_Event CurrentEvent) {
 			// Process any events
 			if (CurrentEvent.EventType != ES_NO_EVENT) { // If an event is active
 				switch (CurrentEvent.EventType) {
-					case E_OBSTACLE_CROSSING_FINISH:
+					case E_OBSTACLE_CROSSING_EXIT:
 						NextState = RACING;
 						MakeTransition = true;
 						ReturnEvent.EventType = ES_NO_EVENT;
@@ -89,7 +92,7 @@ ES_Event RunPlayingSM(ES_Event CurrentEvent) {
 			// Process any events
 			if (CurrentEvent.EventType != ES_NO_EVENT) { // If an event is active
 				switch (CurrentEvent.EventType) {
-					case E_BALL_LAUNCHING_FINISH:
+					case E_BALL_LAUNCHING_EXIT:
 						NextState = RACING;
 					  EntryEventKind.EventType = ES_ENTRY_HISTORY;
 						MakeTransition = true;
@@ -152,6 +155,7 @@ static ES_Event DuringRacing(ES_Event Event) {
 		if(DisplayEntryStateTransitions && DisplaySM_Playing) printf("SM2_Playing: RACING\r\n");
 		// after that start any lower level machines that run in this state
 		StartRacingSM(Event);
+		
 		// repeat the StartxxxSM() functions for concurrent state machines
 		// on the lower level
 	} else if (Event.EventType == ES_EXIT) {
@@ -175,9 +179,11 @@ static ES_Event DuringCrossingObstacle(ES_Event Event) {
 	// Process ES_ENTRY, ES_ENTRY_HISTORY & ES_EXIT events
 	if ((Event.EventType == ES_ENTRY) || (Event.EventType == ES_ENTRY_HISTORY)) {
 		if(DisplayEntryStateTransitions && DisplaySM_Playing) printf("SM2_Playing: CROSSING_OBSTACLE\r\n");
+		StartObstacleCrossingSM(Event);
 	} else if ( Event.EventType == ES_EXIT ) {
 		
 	} else {
+		RunObstacleCrossingSM(Event);
 		
 	}
 	return(ReturnEvent);
@@ -188,10 +194,11 @@ static ES_Event DuringBallLaunching(ES_Event Event) {
 	// Process ES_ENTRY, ES_ENTRY_HISTORY & ES_EXIT events
 	if ((Event.EventType == ES_ENTRY) || (Event.EventType == ES_ENTRY_HISTORY)) {
 		if(DisplayEntryStateTransitions && DisplaySM_Playing) printf("SM2_Playing: BALL_LAUNCHING\r\n");
+		StartBallLaunchingSM(Event);
 	} else if ( Event.EventType == ES_EXIT ) {
 		
 	} else {
-		
+		RunBallLaunchingSM(Event);
 	}
 	return(ReturnEvent);
 }

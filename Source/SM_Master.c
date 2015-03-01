@@ -2,7 +2,7 @@
 Module: SM_Master.c
 Description:
 	The top level state machine for our robot.
-	Contains three states: WAITING_START, PLAYING, WAITING_FINISHED.
+	Contains four states: WAITING_START, PLAYING, PAUSED, WAITING_FINISHED.
 Author: Kyle Moy, 2/18/15
 ****************************************************************************/
 
@@ -20,6 +20,7 @@ Author: Kyle Moy, 2/18/15
 /*---------------------------- Module Functions ---------------------------*/
 static ES_Event DuringWaitingStart(ES_Event Event);
 static ES_Event DuringPlaying(ES_Event Event);
+static ES_Event DuringPaused(ES_Event Event);
 static ES_Event DuringWaitingFinish(ES_Event Event);
 
 
@@ -96,6 +97,30 @@ ES_Event RunMasterSM(ES_Event CurrentEvent) {
 			// Process any events
 			if (CurrentEvent.EventType != ES_NO_EVENT) { // If an event is active
 				switch (CurrentEvent.EventType) {
+					//case E_MOTOR_TICK_TIMEOUT:
+						//StopMotors();
+						//printf("Motor Tick Count / Distance reached.\r\n");
+						//break;
+					
+					//case E_MOTOR_TIMEOUT:
+						//if (MotorTimeoutCase == 0) {
+						//	RotateCCW(40, 50);
+						//	MotorTimeoutCase = 1;
+						//} else if (MotorTimeoutCase == 1) {
+						//	DriveBackwardsWithBias(100, 100, 50);
+						//	MotorTimeoutCase = 2;
+						//} else {
+						//	StopMotors();
+						//	MotorTimeoutCase = 0;
+						//}
+						//break;
+					case E_RACE_CAUTION:
+						NextState = PAUSED;
+						MakeTransition = true;
+						ReturnEvent.EventType = ES_NO_EVENT;
+						break;
+				
+					
 					case E_RACE_FINISHED:
 						NextState = WAITING_FINISHED;
 						MakeTransition = true;
@@ -104,6 +129,23 @@ ES_Event RunMasterSM(ES_Event CurrentEvent) {
 				}
 			}
 			break;
+			
+		case PAUSED:
+			// Execute During function for PAUSED.
+			CurrentEvent = DuringPaused(CurrentEvent);
+			// Process any events
+			if (CurrentEvent.EventType != ES_NO_EVENT) { // If an event is active
+				switch (CurrentEvent.EventType) {
+					case E_RACE_STARTED:
+						NextState = PLAYING;
+					  EntryEventKind.EventType = ES_ENTRY_HISTORY;
+						MakeTransition = true;
+						ReturnEvent.EventType = ES_NO_EVENT;
+						break;
+				}
+			}
+			break;
+						
 			
     case WAITING_FINISHED:
 			// Execute During function for WAITING_FINISHED.
@@ -199,11 +241,27 @@ static ES_Event DuringPlaying(ES_Event Event) {
 	// Process ES_ENTRY, ES_ENTRY_HISTORY & ES_EXIT events
 	if ((Event.EventType == ES_ENTRY) || (Event.EventType == ES_ENTRY_HISTORY)) {
 		if(DisplayEntryStateTransitions && DisplaySM_Master) printf("SM1_Master: PLAYING\r\n");
-		StartPlayingSM(Event);
+		if (Event.EventType == ES_ENTRY) StartPlayingSM(Event);
+		//DriveForwardWithSetDistance(200, 1000);
+		//DriveBackwardsWithBias(100, 100, 25);
+		//MotorTimeoutCase = 0;
 	} else if (Event.EventType == ES_EXIT) {
 		
 	} else {
 		RunPlayingSM(Event);
+	}
+	return(ReturnEvent);
+}
+
+
+static ES_Event DuringPaused(ES_Event Event) {
+	ES_Event ReturnEvent = Event; // Assume no re-mapping or consumption
+	// Process ES_ENTRY, ES_ENTRY_HISTORY & ES_EXIT events
+	if ((Event.EventType == ES_ENTRY) || (Event.EventType == ES_ENTRY_HISTORY)) {
+		if(DisplayEntryStateTransitions && DisplaySM_Master) printf("SM1_Master: PAUSED\r\n");
+	} else if (Event.EventType == ES_EXIT) {
+		
+	} else {
 	}
 	return(ReturnEvent);
 }

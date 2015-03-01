@@ -2,7 +2,7 @@
 Module: SM_Obstacle_Crossing.h
 Description:
 	The third level state machine for our robot in the OBSTACLE_CROSSING state.
-	Contains three states: STRAIGHT3_OBSTACLE_ENTRY, CROSSING, STRAIGHT1_OBSTACLE_EXIT
+	Contains three states: OBSTACLE_ENTRY, CROSSING, OBSTACLE_EXIT
 Author: Kyle Moy, 2/25/15
 ****************************************************************************/
 
@@ -11,8 +11,8 @@ Author: Kyle Moy, 2/25/15
 
 /*----------------------------- Module Defines ----------------------------*/
 // States of the SM_Obstacle_Crossing state machine
-typedef enum {STRAIGHT3_OBSTACLE_ENTRY, CROSSING, \
-							STRAIGHT1_OBSTACLE_EXIT} ObstacleCrossingState_t;
+typedef enum {OBSTACLE_ENTRY, CROSSING, \
+						  OBSTACLE_EXIT} ObstacleCrossingState_t;
 
 
 /*----------------------- Public Function Prototypes ----------------------*/

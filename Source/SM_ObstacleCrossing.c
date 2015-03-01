@@ -2,7 +2,7 @@
 Module: SM_ObstacleCrossing.h
 Description:
 	The third level state machine for our robot in the OBSTACLE_CROSSING state.
-	Contains three states: STRAIGHT3_OBSTACLE_ENTRY, CROSSING, STRAIGHT1_OBSTACLE_EXIT
+	Contains three states: OBSTACLE_ENTRY, CROSSING, OBSTACLE_EXIT
 Author: Kyle Moy, 2/25/15
 ****************************************************************************/
 
@@ -24,13 +24,14 @@ Author: Kyle Moy, 2/25/15
 #define ENTRY_STATE STRAIGHT3_OBSTACLE_ENTRY
 
 /*---------------------------- Module Functions ---------------------------*/
-static ES_Event DuringStraight3ObstacleEntry(ES_Event Event);
+static ES_Event DuringObstacleEntry(ES_Event Event);
 static ES_Event DuringCrossing(ES_Event Event);
-static ES_Event DuringStraight1ObstacleExit(ES_Event Event);
+static ES_Event DuringObstacleExit(ES_Event Event);
 
 
 /*---------------------------- Module Variables ---------------------------*/
 static ObstacleCrossingState_t CurrentState;
+static uint8_t MotorTimeoutCase = 0;
 
 
 /*------------------------------ Module Code ------------------------------*/
@@ -48,20 +49,35 @@ ES_Event RunObstacleCrossingSM(ES_Event CurrentEvent) {
 	ES_Event ReturnEvent = {ES_NO_EVENT, 0}; // Assume no error
 
 	switch(CurrentState) {
-		case STRAIGHT3_OBSTACLE_ENTRY:
+		case OBSTACLE_ENTRY:
 		default:
-			// Execute During function for STRAIGHT3_OBSTACLE_ENTRY.
+			// Execute During function for OBSTACLE_ENTRY.
 			// ES_ENTRY & ES_EXIT are processed here allow the lower
 			// level state machines to re-map or consume the event
-			CurrentEvent = DuringStraight3ObstacleEntry(CurrentEvent);
+			CurrentEvent = DuringObstacleEntry(CurrentEvent);
 			// Process any events
 			if (CurrentEvent.EventType != ES_NO_EVENT) { // If an event is active
 				switch (CurrentEvent.EventType) {
-					//case E_CORNER1_ENTRY:
-					//	NextState = CORNER1;
-					//	MakeTransition = true;
-					//	ReturnEvent.EventType = ES_NO_EVENT;
-					//	break;
+					case E_MOTOR_TIMEOUT:
+						if (MotorTimeoutCase == 0) {
+							DriveForwardWithBias(100, 100, 150);
+							MotorTimeoutCase = 1;
+						} else if (MotorTimeoutCase == 1) {
+							StopMotors();
+							ES_Timer_InitTimer(DRIVE_MOTOR_TIMER, 50);
+							MotorTimeoutCase = 2;
+						} else if (MotorTimeoutCase == 2) {
+							StopMotors();
+							DriveBackwardsWithBias(100, 100, 100);
+							MotorTimeoutCase = 3;
+						} else {
+							StopMotors();
+							MotorTimeoutCase = 0;
+							NextState = CROSSING;
+							MakeTransition = true;
+							ReturnEvent.EventType = ES_NO_EVENT;
+						}
+						break;
 				}
 			}
 			break;
@@ -72,31 +88,34 @@ ES_Event RunObstacleCrossingSM(ES_Event CurrentEvent) {
 			// Process any events
 			if (CurrentEvent.EventType != ES_NO_EVENT) { // If an event is active
 				switch (CurrentEvent.EventType) {
-//					// case E_MOTOR_TIMEOUT:
-//						// After turning is complete
-//						//DriveForward();
-//					case E_MOTOR_TIMEOUT:
-					//case E_CORNER1_EXIT:
-					//	NextState = STRAIGHT2;
-					//	MakeTransition = true;
-					//	ReturnEvent.EventType = ES_NO_EVENT;
-					//	break;
+					
+					case E_MOTOR_TIMEOUT:
+						if (MotorTimeoutCase == 0) {
+							StopMotors();
+							ES_Timer_InitTimer(DRIVE_MOTOR_TIMER, 250);
+							MotorTimeoutCase = 1;
+						} else if (MotorTimeoutCase == 1) {
+							DriveBackward(100,0);
+							MotorTimeoutCase = 2;
+						} else {
+							StopMotors();
+							MotorTimeoutCase = 0;
+							//NextState = OBSTACLE_EXIT;
+							//MakeTransition = true;
+							//ReturnEvent.EventType = ES_NO_EVENT;
+						}
+						break;
 				}
 			}
 			break;
 			
-    case STRAIGHT1_OBSTACLE_EXIT:
+    case OBSTACLE_EXIT:
 			// Execute During function for STRAIGHT1_OBSTACLE_EXIT.
-			CurrentEvent = DuringStraight1ObstacleExit(CurrentEvent);
+			CurrentEvent = DuringObstacleExit(CurrentEvent);
 			// Process any events
 			if (CurrentEvent.EventType != ES_NO_EVENT) { // If an event is active
 				switch (CurrentEvent.EventType) {
-					//case E_MOTOR_TIMEOUT:
-					//case E_CORNER2_ENTRY:
-					//	NextState = CORNER2;
-					//	MakeTransition = true;
-					//	ReturnEvent.EventType = ES_NO_EVENT;
-					//	break;
+					
 				}
 			}
 			break;
@@ -127,7 +146,7 @@ Description:	Does any required initialization for this state machine
 void StartObstacleCrossingSM(ES_Event CurrentEvent) {
 	if (ES_ENTRY_HISTORY != CurrentEvent.EventType) {
 		// Initialize the state variable
-		CurrentState = STRAIGHT3_OBSTACLE_ENTRY;
+		CurrentState = OBSTACLE_ENTRY;
 	}
   
 	// Let the Run function init the lower level state machines
@@ -149,18 +168,16 @@ ObstacleCrossingState_t QueryObstacleCrossingSM(void) {
 
 /*------------------------- Private Function Code -------------------------*/
 
-static ES_Event DuringStraight3ObstacleEntry(ES_Event Event) {
+static ES_Event DuringObstacleEntry(ES_Event Event) {
 	ES_Event ReturnEvent = Event; // Assume no re-mapping or consumption
 	// Process ES_ENTRY, ES_ENTRY_HISTORY & ES_EXIT events
 	if ((Event.EventType == ES_ENTRY) || (Event.EventType == ES_ENTRY_HISTORY)) {
-		if(DisplayEntryStateTransitions && DisplaySM_Racing) printf("SM3_Obstacle_Crossing: STRAIGHT3_OBSTACLE_ENTRY\r\n");
-		//SetTargetTheta(East);
-		//SetTargetPosition(Corner1X, Corner1Y);
-		StartNavigationSM(Event);
+		if(DisplayEntryStateTransitions && DisplaySM_Racing) printf("SM3_Obstacle_Crossing: OBSTACLE_ENTRY\r\n");
+		RotateCW(40, 75);
 	} else if ( Event.EventType == ES_EXIT ) {
 		
 	} else {
-		RunNavigationSM(Event);
+		//RunNavigationSM(Event);
 	}
 	return(ReturnEvent);
 }
@@ -170,22 +187,20 @@ static ES_Event DuringCrossing(ES_Event Event) {
 	// Process ES_ENTRY, ES_ENTRY_HISTORY & ES_EXIT events
 	if ((Event.EventType == ES_ENTRY) || (Event.EventType == ES_ENTRY_HISTORY)) {
 		if(DisplayEntryStateTransitions && DisplaySM_Racing) printf("SM3_Obstacle_Crossing: CROSSING\r\n");
-		//SetTargetTheta(North);
-		//SetTargetPosition(Corner2X, Corner2Y);
-		StartNavigationSM(Event);
+		DriveBackward(100, 240);
+		StopMotors();
 	} else if ( Event.EventType == ES_EXIT ) {
 		
 	} else {
-		RunNavigationSM(Event);
 	}
 	return(ReturnEvent);
 }
 
-static ES_Event DuringStraight1ObstacleExit(ES_Event Event) {
+static ES_Event DuringObstacleExit(ES_Event Event) {
 	ES_Event ReturnEvent = Event; // Assume no re-mapping or consumption
 	// Process ES_ENTRY, ES_ENTRY_HISTORY & ES_EXIT events
 	if ((Event.EventType == ES_ENTRY) || (Event.EventType == ES_ENTRY_HISTORY)) {
-		if(DisplayEntryStateTransitions && DisplaySM_Racing) printf("SM3_Obstacle_Crossing: STRAIGHT1_OBSTACLE_EXIT\r\n");
+		if(DisplayEntryStateTransitions && DisplaySM_Racing) printf("SM3_Obstacle_Crossing: OBSTACLE_EXIT\r\n");
 
 	} else if ( Event.EventType == ES_EXIT ) {
 		

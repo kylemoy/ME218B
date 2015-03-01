@@ -11,6 +11,8 @@ Author: Kyle Moy, 2/18/15
 #include "ES_ServiceHeaders.h"
 #include "ES_Port.h"
 #include "EventCheckers.h"
+#include "BumpSensor.h"
+#include "BeaconSensor.h"
 
 
 /*------------------------------ Module Code ------------------------------*/
@@ -38,4 +40,46 @@ bool Check4Keystroke(void) {
     return true;
   }
   return false;
+}
+
+/****************************************************************************
+Function: 	CheckBumpSensor
+Parameters: void
+Returns: 		bool (true if the bump sensor has changed states)
+Description: Checks to see if the bump sensor has changed states.
+	If the bump sensor has been bumped, post an E_BUMP_DETECTED event
+****************************************************************************/
+bool CheckBumpSensor(void) {
+	static bool LastBumpState = false;
+	if (!LastBumpState && BumpSensorDetected()) {
+		LastBumpState = true;
+		ES_Event Event = {E_BUMP_DETECTED, 0};
+		PostMasterSM(Event);
+		return true;
+	} else {
+		LastBumpState = false;
+		return false;
+	}
+}
+
+/****************************************************************************
+Function: 	CheckIRSensor
+Parameters: void
+Returns: 		bool (true if IR sensor has changed states)
+Description: Checks to see if the IR sensor has changed states.
+	If the IR sensor detects a signal, post an ES_IR_BEACON_DETECTED event
+****************************************************************************/
+bool CheckIRSensor(void) {
+	static bool LastIRstate = false;
+	if (!LastIRstate && IsBeaconSensed()) {
+		printf("IR sensor detected a signal.\r\n");
+		LastIRstate = true;
+		ES_Event Event = {E_IR_BEACON_DETECTED, 0};
+		PostMasterSM(Event);
+		return true;
+	} else {
+		//printf("IR sensor lost the signal.\r\n");
+		LastIRstate = false;
+		return false;
+	}
 }
