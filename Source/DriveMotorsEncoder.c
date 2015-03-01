@@ -131,7 +131,7 @@ void RDriveCaptureResponse( void ){
 	// Update the tick count
 	TickCountR++;
 	TickCountAverage = (TickCountR + TickCountL) / 2;
-	printf("TickCountAverage = %d\r\n", TickCountAverage);
+	//printf("TickCountAverage = %d\r\n", TickCountAverage);
 	if (TickCountAverage > TargetTickCount) {
 		ES_Event Event = {E_MOTOR_TICK_TIMEOUT, 0};
 		PostMasterSM(Event);
@@ -155,7 +155,7 @@ void LDriveCaptureResponse( void ){
 	// Update the tick count
 	TickCountL++;
 	TickCountAverage = (TickCountR + TickCountL) / 2;
-	printf("TickCountAverage = %d\r\n", TickCountAverage);
+	//printf("TickCountAverage = %d\r\n", TickCountAverage);
 	if (TickCountAverage > TargetTickCount) {
 		ES_Event Event = {E_MOTOR_TICK_TIMEOUT, 0};
 		PostMasterSM(Event);

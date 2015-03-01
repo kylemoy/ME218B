@@ -18,7 +18,9 @@ void InitializeBallLauncher(void);
 void SetShooterPWM(uint8_t DutyCycle);
 void ServoForward(void);
 void ServoReverse(void);
-
+void TurnOnShooter(void);
+void TurnOffShooter(void);
+	
 #endif 
 
 /* BallLauncher_H */

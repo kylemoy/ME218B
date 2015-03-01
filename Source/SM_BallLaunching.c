@@ -114,14 +114,17 @@ ES_Event RunBallLaunchingSM(ES_Event CurrentEvent) {
 						StopMotors();
 						if (MotorTimeoutCase == 0) {
 							ServoForward();
-							ES_Timer_InitTimer(DRIVE_MOTOR_TIMER, 1000); // Just use the drive motor timer for now
+							ES_Timer_InitTimer(DRIVE_MOTOR_TIMER, 50); // Just use the drive motor timer for now
 							MotorTimeoutCase = 1;
 						} else if (MotorTimeoutCase == 1) {
 							ServoReverse();
-							ES_Timer_InitTimer(DRIVE_MOTOR_TIMER, 1000); // Just use the drive motor timer for now
+							ES_Timer_InitTimer(DRIVE_MOTOR_TIMER, 50); // Just use the drive motor timer for now
 							MotorTimeoutCase = 2;
+						} else if (MotorTimeoutCase == 2) {
+							TurnOffShooter();
+							ES_Timer_InitTimer(DRIVE_MOTOR_TIMER, 1000); // Just use the drive motor timer for now
+							MotorTimeoutCase = 3;
 						} else {
-							SetShooterPWM(0);
 							MotorTimeoutCase = 0;
 							NextState = BALL_LAUNCHING_EXIT;
 							MakeTransition = true;
@@ -241,7 +244,8 @@ static ES_Event DuringBallLaunchingLaunch(ES_Event Event) {
 	// Process ES_ENTRY, ES_ENTRY_HISTORY & ES_EXIT events
 	if ((Event.EventType == ES_ENTRY) || (Event.EventType == ES_ENTRY_HISTORY)) {
 		if(DisplayEntryStateTransitions && DisplaySM_Racing) printf("SM3_Ball_Launching: BALL_LAUNCHING_LAUNCH\r\n");
-		SetShooterPWM(100);
+		//SetShooterPWM(100);
+		TurnOnShooter();
 		ES_Timer_InitTimer(DRIVE_MOTOR_TIMER, 1000); // Just use the drive motor timer for now
 	} else if ( Event.EventType == ES_EXIT ) {
 		

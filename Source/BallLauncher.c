@@ -47,8 +47,8 @@ Author: Alex Lin, 2/25/15
 // Scale frequency for easy control of pulse width.  20 mS.
 //#define PeriodInMicroSeconds 100000
 #define PeriodInMicroSeconds 40000
-#define SERVO_FORWARD_PULSE_WIDTH 35
-#define SERVO_REVERSE_PULSE_WIDTH 50
+#define SERVO_FORWARD_PULSE_WIDTH 30
+#define SERVO_REVERSE_PULSE_WIDTH 48
 
 
 
@@ -87,10 +87,10 @@ void InitializeBallLauncher(void) {
   // Set the initial duty cycle on A to 50% by programming the compare value
   // to 1/2 the period to count up (or down) 
   HWREG( PWM0_BASE+PWM_O_2_CMPA) = ((PeriodInMicroSeconds * PWMTicksPerMicroSecond)-1)>>2;
-  //HWREG( PWM0_BASE+PWM_O_3_CMPA) = ((PeriodInMicroSeconds * PWMTicksPerMicroSecond)-1)>>2;
+  HWREG( PWM0_BASE+PWM_O_3_CMPA) = ((PeriodInMicroSeconds * PWMTicksPerMicroSecond)-1)>>2;
   // Set changes to the PWM output Enables to be locally syncronized to a 
   // zero count
-  HWREG(PWM0_BASE+PWM_O_ENUPD) =  (HWREG(PWM0_BASE+PWM_O_ENUPD) & 
+  HWREG(PWM0_BASE+PWM_O_ENUPD) |=  (HWREG(PWM0_BASE+PWM_O_ENUPD) & 
       ~(PWM_ENUPD_ENUPD2_M | PWM_ENUPD_ENUPD3_M)) |
       (PWM_ENUPD_ENUPD2_LSYNC | PWM_ENUPD_ENUPD3_LSYNC);
   // Enable the PWM outputs
@@ -101,9 +101,9 @@ void InitializeBallLauncher(void) {
 	HWREG(GPIO_PORTC_BASE+GPIO_O_AFSEL) |= (BIT4HI);
 	// Now choose to map PWM to those pins, this is a mux value of 4 that we
 	// want to use for specifying the function on bit 4 and bit 4
-  HWREG(GPIO_PORTC_BASE+GPIO_O_PCTL) = 
+  HWREG(GPIO_PORTC_BASE+GPIO_O_PCTL) |= 
     (HWREG(GPIO_PORTC_BASE+GPIO_O_PCTL) & 0x00fffff) + (4<<(4*BitsPerNibble));
-  HWREG(GPIO_PORTE_BASE+GPIO_O_PCTL) = 
+  HWREG(GPIO_PORTE_BASE+GPIO_O_PCTL) |= 
     (HWREG(GPIO_PORTE_BASE+GPIO_O_PCTL) & 0x00fffff) + (4<<(4*BitsPerNibble));
 	// Enable pins on Port C and E for digital I/O
   HWREG(GPIO_PORTC_BASE+GPIO_O_DEN) |= (BIT4HI);
@@ -112,12 +112,19 @@ void InitializeBallLauncher(void) {
   HWREG(GPIO_PORTC_BASE+GPIO_O_DIR) |= (BIT4HI);
 	HWREG(GPIO_PORTE_BASE+GPIO_O_DIR) |= (BIT4HI);
 	// Enable a pull down on Port E4
-	HWREG(GPIO_PORTE_BASE+GPIO_O_PDR) |=  GPIO_PIN_4;
+	//HWREG(GPIO_PORTE_BASE+GPIO_O_PDR) |=  GPIO_PIN_4;
 	// Set the up/down count mode and enable the PWM generator
   HWREG(PWM0_BASE+ PWM_O_2_CTL) |= (PWM_2_CTL_MODE | PWM_2_CTL_ENABLE);
   HWREG(PWM0_BASE+ PWM_O_3_CTL) |= (PWM_3_CTL_MODE | PWM_3_CTL_ENABLE);
 	ServoReverse();
-	SetShooterPWM(0);
+	//SetShooterPWM(0);
+	TurnOffShooter();
+	
+	
+	// ENABLE BALL LAUNCHER MOTOR ON PIN D3
+	HWREG(SYSCTL_RCGCGPIO) |= SYSCTL_RCGCGPIO_R3; // Port D
+	HWREG(GPIO_PORTD_BASE+GPIO_O_DEN) |= GPIO_PIN_3; // Enable Pin D3 for Digital I/O
+	HWREG(GPIO_PORTD_BASE+GPIO_O_DIR) |= GPIO_PIN_3; // Enable Pin D3 as Output
 }
 
 /****************************************************************************
@@ -179,6 +186,17 @@ void ServoReverse(void){
 	return;
 }
 
+void TurnOnShooter(void) {
+	printf("Turning on the shooter motor.\r\n");
+	HWREG(GPIO_PORTD_BASE+(GPIO_O_DATA + ALL_BITS)) |= GPIO_PIN_3;
+}
+
+void TurnOffShooter(void) {
+	printf("Turning off the shooter motor.\r\n");
+	HWREG(GPIO_PORTD_BASE+(GPIO_O_DATA + ALL_BITS)) &= ~GPIO_PIN_3;
+}
+	
+
 /*------------------------------ Test Harness -----------------------------*/
 #ifdef TEST 
 /* Test Harness for the Ball Launcher Module */ 
@@ -195,7 +213,6 @@ int main(void)
 	InitializeDriveMotors();
 	_HW_Timer_Init(ES_Timer_RATE_1mS);
 	int pwm = 0;
-	
 	
 	
 	//IR Test
@@ -254,8 +271,6 @@ int main(void)
 				default:
 					break;
 			}
-			
-		
 	
 	//Key Control
 	while(true){		

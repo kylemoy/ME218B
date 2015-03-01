@@ -65,8 +65,8 @@ ES_Event RunMapKeys(ES_Event ThisEvent) {
 			case ' ': StopMotors(); break;
 			
 			// Shooter Motor Command Triggers
-			case 'U': SetShooterPWM(100); break;
-			case 'I': SetShooterPWM(0); break;
+			case 'U': TurnOnShooter(); break; //SetShooterPWM(100); break;
+			case 'I': TurnOffShooter(); break; // SetShooterPWM(0); break;
 			case 'O': ServoForward(); break;
 			case 'P': ServoReverse(); break;
 			
