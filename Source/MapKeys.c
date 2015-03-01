@@ -59,8 +59,8 @@ ES_Event RunMapKeys(ES_Event ThisEvent) {
 			// Drive Command Triggers
 			case 'W': DriveForward(100, 100); break;
 			case 'S': DriveBackward(100, 100); break;
-			case 'D': DriveForwardWithBias(70, 30, 50); break;//RotateCW(150, 5); break;
-			case 'A': DriveForwardWithBias(30, 70, 50); break;//RotateCCW(100, 5); break;
+			case 'D': RotateCWwithDuty(40, 5); break; //DriveForwardWithBias(70, 30, 50); break;//RotateCW(150, 5); break;
+			case 'A': RotateCCWwithDuty(40, 10); break; //DriveForwardWithBias(30, 70, 50); break;//RotateCCW(100, 5); break;
 			case ' ': StopMotors(); break;
 			
 			

@@ -24,29 +24,33 @@ typedef enum {
 	Corner3,
 	Straight4,
 	Corner4,
-	BallShootingArea,
+	BallLaunchingArea,
 	ObstacleCrossingArea,
 	Undefined
 } GamefieldPosition_t;
 
-// The bounding lines (see Racing_Positions.xlsx for data)
-#define Corner1XBound 104
-#define Corner1YBound 32
-#define Corner2XBound 103
-#define Corner2YBound 148
-#define Corner3XBound 219
-#define Corner3YBound 150
+// The bounding lines
+#define Corner1XBound 101
+#define Corner1YBound 33
+#define Corner2XBound 101
+#define Corner2YBound 145
+#define Corner3XBound 217
+#define Corner3YBound 149
 #define Corner4XBound 220
-#define Corner4YBound 35
+#define Corner4YBound 37
 
 #define Straight1YBound 29
 #define Straight2XBound 97
 #define Straight3YBound 154 
 #define Straight4XBound 225
 
-#define BallShootingObstacleBound  163
+#define BallLaunchingObstacleBound  163
+
+#define ObstacleEntryXBound 175 // X-value that initiates the turn into the obstacle
+#define BallLaunchingEntryYBound 75 // Y-value that initiates the turn into the obstacle
  
-#define CornerEntry 35 // Extends the corner entry beyond the corner box
+#define CornerEntry 25 // Extends the corner entry beyond the corner box
+#define CornerExit 0
 
 //#define Xleft 205	
 //#define Xcenter 147
@@ -56,14 +60,14 @@ typedef enum {
 //#define Ytop 147
 
 // Target points
-#define Corner1X 65
-#define Corner1Y 180 //22
+#define Corner1X 101
+#define Corner1Y 33 //22
 
-#define Corner2X 64
-#define Corner2Y 187
+#define Corner2X 101
+#define Corner2Y 145
 
-#define Corner3X 236
-#define Corner3Y 177
+#define Corner3X 217
+#define Corner3Y 149
 
 #define Corner4X 230
 #define Corner4Y 17
@@ -88,7 +92,7 @@ typedef enum {
 #define South 345	// i.e. Direction to Corner4
 
 /*----------------------- Public Function Prototypes ----------------------*/
-GamefieldPosition_t GetGamefieldPosition(uint8_t Xcoord, uint8_t Ycoord);
+GamefieldPosition_t GetGamefieldPosition(uint16_t Xcoord, uint16_t Ycoord);
 const char * GamefieldPositionString(GamefieldPosition_t GamefieldPosition);
 double GetAngle(uint8_t Xcoord, uint8_t Ycoord, uint8_t Xtarget, uint8_t Ytarget);
 

@@ -218,10 +218,9 @@ Description: 	Rotates the bot clockwise
 ****************************************************************************/
 void RotateCW(uint16_t TargetRPM, uint16_t Duration) {
 	if (DisplayMotorInfo) printf("Drive Motors: Rotating CW, TargetRPM = %d\r\n", TargetRPM);
+	EnablePIDcontrol();
 	SetMotorDirection(LEFT_MOTOR, FORWARD);
 	SetMotorDirection(RIGHT_MOTOR, BACKWARD);
-	//SetMotorPWM(LEFT_MOTOR, TargetRPM);
-	//SetMotorPWM(RIGHT_MOTOR, TargetRPM);
 	SetTargetRPM(TargetRPM, TargetRPM);
 	if (Duration != 0) {
 		ES_Timer_InitTimer(DRIVE_MOTOR_TIMER, Duration);
@@ -236,10 +235,9 @@ Description: 	Rotates the bot counter-clockwise
 ****************************************************************************/
 void RotateCCW(uint16_t TargetRPM, uint16_t Duration) {
 	if (DisplayMotorInfo) printf("Drive Motors: Rotating CCW, TargetRPM = %d\r\n", TargetRPM);
+	EnablePIDcontrol();
 	SetMotorDirection(LEFT_MOTOR, BACKWARD);
 	SetMotorDirection(RIGHT_MOTOR, FORWARD);
-	//SetMotorPWM(LEFT_MOTOR, TargetRPM);
-	//SetMotorPWM(RIGHT_MOTOR, TargetRPM);
 	SetTargetRPM(TargetRPM, TargetRPM);
 	if (Duration != 0) {
 		ES_Timer_InitTimer(DRIVE_MOTOR_TIMER, Duration);
@@ -255,8 +253,9 @@ Description: 	Stops the bot
 ****************************************************************************/
 void StopMotors(void) {
 	if (DisplayMotorInfo) printf("Drive Motors: Stopping\r\n");
-	//SetMotorPWM(LEFT_MOTOR, 0);
-	//SetMotorPWM(RIGHT_MOTOR, 0);
+	DisablePIDcontrol();
+	SetMotorPWM(LEFT_MOTOR, 0);
+	SetMotorPWM(RIGHT_MOTOR, 0);
 	SetTargetRPM(0, 0);
 }
 
@@ -268,10 +267,9 @@ Description: 	Drive the bot forward
 ****************************************************************************/
 void DriveForward(uint16_t TargetRPM, uint16_t Duration) {
 	if (DisplayMotorInfo) printf("Drive Motors: Driving Forward, TargetRPM = %d\r\n", TargetRPM);
+	EnablePIDcontrol();
 	SetMotorDirection(LEFT_MOTOR, FORWARD);
 	SetMotorDirection(RIGHT_MOTOR, FORWARD);
-	SetMotorPWM(LEFT_MOTOR, 100);
-	SetMotorPWM(RIGHT_MOTOR, 100);
 	SetTargetRPM(TargetRPM, TargetRPM);
 	if (Duration != 0) {
 		ES_Timer_InitTimer(DRIVE_MOTOR_TIMER, Duration);
@@ -287,11 +285,10 @@ Description: 	Drive the bot forward
 ****************************************************************************/
 void DriveForwardWithBias(uint16_t TargetRPML, uint16_t TargetRPMR, uint16_t Duration) {
 	if (DisplayMotorInfo) printf("Drive Motors: Driving Forward with Bias, TargetRPML = %d, TargetRPMR = %d\r\n", TargetRPML, TargetRPMR);
+	EnablePIDcontrol();
 	SetMotorDirection(LEFT_MOTOR, FORWARD);
 	SetMotorDirection(RIGHT_MOTOR, FORWARD);
-	//SetMotorPWM(LEFT_MOTOR, TargetRPML);
-	//SetMotorPWM(RIGHT_MOTOR, TargetRPMR);
-	SetTargetRPM(TargetRPML, TargetRPMR);
+	SetTargetRPM(TargetRPMR, TargetRPML);
 	if (Duration != 0) {
 		ES_Timer_InitTimer(DRIVE_MOTOR_TIMER, Duration);
 	}
@@ -306,17 +303,88 @@ Description: 	Drive the bot backward
 ****************************************************************************/
 void DriveBackward(uint16_t TargetRPM, uint16_t Duration) {
 	if (DisplayMotorInfo) printf("Drive Motors: Driving Backward, TargetRPM = %d\r\n", TargetRPM);
+	EnablePIDcontrol();
 	SetMotorDirection(LEFT_MOTOR, BACKWARD);
 	SetMotorDirection(RIGHT_MOTOR, BACKWARD);
-	//SetMotorPWM(LEFT_MOTOR, TargetRPM);
-	//SetMotorPWM(RIGHT_MOTOR, TargetRPM);
 	SetTargetRPM(TargetRPM, TargetRPM);
 	if (Duration != 0) {
 		ES_Timer_InitTimer(DRIVE_MOTOR_TIMER, Duration);
 	}
 }
 
-		
+/****************************************************************************
+Function: 		RotateCWwithDuty
+Parameters: 	void
+Returns: 			void
+Description: 	Rotates the bot clockwise
+****************************************************************************/
+void RotateCWwithDuty(uint16_t DutyCycle, uint16_t Duration) {
+	if (DisplayMotorInfo) printf("Drive Motors: Rotating CW, Duty Cycle = %d\r\n", DutyCycle);
+	DisablePIDcontrol();
+	SetMotorDirection(LEFT_MOTOR, FORWARD);
+	SetMotorDirection(RIGHT_MOTOR, BACKWARD);
+	SetMotorPWM(LEFT_MOTOR, DutyCycle);
+	SetMotorPWM(RIGHT_MOTOR, DutyCycle);
+	if (Duration != 0) {
+		ES_Timer_InitTimer(DRIVE_MOTOR_TIMER, Duration);
+	}
+}
+
+/****************************************************************************
+Function: 		RotateCCWwithDuty
+Parameters: 	void
+Returns: 			void
+Description: 	Rotates the bot counter-clockwise
+****************************************************************************/
+void RotateCCWwithDuty(uint16_t DutyCycle, uint16_t Duration) {
+	if (DisplayMotorInfo) printf("Drive Motors: Rotating CCW, Duty Cycle = %d\r\n", DutyCycle);
+	DisablePIDcontrol();
+	SetMotorDirection(LEFT_MOTOR, BACKWARD);
+	SetMotorDirection(RIGHT_MOTOR, FORWARD);
+	SetMotorPWM(LEFT_MOTOR, DutyCycle);
+	SetMotorPWM(RIGHT_MOTOR, DutyCycle);
+	if (Duration != 0) {
+		ES_Timer_InitTimer(DRIVE_MOTOR_TIMER, Duration);
+	}
+}
+
+/****************************************************************************
+Function: 		DriveForward
+Parameters: 	void
+Returns: 			void
+Description: 	Drive the bot forward
+****************************************************************************/
+void DriveForwardWithDuty(uint16_t Duty, uint16_t Duration) {
+	if (DisplayMotorInfo) printf("Drive Motors: Driving Forward, Duty Cycle = %d\r\n", Duty);
+	DisablePIDcontrol();
+	SetMotorDirection(LEFT_MOTOR, FORWARD);
+	SetMotorDirection(RIGHT_MOTOR, FORWARD);
+	SetMotorPWM(LEFT_MOTOR, Duty);
+	SetMotorPWM(RIGHT_MOTOR, Duty);
+	if (Duration != 0) {
+		ES_Timer_InitTimer(DRIVE_MOTOR_TIMER, Duration);
+	}
+}
+
+
+/****************************************************************************
+Function: 		DriveForward
+Parameters: 	void
+Returns: 			void
+Description: 	Drive the bot forward
+****************************************************************************/
+void DriveForwardWithBiasWithDuty(uint16_t DutyL, uint16_t DutyR, uint16_t Duration) {
+	if (DisplayMotorInfo) printf("Drive Motors: Driving Forward with Bias, DutyL = %d, DutyR = %d\r\n", DutyL, DutyR);
+	DisablePIDcontrol();
+	SetMotorDirection(LEFT_MOTOR, FORWARD);
+	SetMotorDirection(RIGHT_MOTOR, FORWARD);
+	SetMotorPWM(LEFT_MOTOR, DutyL);
+	SetMotorPWM(RIGHT_MOTOR, DutyR);
+	if (Duration != 0) {
+		ES_Timer_InitTimer(DRIVE_MOTOR_TIMER, Duration);
+	}
+}
+
 		
 
 /*------------------------------ Test Harness -----------------------------*/
@@ -350,11 +418,11 @@ int main(void)
 				break;
 			
 			case 'a':
-				RotateCCW(40, 0);
+				RotateCCW(30, 0);
 				break;
 			
 			case 'd':
-				RotateCW(40, 0);
+				RotateCW(20, 0);
 				break;
 			
 			case ' ':

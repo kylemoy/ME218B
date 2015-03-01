@@ -28,12 +28,17 @@ void SetMotorPWM(uint8_t Motor, uint8_t DutyCycle);
 void SetMotorDirection(uint8_t Motor, uint8_t Direction);
 
 // Functions for specific robot movements
+void StopMotors(void);
 void RotateCW(uint16_t TargetRPM, uint16_t Duration);
 void RotateCCW(uint16_t TargetRPM, uint16_t Duration);
-void StopMotors(void);
 void DriveForward(uint16_t TargetRPM, uint16_t Duration);
 void DriveForwardWithBias(uint16_t TargetRPML, uint16_t TargetRPMR, uint16_t Duration);
 void DriveBackward(uint16_t TargetRPM, uint16_t Duration);
+
+void RotateCWwithDuty(uint16_t Duty, uint16_t Duration);
+void RotateCCWwithDuty(uint16_t Duty, uint16_t Duration);
+void DriveForwardWithDuty(uint16_t TargetRPM, uint16_t Duration);
+void DriveForwardWithBiasWithDuty(uint16_t TargetRPML, uint16_t TargetRPMR, uint16_t Duration);
 
 #endif /* DriveMotors_H */
 

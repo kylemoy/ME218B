@@ -15,6 +15,7 @@ Author: Kyle Moy, 2/18/15
 #include "SM_Playing.h"
 #include "SM_Racing.h"
 #include "Display.h"
+#include "DriveMotors.h"
 
 /*----------------------------- Module Defines ----------------------------*/
 #define ENTRY_STATE RACING

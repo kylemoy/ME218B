@@ -279,6 +279,8 @@ typedef enum {  ES_NO_EVENT = 0,
 										E_CORNER4_EXIT,
 										
 										// SM_Ball_Launching Events
+										E_BALL_LAUNCHING_ENTRY,
+										E_BALL_LAUNCHING_EXIT,
 										E_TARGET_SUCCESS,
 										
 										// SM_Obstacle_Crossing Events

@@ -22,11 +22,10 @@ Author: Kyle Moy, 2/25/15
 
 
 /*----------------------------- Module Defines ----------------------------*/
-#define ENTRY_STATE BALL_LAUNCHING_ENTRY1
+#define ENTRY_STATE BALL_LAUNCHING_ENTRY
 
 /*---------------------------- Module Functions ---------------------------*/
-static ES_Event DuringBallLaunchingEntry1(ES_Event Event);
-static ES_Event DuringBallLaunchingEntry2(ES_Event Event);
+static ES_Event DuringBallLaunchingEntry(ES_Event Event);
 static ES_Event DuringBallLaunching(ES_Event Event);
 static ES_Event DuringBallLaunchingExit(ES_Event Event);
 
@@ -50,12 +49,12 @@ ES_Event RunBallLaunchingSM(ES_Event CurrentEvent) {
 	ES_Event ReturnEvent = {ES_NO_EVENT, 0}; // Assume no error
 
 	switch(CurrentState) {
-		case BALL_LAUNCHING_ENTRY1:
+		case BALL_LAUNCHING_ENTRY:
 		default:
-			// Execute During function for BALL_LAUNCHING_ENTRY1.
+			// Execute During function for BALL_LAUNCHING_ENTRY.
 			// ES_ENTRY & ES_EXIT are processed here allow the lower
 			// level state machines to re-map or consume the event
-			CurrentEvent = DuringBallLaunchingEntry1(CurrentEvent);
+			CurrentEvent = DuringBallLaunchingEntry(CurrentEvent);
 			// Process any events
 			if (CurrentEvent.EventType != ES_NO_EVENT) { // If an event is active
 				switch (CurrentEvent.EventType) {
@@ -64,25 +63,11 @@ ES_Event RunBallLaunchingSM(ES_Event CurrentEvent) {
 					//	MakeTransition = true;
 					//	ReturnEvent.EventType = ES_NO_EVENT;
 					//	break;
-				}
-			}
-			break;
-			
-		case BALL_LAUNCHING_ENTRY2:
-			// Execute During function for BALL_LAUNCHING_ENTRY2.
-			CurrentEvent = DuringBallLaunchingEntry2(CurrentEvent);
-			// Process any events
-			if (CurrentEvent.EventType != ES_NO_EVENT) { // If an event is active
-				switch (CurrentEvent.EventType) {
-//					// case E_MOTOR_TIMEOUT:
-//						// After turning is complete
-//						//DriveForward();
-//					case E_MOTOR_TIMEOUT:
-					//case E_CORNER1_EXIT:
-					//	NextState = STRAIGHT2;
-					//	MakeTransition = true;
-					//	ReturnEvent.EventType = ES_NO_EVENT;
-					//	break;
+					case E_BALL_LAUNCHING_ENTRY:
+						NextState = BALL_LAUNCHING;
+						MakeTransition = true;
+						ReturnEvent.EventType = ES_NO_EVENT;
+						break;
 				}
 			}
 			break;
@@ -144,7 +129,7 @@ Description:	Does any required initialization for this state machine
 ****************************************************************************/
 void StartBallLaunchingSM(ES_Event CurrentEvent) {
 	// Initialize the state variable
-	CurrentState = BALL_LAUNCHING_ENTRY1;
+	CurrentState = BALL_LAUNCHING_ENTRY;
   
 	// Let the Run function init the lower level state machines
   RunBallLaunchingSM(CurrentEvent);
@@ -165,34 +150,18 @@ BallLaunchingState_t QueryBallLaunchingSM(void) {
 
 /*------------------------- Private Function Code -------------------------*/
 
-static ES_Event DuringBallLaunchingEntry1(ES_Event Event) {
+static ES_Event DuringBallLaunchingEntry(ES_Event Event) {
 	ES_Event ReturnEvent = Event; // Assume no re-mapping or consumption
 	// Process ES_ENTRY, ES_ENTRY_HISTORY & ES_EXIT events
 	if ((Event.EventType == ES_ENTRY) || (Event.EventType == ES_ENTRY_HISTORY)) {
 		if(DisplayEntryStateTransitions && DisplaySM_Racing) printf("SM3_Ball_Launching: BALL_LAUNCHING_ENTRY1\r\n");
 		//SetTargetTheta(East);
 		//SetTargetPosition(Corner1X, Corner1Y);
-		StartNavigationSM(Event);
+		//StartNavigationSM(Event);
 	} else if ( Event.EventType == ES_EXIT ) {
 		
 	} else {
-		RunNavigationSM(Event);
-	}
-	return(ReturnEvent);
-}
-
-static ES_Event DuringBallLaunchingEntry2(ES_Event Event) {
-	ES_Event ReturnEvent = Event; // Assume no re-mapping or consumption
-	// Process ES_ENTRY, ES_ENTRY_HISTORY & ES_EXIT events
-	if ((Event.EventType == ES_ENTRY) || (Event.EventType == ES_ENTRY_HISTORY)) {
-		if(DisplayEntryStateTransitions && DisplaySM_Racing) printf("SM3_Ball_Launching: BALL_LAUNCHING_ENTRY2\r\n");
-		//SetTargetTheta(East);
-		//SetTargetPosition(Corner1X, Corner1Y);
-		StartNavigationSM(Event);
-	} else if ( Event.EventType == ES_EXIT ) {
-		
-	} else {
-		RunNavigationSM(Event);
+		//RunNavigationSM(Event);
 	}
 	return(ReturnEvent);
 }

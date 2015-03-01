@@ -24,20 +24,20 @@ Parameters:		uint8_t Xcoord, the X coordinate
 Returns:			GamefieldPosition_t, the gamefield position the point is in
 Description:	Return the gamefield position that a point is in
 ****************************************************************************/
-GamefieldPosition_t GetGamefieldPosition(uint8_t Xcoord, uint8_t Ycoord) {
+GamefieldPosition_t GetGamefieldPosition(uint16_t Xcoord, uint16_t Ycoord) {
 	if (Xcoord == 0 && Ycoord == 0)
 		return Undefined;
 	
-	else if (Xcoord < (Corner1XBound + CornerEntry) && Ycoord < Corner1YBound)
+	else if (Xcoord < (Corner1XBound + CornerEntry) && Ycoord < (Corner1YBound))
 		return Corner1;
 	
-	else if (Xcoord < Corner2XBound && Ycoord > (Corner2YBound - CornerEntry))
+	else if (Xcoord < (Corner2XBound) && Ycoord > (Corner2YBound - CornerEntry))
 		return Corner2;
 	
-	else if (Xcoord > (Corner3XBound - CornerEntry) && Ycoord > Corner3YBound)
+	else if (Xcoord > (Corner3XBound - CornerEntry) && Ycoord > (Corner3YBound))
 		return Corner3;
 	
-	else if (Xcoord > Corner4XBound && Ycoord < (Corner4YBound + CornerEntry))
+	else if (Xcoord > (Corner4XBound) && Ycoord < (Corner4YBound + CornerEntry))
 		return Corner4;
 	
 	else if (Xcoord < Straight2XBound)
@@ -52,8 +52,8 @@ GamefieldPosition_t GetGamefieldPosition(uint8_t Xcoord, uint8_t Ycoord) {
 	else if (Ycoord > Straight3YBound)
 		return Straight3;
 	
-	else if (Xcoord < BallShootingObstacleBound)
-		return BallShootingArea;
+	else if (Xcoord < BallLaunchingObstacleBound)
+		return BallLaunchingArea;
 	
 	else
 		return ObstacleCrossingArea;
@@ -125,7 +125,7 @@ const char * GamefieldPositionString(GamefieldPosition_t GamefieldPosition) {
 		case Corner3: return "Corner3";
 		case Straight4: return "Straight4";
 		case Corner4: return "Corner4";
-		case BallShootingArea: return "BallShootingArea";
+		case BallLaunchingArea: return "BallLaunchingArea";
 		case ObstacleCrossingArea: return "ObstacleCrossingArea";
 		case Undefined: default: return "Undefined";
 	}

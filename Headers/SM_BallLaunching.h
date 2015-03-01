@@ -12,7 +12,7 @@ Author: Kyle Moy, 2/25/15
 
 /*----------------------------- Module Defines ----------------------------*/
 // States of the SM_Ball_Launching state machine
-typedef enum {BALL_LAUNCHING_ENTRY1, BALL_LAUNCHING_ENTRY2, \
+typedef enum {BALL_LAUNCHING_ENTRY, \
 							BALL_LAUNCHING, BALL_LAUNCHING_EXIT} BallLaunchingState_t;
 
 

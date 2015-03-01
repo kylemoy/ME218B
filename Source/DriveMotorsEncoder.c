@@ -14,7 +14,7 @@
 // 40,000 ticks per mS assumes a 40Mhz clock
 #define TicksPerMS 40000
 #define TicksPerMin 2400000000
-#define PulsesPerRev 26
+#define PulsesPerRev 28
 
 //#define TEST
 

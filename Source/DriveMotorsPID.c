@@ -28,6 +28,7 @@
 
 static float TargetRPMR = 100.0;
 static float TargetRPML = 100.0;
+static bool PIDcontrolEnabled = true;
 
 // we will use Timer B in Wide Timer 1 to generate the interrupt
 void InitPeriodicInt( void ){
@@ -119,13 +120,23 @@ void SetRPMResponse( void ){
 	//SetMotorDirection(1,1); //take this away
 	//SetMotorPWM(RIGHT_MOTOR, 100);
 	//SetMotorPWM(LEFT_MOTOR, 100 );
-	SetMotorPWM(RIGHT_MOTOR, RequestedDutyR);
-	SetMotorPWM(LEFT_MOTOR, RequestedDutyL);
+	if (PIDcontrolEnabled) {
+		SetMotorPWM(RIGHT_MOTOR, RequestedDutyR);
+		SetMotorPWM(LEFT_MOTOR, RequestedDutyL);
+	}
 }
 
 void SetTargetRPM(float SetRPMR, float SetRPML){
 	TargetRPMR = SetRPMR;
 	TargetRPML = SetRPML;
+}
+
+
+void EnablePIDcontrol(void) {
+	PIDcontrolEnabled = true;
+}
+void DisablePIDcontrol(void) {
+	PIDcontrolEnabled = false;
 }
 /*
 uint32_t GetTimeoutCount( void ){

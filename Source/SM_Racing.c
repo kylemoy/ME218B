@@ -66,13 +66,21 @@ ES_Event RunRacingSM(ES_Event CurrentEvent) {
 			// Process any events
 			if (CurrentEvent.EventType != ES_NO_EVENT) { // If an event is active
 				switch (CurrentEvent.EventType) {
+					case E_DRS_UPDATED:
+						PrintMyKartStatus();
+						if (GetMyKart().KartX < Corner1XBound + CornerEntry + 10) {
+							NextState = CORNER1;
+							MakeTransition = true;
+							ReturnEvent.EventType = ES_NO_EVENT;
+						}
+						break;
 //					case E_MOTOR_TIMEOUT:
 					// For now, let's stay in Straight1 while we Debug our SM_Navigation module
-					case E_CORNER1_ENTRY:
-						NextState = CORNER1;
-						MakeTransition = true;
-						ReturnEvent.EventType = ES_NO_EVENT;
-						break;
+					//case E_CORNER1_ENTRY:
+						//NextState = CORNER1;
+						//MakeTransition = true;
+						//ReturnEvent.EventType = ES_NO_EVENT;
+						//break;
 				}
 			}
 			break;
@@ -83,19 +91,31 @@ ES_Event RunRacingSM(ES_Event CurrentEvent) {
 			// Process any events
 			if (CurrentEvent.EventType != ES_NO_EVENT) { // If an event is active
 				switch (CurrentEvent.EventType) {
-//					// case E_MOTOR_TIMEOUT:
+					case E_MOTOR_TIMEOUT:
+						NextState = STRAIGHT2;
+						MakeTransition = true;
+						ReturnEvent.EventType = ES_NO_EVENT;
+						break;
+						//DriveForward(100, 0);
+						//DriveForwardWithBias(250, 400, 0);
+						//break;
 //						// After turning is complete
 //						//DriveForward();
 //					case E_MOTOR_TIMEOUT:
 					case E_DRS_UPDATED:
 						PrintMyKartStatus();
-						break;
+						//if (GetMyKart().KartY > Corner1YBound - CornerExit) {
+						//	NextState = STRAIGHT2;
+						//	MakeTransition = true;
+						//	ReturnEvent.EventType = ES_NO_EVENT;
+						//}
+						//break;
 					
-					case E_CORNER1_EXIT:
-						NextState = STRAIGHT2;
-						MakeTransition = true;
-						ReturnEvent.EventType = ES_NO_EVENT;
-						break;
+					//case E_CORNER1_EXIT:
+					//	NextState = STRAIGHT2;
+					//	MakeTransition = true;
+					//	ReturnEvent.EventType = ES_NO_EVENT;
+					//	break;
 				}
 			}
 			break;
@@ -107,6 +127,17 @@ ES_Event RunRacingSM(ES_Event CurrentEvent) {
 			if (CurrentEvent.EventType != ES_NO_EVENT) { // If an event is active
 				switch (CurrentEvent.EventType) {
 					//case E_MOTOR_TIMEOUT:
+					
+					case E_DRS_UPDATED:
+						if (GetMyKart().KartY > BallLaunchingEntryYBound) {
+							printf("Passed the Ball Shooting Entry Y-Bound = %d.\r\n", BallLaunchingEntryYBound);
+							if (WillBallLaunch) {
+								ES_Event Event = {E_BALL_LAUNCHING_START, 0};
+								PostMasterSM(Event);
+							}
+						}
+						break;
+					
 					case E_CORNER2_ENTRY:
 						NextState = CORNER2;
 						MakeTransition = true;
@@ -122,15 +153,28 @@ ES_Event RunRacingSM(ES_Event CurrentEvent) {
 			// Process any events
 			if (CurrentEvent.EventType != ES_NO_EVENT) { // If an event is active
 				switch (CurrentEvent.EventType) {
-					//case E_MOTOR_TIMEOUT:
-						// After turning is complete
-						//DriveForward();
-					//case E_MOTOR_TIMEOUT:
-					case E_CORNER2_EXIT:
+					case E_MOTOR_TIMEOUT:
 						NextState = STRAIGHT3;
 						MakeTransition = true;
 						ReturnEvent.EventType = ES_NO_EVENT;
 						break;
+						// After turning is complete
+						//DriveForward();
+					//case E_MOTOR_TIMEOUT:
+					case E_DRS_UPDATED:
+						PrintMyKartStatus();
+						//if (GetMyKart().KartX > Corner2XBound - CornerExit) {
+						//	NextState = STRAIGHT3;
+						//	MakeTransition = true;
+						//	ReturnEvent.EventType = ES_NO_EVENT;
+						//}
+						break;
+						
+					//case E_CORNER2_EXIT:
+						//NextState = STRAIGHT3;
+						//MakeTransition = true;
+						//ReturnEvent.EventType = ES_NO_EVENT;
+						//break;
 				}
 			}
 			break;
@@ -142,6 +186,16 @@ ES_Event RunRacingSM(ES_Event CurrentEvent) {
 			if (CurrentEvent.EventType != ES_NO_EVENT) { // If an event is active
 				switch (CurrentEvent.EventType) {
 					//case E_MOTOR_TIMEOUT:
+					case E_DRS_UPDATED:
+						if (GetMyKart().KartX > ObstacleEntryXBound) {
+							printf("Passed the Obstacle Entry X-Bound = %d.\r\n", ObstacleEntryXBound);
+							if (WillCrossObstacle) {
+								ES_Event Event = {E_OBSTACLE_CROSSING_START, 0};
+								PostMasterSM(Event);
+							}
+						}
+						break;
+						
 					case E_CORNER3_ENTRY:
 						NextState = CORNER3;
 						MakeTransition = true;
@@ -157,15 +211,27 @@ ES_Event RunRacingSM(ES_Event CurrentEvent) {
 			// Process any events
 			if (CurrentEvent.EventType != ES_NO_EVENT) { // If an event is active
 				switch (CurrentEvent.EventType) {
-					//case E_MOTOR_TIMEOUT:
-						// After turning is complete
-						//DriveForward();
-					//case E_MOTOR_TIMEOUT:
-					case E_CORNER3_EXIT:
+					case E_MOTOR_TIMEOUT:
 						NextState = STRAIGHT4;
 						MakeTransition = true;
 						ReturnEvent.EventType = ES_NO_EVENT;
 						break;
+						// After turning is complete
+						//DriveForward();
+					//case E_MOTOR_TIMEOUT:
+					case E_DRS_UPDATED:
+						PrintMyKartStatus();
+						//if (GetMyKart().KartY < Corner3YBound + CornerExit) {
+						//	NextState = STRAIGHT4;
+						//	MakeTransition = true;
+						//	ReturnEvent.EventType = ES_NO_EVENT;
+						//}
+						break;
+					//case E_CORNER3_EXIT:
+						//NextState = STRAIGHT4;
+						//MakeTransition = true;
+						//ReturnEvent.EventType = ES_NO_EVENT;
+						//break;
 				}
 			}
 			break;
@@ -177,6 +243,10 @@ ES_Event RunRacingSM(ES_Event CurrentEvent) {
 			if (CurrentEvent.EventType != ES_NO_EVENT) { // If an event is active
 				switch (CurrentEvent.EventType) {
 					//case E_MOTOR_TIMEOUT:
+					case E_DRS_UPDATED:
+						PrintMyKartStatus();
+						break;
+					
 					case E_CORNER4_ENTRY:
 						NextState = CORNER4;
 						MakeTransition = true;
@@ -192,15 +262,28 @@ ES_Event RunRacingSM(ES_Event CurrentEvent) {
 			// Process any events
 			if (CurrentEvent.EventType != ES_NO_EVENT) { // If an event is active
 				switch (CurrentEvent.EventType) {
-					//case E_MOTOR_TIMEOUT:
-						// After turning is complete
-						//DriveForward();
-					//case E_MOTOR_TIMEOUT:
-					case E_CORNER4_EXIT:
+					case E_MOTOR_TIMEOUT:
 						NextState = STRAIGHT1;
 						MakeTransition = true;
 						ReturnEvent.EventType = ES_NO_EVENT;
 						break;
+					//case E_MOTOR_TIMEOUT:
+						// After turning is complete
+						//DriveForward();
+					//case E_MOTOR_TIMEOUT:
+					case E_DRS_UPDATED:
+						PrintMyKartStatus();
+						//if (GetMyKart().KartX < Corner4XBound + CornerExit) {
+							//NextState = STRAIGHT1;
+							//MakeTransition = true;
+							//ReturnEvent.EventType = ES_NO_EVENT;
+						//}
+						break;
+					//case E_CORNER4_EXIT:
+						//NextState = STRAIGHT1;
+						//MakeTransition = true;
+						//ReturnEvent.EventType = ES_NO_EVENT;
+						//break;
 				}
 			}
 			break;
@@ -270,7 +353,8 @@ static ES_Event DuringStraight1(ES_Event Event) {
 		//SetTargetTheta(East);
 		//SetTargetPosition(Corner1X, Corner1Y);
 		//StartNavigationSM(Event);
-		DriveForward(100,0);
+		
+		DriveForward(100, 0);
 	} else if ( Event.EventType == ES_EXIT ) {
 		
 	} else {
@@ -287,7 +371,11 @@ static ES_Event DuringCorner1(ES_Event Event) {
 		//SetTargetTheta(North);
 		//SetTargetPosition(Corner2X, Corner2Y);
 		//StartNavigationSM(Event);
-		DriveForwardWithBias(30, 70, 0);
+		DriveForwardWithBias(50, 100, 110);
+		//RotateCCW(40, 75);
+		//StopMotors();
+		//printf("Braking...\r\n");
+		//ES_Timer_InitTimer(DRIVE_MOTOR_TIMER, 20);
 	} else if ( Event.EventType == ES_EXIT ) {
 		
 	} else {
@@ -308,7 +396,8 @@ static ES_Event DuringStraight2(ES_Event Event) {
 			//SetTargetTheta(North);
 			//SetTargetPosition(Corner2X, Corner2Y);
 			//StartNavigationSM(Event);
-			DriveForward(100, 0);
+		DriveForward(100, 0);
+			//StopMotors();
 		}
 	} else if ( Event.EventType == ES_EXIT ) {
 		
@@ -326,7 +415,7 @@ static ES_Event DuringCorner2(ES_Event Event) {
 		//SetTargetTheta(West);
 		//SetTargetPosition(Corner3X, Corner3Y);
 		//StartNavigationSM(Event);
-		DriveForwardWithBias(30, 70, 0);
+		DriveForwardWithBias(50, 100, 115);
 	} else if ( Event.EventType == ES_EXIT ) {
 		
 	} else {
@@ -347,7 +436,7 @@ static ES_Event DuringStraight3(ES_Event Event) {
 			//SetTargetTheta(West);
 			//SetTargetPosition(Corner3X, Corner3Y);
 			//StartNavigationSM(Event);
-			DriveForward(100, 0);
+		DriveForward(100, 0);
 		}
 	} else if ( Event.EventType == ES_EXIT ) {
 		
@@ -365,7 +454,7 @@ static ES_Event DuringCorner3(ES_Event Event) {
 		//SetTargetTheta(South);
 		//SetTargetPosition(Corner4X, Corner4Y);
 		//StartNavigationSM(Event);
-		DriveForwardWithBias(30, 70, 0);
+		DriveForwardWithBias(50, 100, 115);
 	} else if ( Event.EventType == ES_EXIT ) {
 		
 	} else {
@@ -399,7 +488,7 @@ static ES_Event DuringCorner4(ES_Event Event) {
 		//SetTargetTheta(East);
 		//SetTargetPosition(Corner1X, Corner1Y);
 		//StartNavigationSM(Event);
-		DriveForwardWithBias(30, 70, 0);
+		DriveForwardWithBias(50, 100, 115);
 	} else if ( Event.EventType == ES_EXIT ) {
 		
 	} else {
