@@ -16,6 +16,7 @@ Author: Kyle Moy, 2/18/15
 #include "SM_Playing.h"
 #include "Display.h"
 #include "DriveMotors.h"
+#include "BallLauncher.h"
 
 /*---------------------------- Module Functions ---------------------------*/
 static ES_Event DuringWaitingStart(ES_Event Event);
@@ -241,7 +242,7 @@ static ES_Event DuringPlaying(ES_Event Event) {
 	// Process ES_ENTRY, ES_ENTRY_HISTORY & ES_EXIT events
 	if ((Event.EventType == ES_ENTRY) || (Event.EventType == ES_ENTRY_HISTORY)) {
 		if(DisplayEntryStateTransitions && DisplaySM_Master) printf("SM1_Master: PLAYING\r\n");
-		if (Event.EventType == ES_ENTRY) StartPlayingSM(Event);
+		StartPlayingSM(Event);
 		//DriveForwardWithSetDistance(200, 1000);
 		//DriveBackwardsWithBias(100, 100, 25);
 		//MotorTimeoutCase = 0;
@@ -259,6 +260,7 @@ static ES_Event DuringPaused(ES_Event Event) {
 	// Process ES_ENTRY, ES_ENTRY_HISTORY & ES_EXIT events
 	if ((Event.EventType == ES_ENTRY) || (Event.EventType == ES_ENTRY_HISTORY)) {
 		if(DisplayEntryStateTransitions && DisplaySM_Master) printf("SM1_Master: PAUSED\r\n");
+		StopMotors();
 	} else if (Event.EventType == ES_EXIT) {
 		
 	} else {
@@ -272,6 +274,7 @@ static ES_Event DuringWaitingFinish(ES_Event Event) {
 	if ((Event.EventType == ES_ENTRY) || (Event.EventType == ES_ENTRY_HISTORY)) {
 		if(DisplayEntryStateTransitions && DisplaySM_Master) printf("SM1_Master: WAITING_FINISHED\r\n");
 		StopMotors();
+		TurnOffShooter();
 	} else if (Event.EventType == ES_EXIT) {
 		
 	} else {

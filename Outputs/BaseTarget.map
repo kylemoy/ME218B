@@ -103,10 +103,11 @@ Section Cross References
     sm_master.o(i.PostMasterSM) refers to sm_master.o(.data) for .data
     sm_master.o(i.QueryMasterSM) refers to sm_master.o(.data) for .data
     sm_master.o(i.RunMasterSM) refers to display.o(i.RunDisplay) for RunDisplay
-    sm_master.o(i.RunMasterSM) refers to sm_playing.o(i.RunPlayingSM) for RunPlayingSM
     sm_master.o(i.RunMasterSM) refers to noretval__2printf.o(.text) for __2printf
-    sm_master.o(i.RunMasterSM) refers to sm_playing.o(i.StartPlayingSM) for StartPlayingSM
     sm_master.o(i.RunMasterSM) refers to drivemotors.o(i.StopMotors) for StopMotors
+    sm_master.o(i.RunMasterSM) refers to sm_playing.o(i.RunPlayingSM) for RunPlayingSM
+    sm_master.o(i.RunMasterSM) refers to sm_playing.o(i.StartPlayingSM) for StartPlayingSM
+    sm_master.o(i.RunMasterSM) refers to balllauncher.o(i.TurnOffShooter) for TurnOffShooter
     sm_master.o(i.RunMasterSM) refers to sm_master.o(.data) for .data
     sm_master.o(i.RunMasterSM) refers to sm_master.o(.constdata) for .constdata
     sm_master.o(i.StartMasterSM) refers to sm_master.o(i.RunMasterSM) for RunMasterSM
@@ -355,12 +356,11 @@ Section Cross References
     sm_obstaclecrossing.o(i.RunObstacleCrossingSM) refers to noretval__2printf.o(.text) for __2printf
     sm_obstaclecrossing.o(i.RunObstacleCrossingSM) refers to drivemotors.o(i.RotateCW) for RotateCW
     sm_obstaclecrossing.o(i.RunObstacleCrossingSM) refers to drivemotors.o(i.StopMotors) for StopMotors
-    sm_obstaclecrossing.o(i.RunObstacleCrossingSM) refers to drivemotors.o(i.DriveForwardWithBias) for DriveForwardWithBias
     sm_obstaclecrossing.o(i.RunObstacleCrossingSM) refers to es_timers.o(i.ES_Timer_InitTimer) for ES_Timer_InitTimer
     sm_obstaclecrossing.o(i.RunObstacleCrossingSM) refers to drivemotors.o(i.DriveBackwardsWithBias) for DriveBackwardsWithBias
     sm_obstaclecrossing.o(i.RunObstacleCrossingSM) refers to drivemotors.o(i.DriveBackward) for DriveBackward
     sm_obstaclecrossing.o(i.RunObstacleCrossingSM) refers to sm_master.o(i.PostMasterSM) for PostMasterSM
-    sm_obstaclecrossing.o(i.RunObstacleCrossingSM) refers to drivemotors.o(i.RotateCCW) for RotateCCW
+    sm_obstaclecrossing.o(i.RunObstacleCrossingSM) refers to drivemotors.o(i.DriveForwardWithBias) for DriveForwardWithBias
     sm_obstaclecrossing.o(i.RunObstacleCrossingSM) refers to sm_obstaclecrossing.o(.data) for .data
     sm_obstaclecrossing.o(i.RunObstacleCrossingSM) refers to sm_obstaclecrossing.o(.constdata) for .constdata
     sm_obstaclecrossing.o(i.StartObstacleCrossingSM) refers to sm_obstaclecrossing.o(i.RunObstacleCrossingSM) for RunObstacleCrossingSM
@@ -1498,195 +1498,195 @@ Image Symbol Table
     i.CPUsetPRIMASK                          0x00001710   Section        0  es_port.o(i.CPUsetPRIMASK)
     i.Check4Keystroke                        0x00001718   Section        0  eventcheckers.o(i.Check4Keystroke)
     i.CheckBumpSensor                        0x00001744   Section        0  eventcheckers.o(i.CheckBumpSensor)
-    i.CheckIRSensor                          0x00001770   Section        0  eventcheckers.o(i.CheckIRSensor)
-    i.DisablePIDcontrol                      0x000017c4   Section        0  drivemotorspid.o(i.DisablePIDcontrol)
-    i.DriveBackward                          0x000017d0   Section        0  drivemotors.o(i.DriveBackward)
-    i.DriveBackwardsWithBias                 0x0000184c   Section        0  drivemotors.o(i.DriveBackwardsWithBias)
-    i.DriveForward                           0x0000189c   Section        0  drivemotors.o(i.DriveForward)
-    i.DriveForwardWithBias                   0x00001914   Section        0  drivemotors.o(i.DriveForwardWithBias)
-    i.EOTIntHandler                          0x00001964   Section        0  drs.o(i.EOTIntHandler)
-    i.ES_CheckUserEvents                     0x00001994   Section        0  es_checkevents.o(i.ES_CheckUserEvents)
-    i.ES_DeQueue                             0x000019bc   Section        0  es_queue.o(i.ES_DeQueue)
-    i.ES_EnQueueFIFO                         0x00001a10   Section        0  es_queue.o(i.ES_EnQueueFIFO)
-    i.ES_GetMSBitSet                         0x00001a58   Section        0  es_lookuptables.o(i.ES_GetMSBitSet)
-    i.ES_InitQueue                           0x00001a8c   Section        0  es_queue.o(i.ES_InitQueue)
-    i.ES_Initialize                          0x00001a9c   Section        0  es_framework.o(i.ES_Initialize)
-    i.ES_PostToService                       0x00001ae8   Section        0  es_framework.o(i.ES_PostToService)
-    i.ES_Run                                 0x00001b20   Section        0  es_framework.o(i.ES_Run)
-    i.ES_Timer_Init                          0x00001b80   Section        0  es_timers.o(i.ES_Timer_Init)
-    i.ES_Timer_InitTimer                     0x00001b84   Section        0  es_timers.o(i.ES_Timer_InitTimer)
-    i.ES_Timer_StopTimer                     0x00001bc0   Section        0  es_timers.o(i.ES_Timer_StopTimer)
-    i.ES_Timer_Tick_Resp                     0x00001be4   Section        0  es_timers.o(i.ES_Timer_Tick_Resp)
-    i.EnablePIDcontrol                       0x00001c50   Section        0  drivemotorspid.o(i.EnablePIDcontrol)
-    i.GPIODirModeSet                         0x00001c5c   Section        0  gpio.o(i.GPIODirModeSet)
-    i.GPIOPadConfigSet                       0x00001c84   Section        0  gpio.o(i.GPIOPadConfigSet)
-    i.GPIOPinConfigure                       0x00001dc0   Section        0  gpio.o(i.GPIOPinConfigure)
-    i.GPIOPinTypeUART                        0x00001e08   Section        0  gpio.o(i.GPIOPinTypeUART)
-    i.GamefieldPositionString                0x00001e24   Section        0  gamefieldpositions.o(i.GamefieldPositionString)
-    i.GetAngle                               0x00001eec   Section        0  gamefieldpositions.o(i.GetAngle)
-    i.GetAveragePerioduS                     0x00001f54   Section        0  beaconsensor.o(i.GetAveragePerioduS)
-    i.GetGamefieldPosition                   0x00001f7c   Section        0  gamefieldpositions.o(i.GetGamefieldPosition)
-    i.GetKartData                            0x00001fe4   Section        0  drs.o(i.GetKartData)
-    i.GetMyKart                              0x00002018   Section        0  drs.o(i.GetMyKart)
-    i.GetRPML                                0x00002030   Section        0  drivemotorsencoder.o(i.GetRPML)
-    i.GetRPMR                                0x00002054   Section        0  drivemotorsencoder.o(i.GetRPMR)
-    i.InitBeaconSensingCapture               0x00002078   Section        0  beaconsensor.o(i.InitBeaconSensingCapture)
-    i.InitDRS_SM                             0x00002124   Section        0  sm_drs.o(i.InitDRS_SM)
-    i.InitDisplay                            0x00002144   Section        0  display.o(i.InitDisplay)
-    i.InitDriveMotorsService                 0x00002150   Section        0  drivemotorsservice.o(i.InitDriveMotorsService)
-    i.InitInputCapturePeriod                 0x0000215c   Section        0  drivemotorsencoder.o(i.InitInputCapturePeriod)
-    i.InitMapKeys                            0x00002254   Section        0  mapkeys.o(i.InitMapKeys)
-    i.InitMasterSM                           0x00002260   Section        0  sm_master.o(i.InitMasterSM)
-    i.InitPeriodicInt                        0x0000227c   Section        0  drivemotorspid.o(i.InitPeriodicInt)
-    i.InitializeBallLauncher                 0x000022d8   Section        0  balllauncher.o(i.InitializeBallLauncher)
-    i.InitializeBumpSensors                  0x00002414   Section        0  bumpsensor.o(i.InitializeBumpSensors)
-    i.InitializeDRS                          0x0000244c   Section        0  drs.o(i.InitializeDRS)
-    i.InitializeDriveMotors                  0x00002568   Section        0  drivemotors.o(i.InitializeDriveMotors)
-    i.IntMasterEnable                        0x00002688   Section        0  interrupt.o(i.IntMasterEnable)
-    i.IsBeaconSensed                         0x00002698   Section        0  beaconsensor.o(i.IsBeaconSensed)
-    i.LDriveCaptureResponse                  0x000026c4   Section        0  drivemotorsencoder.o(i.LDriveCaptureResponse)
-    i.PostDRS_SM                             0x0000271c   Section        0  sm_drs.o(i.PostDRS_SM)
-    i.PostDisplay                            0x0000272c   Section        0  display.o(i.PostDisplay)
-    i.PostDriveMotorsService                 0x0000273c   Section        0  drivemotorsservice.o(i.PostDriveMotorsService)
-    i.PostMapKeys                            0x0000274c   Section        0  mapkeys.o(i.PostMapKeys)
-    i.PostMasterSM                           0x0000275c   Section        0  sm_master.o(i.PostMasterSM)
-    i.RDriveCaptureResponse                  0x0000276c   Section        0  drivemotorsencoder.o(i.RDriveCaptureResponse)
-    i.RotateCCW                              0x000027c8   Section        0  drivemotors.o(i.RotateCCW)
-    i.RotateCCWwithDuty                      0x00002840   Section        0  drivemotors.o(i.RotateCCWwithDuty)
-    i.RotateCW                               0x000028b4   Section        0  drivemotors.o(i.RotateCW)
-    i.RotateCWwithDuty                       0x00002928   Section        0  drivemotors.o(i.RotateCWwithDuty)
-    i.RunBallLaunchingSM                     0x0000299c   Section        0  sm_balllaunching.o(i.RunBallLaunchingSM)
-    i.RunDRS_SM                              0x00002bf0   Section        0  sm_drs.o(i.RunDRS_SM)
-    i.RunDisplay                             0x00002cec   Section        0  display.o(i.RunDisplay)
-    i.RunDriveMotorsService                  0x00002fa4   Section        0  drivemotorsservice.o(i.RunDriveMotorsService)
-    i.RunMapKeys                             0x00002fc8   Section        0  mapkeys.o(i.RunMapKeys)
-    i.RunMasterSM                            0x00003398   Section        0  sm_master.o(i.RunMasterSM)
-    i.RunObstacleCrossingSM                  0x000034f0   Section        0  sm_obstaclecrossing.o(i.RunObstacleCrossingSM)
-    i.RunPlayingSM                           0x000036a4   Section        0  sm_playing.o(i.RunPlayingSM)
-    i.RunRacingSM                            0x000037e8   Section        0  sm_racing.o(i.RunRacingSM)
-    i.SendQuery                              0x00003be4   Section        0  drs.o(i.SendQuery)
-    i.ServoForward                           0x00003c18   Section        0  balllauncher.o(i.ServoForward)
-    i.ServoReverse                           0x00003c58   Section        0  balllauncher.o(i.ServoReverse)
-    i.SetMotorDirection                      0x00003c98   Section        0  drivemotors.o(i.SetMotorDirection)
-    i.SetMotorPWM                            0x00003ce8   Section        0  drivemotors.o(i.SetMotorPWM)
-    i.SetRPMResponse                         0x00003d60   Section        0  drivemotorspid.o(i.SetRPMResponse)
-    i.SetTargetRPM                           0x00003e60   Section        0  drivemotorspid.o(i.SetTargetRPM)
-    i.StartBallLaunchingSM                   0x00003e70   Section        0  sm_balllaunching.o(i.StartBallLaunchingSM)
-    i.StartMasterSM                          0x00003e80   Section        0  sm_master.o(i.StartMasterSM)
-    i.StartObstacleCrossingSM                0x00003e90   Section        0  sm_obstaclecrossing.o(i.StartObstacleCrossingSM)
-    i.StartPlayingSM                         0x00003ea4   Section        0  sm_playing.o(i.StartPlayingSM)
-    i.StartRacingSM                          0x00003eb4   Section        0  sm_racing.o(i.StartRacingSM)
-    i.StopMotors                             0x00003f00   Section        0  drivemotors.o(i.StopMotors)
-    i.StoreData                              0x00003f4c   Section        0  drs.o(i.StoreData)
-    i.SysCtlClockSet                         0x00004204   Section        0  sysctl.o(i.SysCtlClockSet)
-    i.SysCtlPeripheralEnable                 0x00004324   Section        0  sysctl.o(i.SysCtlPeripheralEnable)
-    i.SysTickEnable                          0x0000434c   Section        0  systick.o(i.SysTickEnable)
-    i.SysTickIntEnable                       0x0000435a   Section        0  systick.o(i.SysTickIntEnable)
-    i.SysTickIntHandler                      0x00004368   Section        0  es_port.o(i.SysTickIntHandler)
-    i.SysTickPeriodSet                       0x0000437c   Section        0  systick.o(i.SysTickPeriodSet)
-    i.TERMIO_GetChar                         0x00004386   Section        0  termio.o(i.TERMIO_GetChar)
-    i.TERMIO_Init                            0x0000438c   Section        0  termio.o(i.TERMIO_Init)
-    i.TERMIO_PutChar                         0x000043dc   Section        0  termio.o(i.TERMIO_PutChar)
-    i.TurnOffShooter                         0x000043e8   Section        0  balllauncher.o(i.TurnOffShooter)
-    i.TurnOnShooter                          0x00004428   Section        0  balllauncher.o(i.TurnOnShooter)
-    i.UARTCharPut                            0x00004464   Section        0  uart.o(i.UARTCharPut)
-    i.UARTClockSourceSet                     0x00004470   Section        0  uart.o(i.UARTClockSourceSet)
-    i.UARTStdioConfig                        0x00004478   Section        0  uartstdio.o(i.UARTStdioConfig)
-    i.UARTgetc                               0x000044d4   Section        0  uartstdio.o(i.UARTgetc)
-    i._HW_Process_Pending_Ints               0x000044ec   Section        0  es_port.o(i._HW_Process_Pending_Ints)
-    i._HW_Timer_Init                         0x0000450c   Section        0  es_port.o(i._HW_Timer_Init)
-    i.__ARM_fpclassify                       0x00004522   Section        0  fpclassify.o(i.__ARM_fpclassify)
-    i.__hardfp_atan                          0x00004558   Section        0  atan.o(i.__hardfp_atan)
-    i.__hardfp_atan2                         0x00004838   Section        0  atan2.o(i.__hardfp_atan2)
-    i.__kernel_poly                          0x00004a28   Section        0  poly.o(i.__kernel_poly)
-    i.__mathlib_dbl_underflow                0x00004b20   Section        0  dunder.o(i.__mathlib_dbl_underflow)
-    i._is_digit                              0x00004b40   Section        0  __printf_wp.o(i._is_digit)
-    i._sys_exit                              0x00004b4e   Section        0  retarget.o(i._sys_exit)
-    i.atan                                   0x00004b50   Section        0  atan.o(i.atan)
-    i.fabs                                   0x00004b60   Section        0  fabs.o(i.fabs)
-    i.ferror                                 0x00004b78   Section        0  retarget.o(i.ferror)
-    i.fgetc                                  0x00004b7e   Section        0  retarget.o(i.fgetc)
-    i.fputc                                  0x00004b82   Section        0  retarget.o(i.fputc)
-    i.kbhit                                  0x00004b90   Section        0  termio.o(i.kbhit)
-    i.main                                   0x00004ba4   Section        0  main.o(i.main)
-    locale$$code                             0x00004cf4   Section       44  lc_ctype_c.o(locale$$code)
-    locale$$code                             0x00004d20   Section       44  lc_numeric_c.o(locale$$code)
-    x$fpl$basic                              0x00004d4c   Section       24  basic.o(x$fpl$basic)
-    $v0                                      0x00004d4c   Number         0  basic.o(x$fpl$basic)
-    x$fpl$dadd                               0x00004d64   Section      336  daddsub_clz.o(x$fpl$dadd)
-    $v0                                      0x00004d64   Number         0  daddsub_clz.o(x$fpl$dadd)
-    _dadd1                                   0x00004d75   Thumb Code     0  daddsub_clz.o(x$fpl$dadd)
-    x$fpl$ddiv                               0x00004eb4   Section      688  ddiv.o(x$fpl$ddiv)
-    $v0                                      0x00004eb4   Number         0  ddiv.o(x$fpl$ddiv)
-    ddiv_entry                               0x00004ebb   Thumb Code     0  ddiv.o(x$fpl$ddiv)
-    x$fpl$dflt                               0x00005164   Section       46  dflt_clz.o(x$fpl$dflt)
-    $v0                                      0x00005164   Number         0  dflt_clz.o(x$fpl$dflt)
-    x$fpl$dmul                               0x00005194   Section      340  dmul.o(x$fpl$dmul)
-    $v0                                      0x00005194   Number         0  dmul.o(x$fpl$dmul)
-    x$fpl$dnaninf                            0x000052e8   Section      156  dnaninf.o(x$fpl$dnaninf)
-    $v0                                      0x000052e8   Number         0  dnaninf.o(x$fpl$dnaninf)
-    x$fpl$dretinf                            0x00005384   Section       12  dretinf.o(x$fpl$dretinf)
-    $v0                                      0x00005384   Number         0  dretinf.o(x$fpl$dretinf)
-    x$fpl$drsb                               0x00005390   Section       22  daddsub_clz.o(x$fpl$drsb)
-    $v0                                      0x00005390   Number         0  daddsub_clz.o(x$fpl$drsb)
-    x$fpl$dsub                               0x000053a8   Section      468  daddsub_clz.o(x$fpl$dsub)
-    $v0                                      0x000053a8   Number         0  daddsub_clz.o(x$fpl$dsub)
-    _dsub1                                   0x000053b9   Thumb Code     0  daddsub_clz.o(x$fpl$dsub)
-    x$fpl$fpinit                             0x0000557c   Section       10  fpinit.o(x$fpl$fpinit)
-    $v0                                      0x0000557c   Number         0  fpinit.o(x$fpl$fpinit)
-    x$fpl$printf1                            0x00005586   Section        4  printf1.o(x$fpl$printf1)
-    $v0                                      0x00005586   Number         0  printf1.o(x$fpl$printf1)
-    x$fpl$usenofp                            0x0000558a   Section        0  usenofp.o(x$fpl$usenofp)
-    .constdata                               0x0000558c   Section        8  eventcheckers.o(.constdata)
-    .constdata                               0x00005594   Section       60  drs.o(.constdata)
-    .constdata                               0x000055d0   Section        4  sm_master.o(.constdata)
-    .constdata                               0x000055d4   Section        8  sm_drs.o(.constdata)
-    .constdata                               0x000055dc   Section        4  sm_playing.o(.constdata)
-    .constdata                               0x000055e0   Section       12  sm_racing.o(.constdata)
-    .constdata                               0x000055ec   Section        8  drivemotorsencoder.o(.constdata)
-    .constdata                               0x000055f4   Section        8  sm_obstaclecrossing.o(.constdata)
-    .constdata                               0x000055fc   Section        8  sm_balllaunching.o(.constdata)
-    .constdata                               0x00005604   Section       12  es_checkevents.o(.constdata)
-    ES_EventList                             0x00005604   Data          12  es_checkevents.o(.constdata)
-    .constdata                               0x00005610   Section       80  es_framework.o(.constdata)
-    ServDescList                             0x00005610   Data          40  es_framework.o(.constdata)
-    EventQueues                              0x00005638   Data          40  es_framework.o(.constdata)
-    .constdata                               0x00005660   Section       32  es_lookuptables.o(.constdata)
-    .constdata                               0x00005680   Section       15  es_lookuptables.o(.constdata)
-    .constdata                               0x00005690   Section       64  es_timers.o(.constdata)
-    Timer2PostFunc                           0x00005690   Data          64  es_timers.o(.constdata)
-    .constdata                               0x000056d0   Section       28  uartstdio.o(.constdata)
-    g_pcHex                                  0x000056d0   Data           4  uartstdio.o(.constdata)
-    g_ui32UARTBase                           0x000056d4   Data          12  uartstdio.o(.constdata)
-    g_ui32UARTPeriph                         0x000056e0   Data          12  uartstdio.o(.constdata)
-    .constdata                               0x000056ec   Section      528  gpio.o(.constdata)
-    g_ppui32GPIOIntMapBlizzard               0x000056ec   Data         192  gpio.o(.constdata)
-    g_ppui32GPIOIntMapSnowflake              0x000057ac   Data         192  gpio.o(.constdata)
-    g_pui32GPIOBaseAddrs                     0x0000586c   Data         144  gpio.o(.constdata)
-    .constdata                               0x00005900   Section      152  atan.o(.constdata)
-    atanhi                                   0x00005900   Data          32  atan.o(.constdata)
-    atanlo                                   0x00005920   Data          32  atan.o(.constdata)
-    aTodd                                    0x00005940   Data          40  atan.o(.constdata)
-    aTeven                                   0x00005968   Data          48  atan.o(.constdata)
-    .constdata                               0x00005998   Section        8  qnan.o(.constdata)
-    .constdata                               0x000059a0   Section      148  bigflt0.o(.constdata)
-    tenpwrs_x                                0x000059a0   Data          60  bigflt0.o(.constdata)
-    tenpwrs_i                                0x000059dc   Data          64  bigflt0.o(.constdata)
-    .conststring                             0x00005a34   Section      317  mapkeys.o(.conststring)
-    .conststring                             0x00005b74   Section      227  drs.o(.conststring)
-    .conststring                             0x00005c58   Section      154  drivemotors.o(.conststring)
-    .conststring                             0x00005cf4   Section       17  uartstdio.o(.conststring)
-    locale$$data                             0x00005d28   Section      272  lc_ctype_c.o(locale$$data)
-    __lcctype_c_name                         0x00005d2c   Data           2  lc_ctype_c.o(locale$$data)
-    __lcctype_c_start                        0x00005d34   Data           0  lc_ctype_c.o(locale$$data)
-    locale$$data                             0x00005e38   Section       28  lc_numeric_c.o(locale$$data)
-    __lcctype_c_end                          0x00005e38   Data           0  lc_ctype_c.o(locale$$data)
-    __lcnum_c_name                           0x00005e3c   Data           2  lc_numeric_c.o(locale$$data)
-    __lcnum_c_start                          0x00005e44   Data           0  lc_numeric_c.o(locale$$data)
-    __lcnum_c_point                          0x00005e50   Data           0  lc_numeric_c.o(locale$$data)
-    __lcnum_c_thousands                      0x00005e52   Data           0  lc_numeric_c.o(locale$$data)
-    __lcnum_c_grouping                       0x00005e53   Data           0  lc_numeric_c.o(locale$$data)
-    __lcnum_c_end                            0x00005e54   Data           0  lc_numeric_c.o(locale$$data)
+    i.CheckIRSensor                          0x0000177c   Section        0  eventcheckers.o(i.CheckIRSensor)
+    i.DisablePIDcontrol                      0x000017d8   Section        0  drivemotorspid.o(i.DisablePIDcontrol)
+    i.DriveBackward                          0x000017e4   Section        0  drivemotors.o(i.DriveBackward)
+    i.DriveBackwardsWithBias                 0x00001860   Section        0  drivemotors.o(i.DriveBackwardsWithBias)
+    i.DriveForward                           0x000018b0   Section        0  drivemotors.o(i.DriveForward)
+    i.DriveForwardWithBias                   0x00001928   Section        0  drivemotors.o(i.DriveForwardWithBias)
+    i.EOTIntHandler                          0x00001978   Section        0  drs.o(i.EOTIntHandler)
+    i.ES_CheckUserEvents                     0x000019a8   Section        0  es_checkevents.o(i.ES_CheckUserEvents)
+    i.ES_DeQueue                             0x000019d0   Section        0  es_queue.o(i.ES_DeQueue)
+    i.ES_EnQueueFIFO                         0x00001a24   Section        0  es_queue.o(i.ES_EnQueueFIFO)
+    i.ES_GetMSBitSet                         0x00001a6c   Section        0  es_lookuptables.o(i.ES_GetMSBitSet)
+    i.ES_InitQueue                           0x00001aa0   Section        0  es_queue.o(i.ES_InitQueue)
+    i.ES_Initialize                          0x00001ab0   Section        0  es_framework.o(i.ES_Initialize)
+    i.ES_PostToService                       0x00001afc   Section        0  es_framework.o(i.ES_PostToService)
+    i.ES_Run                                 0x00001b34   Section        0  es_framework.o(i.ES_Run)
+    i.ES_Timer_Init                          0x00001b94   Section        0  es_timers.o(i.ES_Timer_Init)
+    i.ES_Timer_InitTimer                     0x00001b98   Section        0  es_timers.o(i.ES_Timer_InitTimer)
+    i.ES_Timer_StopTimer                     0x00001bd4   Section        0  es_timers.o(i.ES_Timer_StopTimer)
+    i.ES_Timer_Tick_Resp                     0x00001bf8   Section        0  es_timers.o(i.ES_Timer_Tick_Resp)
+    i.EnablePIDcontrol                       0x00001c64   Section        0  drivemotorspid.o(i.EnablePIDcontrol)
+    i.GPIODirModeSet                         0x00001c70   Section        0  gpio.o(i.GPIODirModeSet)
+    i.GPIOPadConfigSet                       0x00001c98   Section        0  gpio.o(i.GPIOPadConfigSet)
+    i.GPIOPinConfigure                       0x00001dd4   Section        0  gpio.o(i.GPIOPinConfigure)
+    i.GPIOPinTypeUART                        0x00001e1c   Section        0  gpio.o(i.GPIOPinTypeUART)
+    i.GamefieldPositionString                0x00001e38   Section        0  gamefieldpositions.o(i.GamefieldPositionString)
+    i.GetAngle                               0x00001f00   Section        0  gamefieldpositions.o(i.GetAngle)
+    i.GetAveragePerioduS                     0x00001f68   Section        0  beaconsensor.o(i.GetAveragePerioduS)
+    i.GetGamefieldPosition                   0x00001f90   Section        0  gamefieldpositions.o(i.GetGamefieldPosition)
+    i.GetKartData                            0x00001ff8   Section        0  drs.o(i.GetKartData)
+    i.GetMyKart                              0x0000202c   Section        0  drs.o(i.GetMyKart)
+    i.GetRPML                                0x00002044   Section        0  drivemotorsencoder.o(i.GetRPML)
+    i.GetRPMR                                0x00002068   Section        0  drivemotorsencoder.o(i.GetRPMR)
+    i.InitBeaconSensingCapture               0x0000208c   Section        0  beaconsensor.o(i.InitBeaconSensingCapture)
+    i.InitDRS_SM                             0x00002138   Section        0  sm_drs.o(i.InitDRS_SM)
+    i.InitDisplay                            0x00002158   Section        0  display.o(i.InitDisplay)
+    i.InitDriveMotorsService                 0x00002164   Section        0  drivemotorsservice.o(i.InitDriveMotorsService)
+    i.InitInputCapturePeriod                 0x00002170   Section        0  drivemotorsencoder.o(i.InitInputCapturePeriod)
+    i.InitMapKeys                            0x00002268   Section        0  mapkeys.o(i.InitMapKeys)
+    i.InitMasterSM                           0x00002274   Section        0  sm_master.o(i.InitMasterSM)
+    i.InitPeriodicInt                        0x00002290   Section        0  drivemotorspid.o(i.InitPeriodicInt)
+    i.InitializeBallLauncher                 0x000022ec   Section        0  balllauncher.o(i.InitializeBallLauncher)
+    i.InitializeBumpSensors                  0x00002428   Section        0  bumpsensor.o(i.InitializeBumpSensors)
+    i.InitializeDRS                          0x00002460   Section        0  drs.o(i.InitializeDRS)
+    i.InitializeDriveMotors                  0x0000257c   Section        0  drivemotors.o(i.InitializeDriveMotors)
+    i.IntMasterEnable                        0x0000269c   Section        0  interrupt.o(i.IntMasterEnable)
+    i.IsBeaconSensed                         0x000026ac   Section        0  beaconsensor.o(i.IsBeaconSensed)
+    i.LDriveCaptureResponse                  0x000026d8   Section        0  drivemotorsencoder.o(i.LDriveCaptureResponse)
+    i.PostDRS_SM                             0x00002730   Section        0  sm_drs.o(i.PostDRS_SM)
+    i.PostDisplay                            0x00002740   Section        0  display.o(i.PostDisplay)
+    i.PostDriveMotorsService                 0x00002750   Section        0  drivemotorsservice.o(i.PostDriveMotorsService)
+    i.PostMapKeys                            0x00002760   Section        0  mapkeys.o(i.PostMapKeys)
+    i.PostMasterSM                           0x00002770   Section        0  sm_master.o(i.PostMasterSM)
+    i.RDriveCaptureResponse                  0x00002780   Section        0  drivemotorsencoder.o(i.RDriveCaptureResponse)
+    i.RotateCCW                              0x000027dc   Section        0  drivemotors.o(i.RotateCCW)
+    i.RotateCCWwithDuty                      0x00002854   Section        0  drivemotors.o(i.RotateCCWwithDuty)
+    i.RotateCW                               0x000028c8   Section        0  drivemotors.o(i.RotateCW)
+    i.RotateCWwithDuty                       0x0000293c   Section        0  drivemotors.o(i.RotateCWwithDuty)
+    i.RunBallLaunchingSM                     0x000029b0   Section        0  sm_balllaunching.o(i.RunBallLaunchingSM)
+    i.RunDRS_SM                              0x00002c3c   Section        0  sm_drs.o(i.RunDRS_SM)
+    i.RunDisplay                             0x00002d38   Section        0  display.o(i.RunDisplay)
+    i.RunDriveMotorsService                  0x00003014   Section        0  drivemotorsservice.o(i.RunDriveMotorsService)
+    i.RunMapKeys                             0x00003038   Section        0  mapkeys.o(i.RunMapKeys)
+    i.RunMasterSM                            0x00003408   Section        0  sm_master.o(i.RunMasterSM)
+    i.RunObstacleCrossingSM                  0x00003560   Section        0  sm_obstaclecrossing.o(i.RunObstacleCrossingSM)
+    i.RunPlayingSM                           0x00003720   Section        0  sm_playing.o(i.RunPlayingSM)
+    i.RunRacingSM                            0x00003864   Section        0  sm_racing.o(i.RunRacingSM)
+    i.SendQuery                              0x00003c60   Section        0  drs.o(i.SendQuery)
+    i.ServoForward                           0x00003c94   Section        0  balllauncher.o(i.ServoForward)
+    i.ServoReverse                           0x00003cd4   Section        0  balllauncher.o(i.ServoReverse)
+    i.SetMotorDirection                      0x00003d14   Section        0  drivemotors.o(i.SetMotorDirection)
+    i.SetMotorPWM                            0x00003d64   Section        0  drivemotors.o(i.SetMotorPWM)
+    i.SetRPMResponse                         0x00003ddc   Section        0  drivemotorspid.o(i.SetRPMResponse)
+    i.SetTargetRPM                           0x00003edc   Section        0  drivemotorspid.o(i.SetTargetRPM)
+    i.StartBallLaunchingSM                   0x00003eec   Section        0  sm_balllaunching.o(i.StartBallLaunchingSM)
+    i.StartMasterSM                          0x00003efc   Section        0  sm_master.o(i.StartMasterSM)
+    i.StartObstacleCrossingSM                0x00003f0c   Section        0  sm_obstaclecrossing.o(i.StartObstacleCrossingSM)
+    i.StartPlayingSM                         0x00003f20   Section        0  sm_playing.o(i.StartPlayingSM)
+    i.StartRacingSM                          0x00003f34   Section        0  sm_racing.o(i.StartRacingSM)
+    i.StopMotors                             0x00003f80   Section        0  drivemotors.o(i.StopMotors)
+    i.StoreData                              0x00003fcc   Section        0  drs.o(i.StoreData)
+    i.SysCtlClockSet                         0x00004284   Section        0  sysctl.o(i.SysCtlClockSet)
+    i.SysCtlPeripheralEnable                 0x000043a4   Section        0  sysctl.o(i.SysCtlPeripheralEnable)
+    i.SysTickEnable                          0x000043cc   Section        0  systick.o(i.SysTickEnable)
+    i.SysTickIntEnable                       0x000043da   Section        0  systick.o(i.SysTickIntEnable)
+    i.SysTickIntHandler                      0x000043e8   Section        0  es_port.o(i.SysTickIntHandler)
+    i.SysTickPeriodSet                       0x000043fc   Section        0  systick.o(i.SysTickPeriodSet)
+    i.TERMIO_GetChar                         0x00004406   Section        0  termio.o(i.TERMIO_GetChar)
+    i.TERMIO_Init                            0x0000440c   Section        0  termio.o(i.TERMIO_Init)
+    i.TERMIO_PutChar                         0x0000445c   Section        0  termio.o(i.TERMIO_PutChar)
+    i.TurnOffShooter                         0x00004468   Section        0  balllauncher.o(i.TurnOffShooter)
+    i.TurnOnShooter                          0x000044a8   Section        0  balllauncher.o(i.TurnOnShooter)
+    i.UARTCharPut                            0x000044e4   Section        0  uart.o(i.UARTCharPut)
+    i.UARTClockSourceSet                     0x000044f0   Section        0  uart.o(i.UARTClockSourceSet)
+    i.UARTStdioConfig                        0x000044f8   Section        0  uartstdio.o(i.UARTStdioConfig)
+    i.UARTgetc                               0x00004554   Section        0  uartstdio.o(i.UARTgetc)
+    i._HW_Process_Pending_Ints               0x0000456c   Section        0  es_port.o(i._HW_Process_Pending_Ints)
+    i._HW_Timer_Init                         0x0000458c   Section        0  es_port.o(i._HW_Timer_Init)
+    i.__ARM_fpclassify                       0x000045a2   Section        0  fpclassify.o(i.__ARM_fpclassify)
+    i.__hardfp_atan                          0x000045d8   Section        0  atan.o(i.__hardfp_atan)
+    i.__hardfp_atan2                         0x000048b8   Section        0  atan2.o(i.__hardfp_atan2)
+    i.__kernel_poly                          0x00004aa8   Section        0  poly.o(i.__kernel_poly)
+    i.__mathlib_dbl_underflow                0x00004ba0   Section        0  dunder.o(i.__mathlib_dbl_underflow)
+    i._is_digit                              0x00004bc0   Section        0  __printf_wp.o(i._is_digit)
+    i._sys_exit                              0x00004bce   Section        0  retarget.o(i._sys_exit)
+    i.atan                                   0x00004bd0   Section        0  atan.o(i.atan)
+    i.fabs                                   0x00004be0   Section        0  fabs.o(i.fabs)
+    i.ferror                                 0x00004bf8   Section        0  retarget.o(i.ferror)
+    i.fgetc                                  0x00004bfe   Section        0  retarget.o(i.fgetc)
+    i.fputc                                  0x00004c02   Section        0  retarget.o(i.fputc)
+    i.kbhit                                  0x00004c10   Section        0  termio.o(i.kbhit)
+    i.main                                   0x00004c24   Section        0  main.o(i.main)
+    locale$$code                             0x00004d74   Section       44  lc_ctype_c.o(locale$$code)
+    locale$$code                             0x00004da0   Section       44  lc_numeric_c.o(locale$$code)
+    x$fpl$basic                              0x00004dcc   Section       24  basic.o(x$fpl$basic)
+    $v0                                      0x00004dcc   Number         0  basic.o(x$fpl$basic)
+    x$fpl$dadd                               0x00004de4   Section      336  daddsub_clz.o(x$fpl$dadd)
+    $v0                                      0x00004de4   Number         0  daddsub_clz.o(x$fpl$dadd)
+    _dadd1                                   0x00004df5   Thumb Code     0  daddsub_clz.o(x$fpl$dadd)
+    x$fpl$ddiv                               0x00004f34   Section      688  ddiv.o(x$fpl$ddiv)
+    $v0                                      0x00004f34   Number         0  ddiv.o(x$fpl$ddiv)
+    ddiv_entry                               0x00004f3b   Thumb Code     0  ddiv.o(x$fpl$ddiv)
+    x$fpl$dflt                               0x000051e4   Section       46  dflt_clz.o(x$fpl$dflt)
+    $v0                                      0x000051e4   Number         0  dflt_clz.o(x$fpl$dflt)
+    x$fpl$dmul                               0x00005214   Section      340  dmul.o(x$fpl$dmul)
+    $v0                                      0x00005214   Number         0  dmul.o(x$fpl$dmul)
+    x$fpl$dnaninf                            0x00005368   Section      156  dnaninf.o(x$fpl$dnaninf)
+    $v0                                      0x00005368   Number         0  dnaninf.o(x$fpl$dnaninf)
+    x$fpl$dretinf                            0x00005404   Section       12  dretinf.o(x$fpl$dretinf)
+    $v0                                      0x00005404   Number         0  dretinf.o(x$fpl$dretinf)
+    x$fpl$drsb                               0x00005410   Section       22  daddsub_clz.o(x$fpl$drsb)
+    $v0                                      0x00005410   Number         0  daddsub_clz.o(x$fpl$drsb)
+    x$fpl$dsub                               0x00005428   Section      468  daddsub_clz.o(x$fpl$dsub)
+    $v0                                      0x00005428   Number         0  daddsub_clz.o(x$fpl$dsub)
+    _dsub1                                   0x00005439   Thumb Code     0  daddsub_clz.o(x$fpl$dsub)
+    x$fpl$fpinit                             0x000055fc   Section       10  fpinit.o(x$fpl$fpinit)
+    $v0                                      0x000055fc   Number         0  fpinit.o(x$fpl$fpinit)
+    x$fpl$printf1                            0x00005606   Section        4  printf1.o(x$fpl$printf1)
+    $v0                                      0x00005606   Number         0  printf1.o(x$fpl$printf1)
+    x$fpl$usenofp                            0x0000560a   Section        0  usenofp.o(x$fpl$usenofp)
+    .constdata                               0x0000560c   Section        8  eventcheckers.o(.constdata)
+    .constdata                               0x00005614   Section       60  drs.o(.constdata)
+    .constdata                               0x00005650   Section        4  sm_master.o(.constdata)
+    .constdata                               0x00005654   Section        8  sm_drs.o(.constdata)
+    .constdata                               0x0000565c   Section        4  sm_playing.o(.constdata)
+    .constdata                               0x00005660   Section       12  sm_racing.o(.constdata)
+    .constdata                               0x0000566c   Section        8  drivemotorsencoder.o(.constdata)
+    .constdata                               0x00005674   Section        8  sm_obstaclecrossing.o(.constdata)
+    .constdata                               0x0000567c   Section        8  sm_balllaunching.o(.constdata)
+    .constdata                               0x00005684   Section       12  es_checkevents.o(.constdata)
+    ES_EventList                             0x00005684   Data          12  es_checkevents.o(.constdata)
+    .constdata                               0x00005690   Section       80  es_framework.o(.constdata)
+    ServDescList                             0x00005690   Data          40  es_framework.o(.constdata)
+    EventQueues                              0x000056b8   Data          40  es_framework.o(.constdata)
+    .constdata                               0x000056e0   Section       32  es_lookuptables.o(.constdata)
+    .constdata                               0x00005700   Section       15  es_lookuptables.o(.constdata)
+    .constdata                               0x00005710   Section       64  es_timers.o(.constdata)
+    Timer2PostFunc                           0x00005710   Data          64  es_timers.o(.constdata)
+    .constdata                               0x00005750   Section       28  uartstdio.o(.constdata)
+    g_pcHex                                  0x00005750   Data           4  uartstdio.o(.constdata)
+    g_ui32UARTBase                           0x00005754   Data          12  uartstdio.o(.constdata)
+    g_ui32UARTPeriph                         0x00005760   Data          12  uartstdio.o(.constdata)
+    .constdata                               0x0000576c   Section      528  gpio.o(.constdata)
+    g_ppui32GPIOIntMapBlizzard               0x0000576c   Data         192  gpio.o(.constdata)
+    g_ppui32GPIOIntMapSnowflake              0x0000582c   Data         192  gpio.o(.constdata)
+    g_pui32GPIOBaseAddrs                     0x000058ec   Data         144  gpio.o(.constdata)
+    .constdata                               0x00005980   Section      152  atan.o(.constdata)
+    atanhi                                   0x00005980   Data          32  atan.o(.constdata)
+    atanlo                                   0x000059a0   Data          32  atan.o(.constdata)
+    aTodd                                    0x000059c0   Data          40  atan.o(.constdata)
+    aTeven                                   0x000059e8   Data          48  atan.o(.constdata)
+    .constdata                               0x00005a18   Section        8  qnan.o(.constdata)
+    .constdata                               0x00005a20   Section      148  bigflt0.o(.constdata)
+    tenpwrs_x                                0x00005a20   Data          60  bigflt0.o(.constdata)
+    tenpwrs_i                                0x00005a5c   Data          64  bigflt0.o(.constdata)
+    .conststring                             0x00005ab4   Section      317  mapkeys.o(.conststring)
+    .conststring                             0x00005bf4   Section      227  drs.o(.conststring)
+    .conststring                             0x00005cd8   Section      154  drivemotors.o(.conststring)
+    .conststring                             0x00005d74   Section       17  uartstdio.o(.conststring)
+    locale$$data                             0x00005da8   Section      272  lc_ctype_c.o(locale$$data)
+    __lcctype_c_name                         0x00005dac   Data           2  lc_ctype_c.o(locale$$data)
+    __lcctype_c_start                        0x00005db4   Data           0  lc_ctype_c.o(locale$$data)
+    locale$$data                             0x00005eb8   Section       28  lc_numeric_c.o(locale$$data)
+    __lcctype_c_end                          0x00005eb8   Data           0  lc_ctype_c.o(locale$$data)
+    __lcnum_c_name                           0x00005ebc   Data           2  lc_numeric_c.o(locale$$data)
+    __lcnum_c_start                          0x00005ec4   Data           0  lc_numeric_c.o(locale$$data)
+    __lcnum_c_point                          0x00005ed0   Data           0  lc_numeric_c.o(locale$$data)
+    __lcnum_c_thousands                      0x00005ed2   Data           0  lc_numeric_c.o(locale$$data)
+    __lcnum_c_grouping                       0x00005ed3   Data           0  lc_numeric_c.o(locale$$data)
+    __lcnum_c_end                            0x00005ed4   Data           0  lc_numeric_c.o(locale$$data)
     .data                                    0x20000000   Section        2  eventcheckers.o(.data)
     LastBumpState                            0x20000000   Data           1  eventcheckers.o(.data)
     LastIRstate                              0x20000001   Data           1  eventcheckers.o(.data)
@@ -1936,151 +1936,151 @@ Image Symbol Table
     CPUgetPRIMASK_cpsid                      0x00001709   Thumb Code     8  es_port.o(i.CPUgetPRIMASK_cpsid)
     CPUsetPRIMASK                            0x00001711   Thumb Code     6  es_port.o(i.CPUsetPRIMASK)
     Check4Keystroke                          0x00001719   Thumb Code    40  eventcheckers.o(i.Check4Keystroke)
-    CheckBumpSensor                          0x00001745   Thumb Code    36  eventcheckers.o(i.CheckBumpSensor)
-    CheckIRSensor                            0x00001771   Thumb Code    42  eventcheckers.o(i.CheckIRSensor)
-    DisablePIDcontrol                        0x000017c5   Thumb Code     8  drivemotorspid.o(i.DisablePIDcontrol)
-    DriveBackward                            0x000017d1   Thumb Code    72  drivemotors.o(i.DriveBackward)
-    DriveBackwardsWithBias                   0x0000184d   Thumb Code    76  drivemotors.o(i.DriveBackwardsWithBias)
-    DriveForward                             0x0000189d   Thumb Code    72  drivemotors.o(i.DriveForward)
-    DriveForwardWithBias                     0x00001915   Thumb Code    76  drivemotors.o(i.DriveForwardWithBias)
-    EOTIntHandler                            0x00001965   Thumb Code    34  drs.o(i.EOTIntHandler)
-    ES_CheckUserEvents                       0x00001995   Thumb Code    34  es_checkevents.o(i.ES_CheckUserEvents)
-    ES_DeQueue                               0x000019bd   Thumb Code    80  es_queue.o(i.ES_DeQueue)
-    ES_EnQueueFIFO                           0x00001a11   Thumb Code    66  es_queue.o(i.ES_EnQueueFIFO)
-    ES_GetMSBitSet                           0x00001a59   Thumb Code    48  es_lookuptables.o(i.ES_GetMSBitSet)
-    ES_InitQueue                             0x00001a8d   Thumb Code    16  es_queue.o(i.ES_InitQueue)
-    ES_Initialize                            0x00001a9d   Thumb Code    72  es_framework.o(i.ES_Initialize)
-    ES_PostToService                         0x00001ae9   Thumb Code    42  es_framework.o(i.ES_PostToService)
-    ES_Run                                   0x00001b21   Thumb Code    84  es_framework.o(i.ES_Run)
-    ES_Timer_Init                            0x00001b81   Thumb Code     4  es_timers.o(i.ES_Timer_Init)
-    ES_Timer_InitTimer                       0x00001b85   Thumb Code    44  es_timers.o(i.ES_Timer_InitTimer)
-    ES_Timer_StopTimer                       0x00001bc1   Thumb Code    28  es_timers.o(i.ES_Timer_StopTimer)
-    ES_Timer_Tick_Resp                       0x00001be5   Thumb Code    90  es_timers.o(i.ES_Timer_Tick_Resp)
-    EnablePIDcontrol                         0x00001c51   Thumb Code     8  drivemotorspid.o(i.EnablePIDcontrol)
-    GPIODirModeSet                           0x00001c5d   Thumb Code    40  gpio.o(i.GPIODirModeSet)
-    GPIOPadConfigSet                         0x00001c85   Thumb Code   314  gpio.o(i.GPIOPadConfigSet)
-    GPIOPinConfigure                         0x00001dc1   Thumb Code    64  gpio.o(i.GPIOPinConfigure)
-    GPIOPinTypeUART                          0x00001e09   Thumb Code    28  gpio.o(i.GPIOPinTypeUART)
-    GamefieldPositionString                  0x00001e25   Thumb Code    62  gamefieldpositions.o(i.GamefieldPositionString)
-    GetAngle                                 0x00001eed   Thumb Code    88  gamefieldpositions.o(i.GetAngle)
-    GetAveragePerioduS                       0x00001f55   Thumb Code    32  beaconsensor.o(i.GetAveragePerioduS)
-    GetGamefieldPosition                     0x00001f7d   Thumb Code   102  gamefieldpositions.o(i.GetGamefieldPosition)
-    GetKartData                              0x00001fe5   Thumb Code    48  drs.o(i.GetKartData)
-    GetMyKart                                0x00002019   Thumb Code    18  drs.o(i.GetMyKart)
-    GetRPML                                  0x00002031   Thumb Code    24  drivemotorsencoder.o(i.GetRPML)
-    GetRPMR                                  0x00002055   Thumb Code    24  drivemotorsencoder.o(i.GetRPMR)
-    InitBeaconSensingCapture                 0x00002079   Thumb Code   150  beaconsensor.o(i.InitBeaconSensingCapture)
-    InitDRS_SM                               0x00002125   Thumb Code    26  sm_drs.o(i.InitDRS_SM)
-    InitDisplay                              0x00002145   Thumb Code     8  display.o(i.InitDisplay)
-    InitDriveMotorsService                   0x00002151   Thumb Code     8  drivemotorsservice.o(i.InitDriveMotorsService)
-    InitInputCapturePeriod                   0x0000215d   Thumb Code   226  drivemotorsencoder.o(i.InitInputCapturePeriod)
-    InitMapKeys                              0x00002255   Thumb Code     8  mapkeys.o(i.InitMapKeys)
-    InitMasterSM                             0x00002261   Thumb Code    22  sm_master.o(i.InitMasterSM)
-    InitPeriodicInt                          0x0000227d   Thumb Code    84  drivemotorspid.o(i.InitPeriodicInt)
-    InitializeBallLauncher                   0x000022d9   Thumb Code   266  balllauncher.o(i.InitializeBallLauncher)
-    InitializeBumpSensors                    0x00002415   Thumb Code    44  bumpsensor.o(i.InitializeBumpSensors)
-    InitializeDRS                            0x0000244d   Thumb Code   226  drs.o(i.InitializeDRS)
-    InitializeDriveMotors                    0x00002569   Thumb Code   236  drivemotors.o(i.InitializeDriveMotors)
-    IntMasterEnable                          0x00002689   Thumb Code    14  interrupt.o(i.IntMasterEnable)
-    IsBeaconSensed                           0x00002699   Thumb Code    38  beaconsensor.o(i.IsBeaconSensed)
-    LDriveCaptureResponse                    0x000026c5   Thumb Code    72  drivemotorsencoder.o(i.LDriveCaptureResponse)
-    PostDRS_SM                               0x0000271d   Thumb Code    10  sm_drs.o(i.PostDRS_SM)
-    PostDisplay                              0x0000272d   Thumb Code    10  display.o(i.PostDisplay)
-    PostDriveMotorsService                   0x0000273d   Thumb Code    10  drivemotorsservice.o(i.PostDriveMotorsService)
-    PostMapKeys                              0x0000274d   Thumb Code    10  mapkeys.o(i.PostMapKeys)
-    PostMasterSM                             0x0000275d   Thumb Code    10  sm_master.o(i.PostMasterSM)
-    RDriveCaptureResponse                    0x0000276d   Thumb Code    74  drivemotorsencoder.o(i.RDriveCaptureResponse)
-    RotateCCW                                0x000027c9   Thumb Code    72  drivemotors.o(i.RotateCCW)
-    RotateCCWwithDuty                        0x00002841   Thumb Code    68  drivemotors.o(i.RotateCCWwithDuty)
-    RotateCW                                 0x000028b5   Thumb Code    72  drivemotors.o(i.RotateCW)
-    RotateCWwithDuty                         0x00002929   Thumb Code    68  drivemotors.o(i.RotateCWwithDuty)
-    RunBallLaunchingSM                       0x0000299d   Thumb Code   406  sm_balllaunching.o(i.RunBallLaunchingSM)
-    RunDRS_SM                                0x00002bf1   Thumb Code   244  sm_drs.o(i.RunDRS_SM)
-    RunDisplay                               0x00002ced   Thumb Code   124  display.o(i.RunDisplay)
-    RunDriveMotorsService                    0x00002fa5   Thumb Code    34  drivemotorsservice.o(i.RunDriveMotorsService)
-    RunMapKeys                               0x00002fc9   Thumb Code   798  mapkeys.o(i.RunMapKeys)
-    RunMasterSM                              0x00003399   Thumb Code   226  sm_master.o(i.RunMasterSM)
-    RunObstacleCrossingSM                    0x000034f1   Thumb Code   312  sm_obstaclecrossing.o(i.RunObstacleCrossingSM)
-    RunPlayingSM                             0x000036a5   Thumb Code   224  sm_playing.o(i.RunPlayingSM)
-    RunRacingSM                              0x000037e9   Thumb Code   672  sm_racing.o(i.RunRacingSM)
-    SendQuery                                0x00003be5   Thumb Code    42  drs.o(i.SendQuery)
-    ServoForward                             0x00003c19   Thumb Code    24  balllauncher.o(i.ServoForward)
-    ServoReverse                             0x00003c59   Thumb Code    24  balllauncher.o(i.ServoReverse)
-    SetMotorDirection                        0x00003c99   Thumb Code    72  drivemotors.o(i.SetMotorDirection)
-    SetMotorPWM                              0x00003ce9   Thumb Code   110  drivemotors.o(i.SetMotorPWM)
-    SetRPMResponse                           0x00003d61   Thumb Code   248  drivemotorspid.o(i.SetRPMResponse)
-    SetTargetRPM                             0x00003e61   Thumb Code    12  drivemotorspid.o(i.SetTargetRPM)
-    StartBallLaunchingSM                     0x00003e71   Thumb Code    10  sm_balllaunching.o(i.StartBallLaunchingSM)
-    StartMasterSM                            0x00003e81   Thumb Code    10  sm_master.o(i.StartMasterSM)
-    StartObstacleCrossingSM                  0x00003e91   Thumb Code    16  sm_obstaclecrossing.o(i.StartObstacleCrossingSM)
-    StartPlayingSM                           0x00003ea5   Thumb Code    10  sm_playing.o(i.StartPlayingSM)
-    StartRacingSM                            0x00003eb5   Thumb Code    70  sm_racing.o(i.StartRacingSM)
-    StopMotors                               0x00003f01   Thumb Code    44  drivemotors.o(i.StopMotors)
-    StoreData                                0x00003f4d   Thumb Code   678  drs.o(i.StoreData)
-    SysCtlClockSet                           0x00004205   Thumb Code   270  sysctl.o(i.SysCtlClockSet)
-    SysCtlPeripheralEnable                   0x00004325   Thumb Code    36  sysctl.o(i.SysCtlPeripheralEnable)
-    SysTickEnable                            0x0000434d   Thumb Code    14  systick.o(i.SysTickEnable)
-    SysTickIntEnable                         0x0000435b   Thumb Code    14  systick.o(i.SysTickIntEnable)
-    SysTickIntHandler                        0x00004369   Thumb Code    16  es_port.o(i.SysTickIntHandler)
-    SysTickPeriodSet                         0x0000437d   Thumb Code    10  systick.o(i.SysTickPeriodSet)
-    TERMIO_GetChar                           0x00004387   Thumb Code     4  termio.o(i.TERMIO_GetChar)
-    TERMIO_Init                              0x0000438d   Thumb Code    62  termio.o(i.TERMIO_Init)
-    TERMIO_PutChar                           0x000043dd   Thumb Code     8  termio.o(i.TERMIO_PutChar)
-    TurnOffShooter                           0x000043e9   Thumb Code    24  balllauncher.o(i.TurnOffShooter)
-    TurnOnShooter                            0x00004429   Thumb Code    24  balllauncher.o(i.TurnOnShooter)
-    UARTCharPut                              0x00004465   Thumb Code    12  uart.o(i.UARTCharPut)
-    UARTClockSourceSet                       0x00004471   Thumb Code     6  uart.o(i.UARTClockSourceSet)
-    UARTStdioConfig                          0x00004479   Thumb Code    82  uartstdio.o(i.UARTStdioConfig)
-    UARTgetc                                 0x000044d5   Thumb Code    20  uartstdio.o(i.UARTgetc)
-    _HW_Process_Pending_Ints                 0x000044ed   Thumb Code    26  es_port.o(i._HW_Process_Pending_Ints)
-    _HW_Timer_Init                           0x0000450d   Thumb Code    22  es_port.o(i._HW_Timer_Init)
-    __ARM_fpclassify                         0x00004523   Thumb Code    48  fpclassify.o(i.__ARM_fpclassify)
-    __hardfp_atan                            0x00004559   Thumb Code   632  atan.o(i.__hardfp_atan)
-    __hardfp_atan2                           0x00004839   Thumb Code   426  atan2.o(i.__hardfp_atan2)
-    __kernel_poly                            0x00004a29   Thumb Code   248  poly.o(i.__kernel_poly)
-    __mathlib_dbl_underflow                  0x00004b21   Thumb Code    24  dunder.o(i.__mathlib_dbl_underflow)
-    _is_digit                                0x00004b41   Thumb Code    14  __printf_wp.o(i._is_digit)
-    _sys_exit                                0x00004b4f   Thumb Code     2  retarget.o(i._sys_exit)
-    atan                                     0x00004b51   Thumb Code    16  atan.o(i.atan)
-    fabs                                     0x00004b61   Thumb Code    24  fabs.o(i.fabs)
-    ferror                                   0x00004b79   Thumb Code     6  retarget.o(i.ferror)
-    fgetc                                    0x00004b7f   Thumb Code     4  retarget.o(i.fgetc)
-    fputc                                    0x00004b83   Thumb Code    14  retarget.o(i.fputc)
-    kbhit                                    0x00004b91   Thumb Code    16  termio.o(i.kbhit)
-    main                                     0x00004ba5   Thumb Code   112  main.o(i.main)
-    _get_lc_ctype                            0x00004cf5   Thumb Code    44  lc_ctype_c.o(locale$$code)
-    _get_lc_numeric                          0x00004d21   Thumb Code    44  lc_numeric_c.o(locale$$code)
-    __aeabi_dneg                             0x00004d4d   Thumb Code     0  basic.o(x$fpl$basic)
-    _dneg                                    0x00004d4d   Thumb Code     6  basic.o(x$fpl$basic)
-    __aeabi_fneg                             0x00004d53   Thumb Code     0  basic.o(x$fpl$basic)
-    _fneg                                    0x00004d53   Thumb Code     6  basic.o(x$fpl$basic)
-    _dabs                                    0x00004d59   Thumb Code     6  basic.o(x$fpl$basic)
-    _fabs                                    0x00004d5f   Thumb Code     6  basic.o(x$fpl$basic)
-    __aeabi_dadd                             0x00004d65   Thumb Code     0  daddsub_clz.o(x$fpl$dadd)
-    _dadd                                    0x00004d65   Thumb Code   332  daddsub_clz.o(x$fpl$dadd)
-    __aeabi_ddiv                             0x00004eb5   Thumb Code     0  ddiv.o(x$fpl$ddiv)
-    _ddiv                                    0x00004eb5   Thumb Code   552  ddiv.o(x$fpl$ddiv)
-    __aeabi_i2d                              0x00005165   Thumb Code     0  dflt_clz.o(x$fpl$dflt)
-    _dflt                                    0x00005165   Thumb Code    46  dflt_clz.o(x$fpl$dflt)
-    __aeabi_dmul                             0x00005195   Thumb Code     0  dmul.o(x$fpl$dmul)
-    _dmul                                    0x00005195   Thumb Code   332  dmul.o(x$fpl$dmul)
-    __fpl_dnaninf                            0x000052e9   Thumb Code   156  dnaninf.o(x$fpl$dnaninf)
-    __fpl_dretinf                            0x00005385   Thumb Code    12  dretinf.o(x$fpl$dretinf)
-    __aeabi_drsub                            0x00005391   Thumb Code     0  daddsub_clz.o(x$fpl$drsb)
-    _drsb                                    0x00005391   Thumb Code    22  daddsub_clz.o(x$fpl$drsb)
-    __aeabi_dsub                             0x000053a9   Thumb Code     0  daddsub_clz.o(x$fpl$dsub)
-    _dsub                                    0x000053a9   Thumb Code   464  daddsub_clz.o(x$fpl$dsub)
-    _fp_init                                 0x0000557d   Thumb Code    10  fpinit.o(x$fpl$fpinit)
-    __fplib_config_fpu_vfp                   0x00005585   Thumb Code     0  fpinit.o(x$fpl$fpinit)
-    __fplib_config_pureend_doubles           0x00005585   Thumb Code     0  fpinit.o(x$fpl$fpinit)
-    _printf_fp_dec                           0x00005587   Thumb Code     4  printf1.o(x$fpl$printf1)
-    __I$use$fp                               0x0000558a   Number         0  usenofp.o(x$fpl$usenofp)
-    BitNum2SetMask                           0x00005660   Data          32  es_lookuptables.o(.constdata)
-    Nybble2MSBitNum                          0x00005680   Data          15  es_lookuptables.o(.constdata)
-    __mathlib_zero                           0x00005998   Data           8  qnan.o(.constdata)
-    Region$$Table$$Base                      0x00005d08   Number         0  anon$$obj.o(Region$$Table)
-    Region$$Table$$Limit                     0x00005d28   Number         0  anon$$obj.o(Region$$Table)
-    __ctype                                  0x00005d35   Data           0  lc_ctype_c.o(locale$$data)
+    CheckBumpSensor                          0x00001745   Thumb Code    48  eventcheckers.o(i.CheckBumpSensor)
+    CheckIRSensor                            0x0000177d   Thumb Code    50  eventcheckers.o(i.CheckIRSensor)
+    DisablePIDcontrol                        0x000017d9   Thumb Code     8  drivemotorspid.o(i.DisablePIDcontrol)
+    DriveBackward                            0x000017e5   Thumb Code    72  drivemotors.o(i.DriveBackward)
+    DriveBackwardsWithBias                   0x00001861   Thumb Code    76  drivemotors.o(i.DriveBackwardsWithBias)
+    DriveForward                             0x000018b1   Thumb Code    72  drivemotors.o(i.DriveForward)
+    DriveForwardWithBias                     0x00001929   Thumb Code    76  drivemotors.o(i.DriveForwardWithBias)
+    EOTIntHandler                            0x00001979   Thumb Code    34  drs.o(i.EOTIntHandler)
+    ES_CheckUserEvents                       0x000019a9   Thumb Code    34  es_checkevents.o(i.ES_CheckUserEvents)
+    ES_DeQueue                               0x000019d1   Thumb Code    80  es_queue.o(i.ES_DeQueue)
+    ES_EnQueueFIFO                           0x00001a25   Thumb Code    66  es_queue.o(i.ES_EnQueueFIFO)
+    ES_GetMSBitSet                           0x00001a6d   Thumb Code    48  es_lookuptables.o(i.ES_GetMSBitSet)
+    ES_InitQueue                             0x00001aa1   Thumb Code    16  es_queue.o(i.ES_InitQueue)
+    ES_Initialize                            0x00001ab1   Thumb Code    72  es_framework.o(i.ES_Initialize)
+    ES_PostToService                         0x00001afd   Thumb Code    42  es_framework.o(i.ES_PostToService)
+    ES_Run                                   0x00001b35   Thumb Code    84  es_framework.o(i.ES_Run)
+    ES_Timer_Init                            0x00001b95   Thumb Code     4  es_timers.o(i.ES_Timer_Init)
+    ES_Timer_InitTimer                       0x00001b99   Thumb Code    44  es_timers.o(i.ES_Timer_InitTimer)
+    ES_Timer_StopTimer                       0x00001bd5   Thumb Code    28  es_timers.o(i.ES_Timer_StopTimer)
+    ES_Timer_Tick_Resp                       0x00001bf9   Thumb Code    90  es_timers.o(i.ES_Timer_Tick_Resp)
+    EnablePIDcontrol                         0x00001c65   Thumb Code     8  drivemotorspid.o(i.EnablePIDcontrol)
+    GPIODirModeSet                           0x00001c71   Thumb Code    40  gpio.o(i.GPIODirModeSet)
+    GPIOPadConfigSet                         0x00001c99   Thumb Code   314  gpio.o(i.GPIOPadConfigSet)
+    GPIOPinConfigure                         0x00001dd5   Thumb Code    64  gpio.o(i.GPIOPinConfigure)
+    GPIOPinTypeUART                          0x00001e1d   Thumb Code    28  gpio.o(i.GPIOPinTypeUART)
+    GamefieldPositionString                  0x00001e39   Thumb Code    62  gamefieldpositions.o(i.GamefieldPositionString)
+    GetAngle                                 0x00001f01   Thumb Code    88  gamefieldpositions.o(i.GetAngle)
+    GetAveragePerioduS                       0x00001f69   Thumb Code    32  beaconsensor.o(i.GetAveragePerioduS)
+    GetGamefieldPosition                     0x00001f91   Thumb Code   102  gamefieldpositions.o(i.GetGamefieldPosition)
+    GetKartData                              0x00001ff9   Thumb Code    48  drs.o(i.GetKartData)
+    GetMyKart                                0x0000202d   Thumb Code    18  drs.o(i.GetMyKart)
+    GetRPML                                  0x00002045   Thumb Code    24  drivemotorsencoder.o(i.GetRPML)
+    GetRPMR                                  0x00002069   Thumb Code    24  drivemotorsencoder.o(i.GetRPMR)
+    InitBeaconSensingCapture                 0x0000208d   Thumb Code   150  beaconsensor.o(i.InitBeaconSensingCapture)
+    InitDRS_SM                               0x00002139   Thumb Code    26  sm_drs.o(i.InitDRS_SM)
+    InitDisplay                              0x00002159   Thumb Code     8  display.o(i.InitDisplay)
+    InitDriveMotorsService                   0x00002165   Thumb Code     8  drivemotorsservice.o(i.InitDriveMotorsService)
+    InitInputCapturePeriod                   0x00002171   Thumb Code   226  drivemotorsencoder.o(i.InitInputCapturePeriod)
+    InitMapKeys                              0x00002269   Thumb Code     8  mapkeys.o(i.InitMapKeys)
+    InitMasterSM                             0x00002275   Thumb Code    22  sm_master.o(i.InitMasterSM)
+    InitPeriodicInt                          0x00002291   Thumb Code    84  drivemotorspid.o(i.InitPeriodicInt)
+    InitializeBallLauncher                   0x000022ed   Thumb Code   266  balllauncher.o(i.InitializeBallLauncher)
+    InitializeBumpSensors                    0x00002429   Thumb Code    44  bumpsensor.o(i.InitializeBumpSensors)
+    InitializeDRS                            0x00002461   Thumb Code   226  drs.o(i.InitializeDRS)
+    InitializeDriveMotors                    0x0000257d   Thumb Code   236  drivemotors.o(i.InitializeDriveMotors)
+    IntMasterEnable                          0x0000269d   Thumb Code    14  interrupt.o(i.IntMasterEnable)
+    IsBeaconSensed                           0x000026ad   Thumb Code    38  beaconsensor.o(i.IsBeaconSensed)
+    LDriveCaptureResponse                    0x000026d9   Thumb Code    72  drivemotorsencoder.o(i.LDriveCaptureResponse)
+    PostDRS_SM                               0x00002731   Thumb Code    10  sm_drs.o(i.PostDRS_SM)
+    PostDisplay                              0x00002741   Thumb Code    10  display.o(i.PostDisplay)
+    PostDriveMotorsService                   0x00002751   Thumb Code    10  drivemotorsservice.o(i.PostDriveMotorsService)
+    PostMapKeys                              0x00002761   Thumb Code    10  mapkeys.o(i.PostMapKeys)
+    PostMasterSM                             0x00002771   Thumb Code    10  sm_master.o(i.PostMasterSM)
+    RDriveCaptureResponse                    0x00002781   Thumb Code    74  drivemotorsencoder.o(i.RDriveCaptureResponse)
+    RotateCCW                                0x000027dd   Thumb Code    72  drivemotors.o(i.RotateCCW)
+    RotateCCWwithDuty                        0x00002855   Thumb Code    68  drivemotors.o(i.RotateCCWwithDuty)
+    RotateCW                                 0x000028c9   Thumb Code    72  drivemotors.o(i.RotateCW)
+    RotateCWwithDuty                         0x0000293d   Thumb Code    68  drivemotors.o(i.RotateCWwithDuty)
+    RunBallLaunchingSM                       0x000029b1   Thumb Code   464  sm_balllaunching.o(i.RunBallLaunchingSM)
+    RunDRS_SM                                0x00002c3d   Thumb Code   244  sm_drs.o(i.RunDRS_SM)
+    RunDisplay                               0x00002d39   Thumb Code   132  display.o(i.RunDisplay)
+    RunDriveMotorsService                    0x00003015   Thumb Code    34  drivemotorsservice.o(i.RunDriveMotorsService)
+    RunMapKeys                               0x00003039   Thumb Code   798  mapkeys.o(i.RunMapKeys)
+    RunMasterSM                              0x00003409   Thumb Code   226  sm_master.o(i.RunMasterSM)
+    RunObstacleCrossingSM                    0x00003561   Thumb Code   322  sm_obstaclecrossing.o(i.RunObstacleCrossingSM)
+    RunPlayingSM                             0x00003721   Thumb Code   224  sm_playing.o(i.RunPlayingSM)
+    RunRacingSM                              0x00003865   Thumb Code   672  sm_racing.o(i.RunRacingSM)
+    SendQuery                                0x00003c61   Thumb Code    42  drs.o(i.SendQuery)
+    ServoForward                             0x00003c95   Thumb Code    24  balllauncher.o(i.ServoForward)
+    ServoReverse                             0x00003cd5   Thumb Code    24  balllauncher.o(i.ServoReverse)
+    SetMotorDirection                        0x00003d15   Thumb Code    72  drivemotors.o(i.SetMotorDirection)
+    SetMotorPWM                              0x00003d65   Thumb Code   110  drivemotors.o(i.SetMotorPWM)
+    SetRPMResponse                           0x00003ddd   Thumb Code   248  drivemotorspid.o(i.SetRPMResponse)
+    SetTargetRPM                             0x00003edd   Thumb Code    12  drivemotorspid.o(i.SetTargetRPM)
+    StartBallLaunchingSM                     0x00003eed   Thumb Code    10  sm_balllaunching.o(i.StartBallLaunchingSM)
+    StartMasterSM                            0x00003efd   Thumb Code    10  sm_master.o(i.StartMasterSM)
+    StartObstacleCrossingSM                  0x00003f0d   Thumb Code    16  sm_obstaclecrossing.o(i.StartObstacleCrossingSM)
+    StartPlayingSM                           0x00003f21   Thumb Code    16  sm_playing.o(i.StartPlayingSM)
+    StartRacingSM                            0x00003f35   Thumb Code    70  sm_racing.o(i.StartRacingSM)
+    StopMotors                               0x00003f81   Thumb Code    44  drivemotors.o(i.StopMotors)
+    StoreData                                0x00003fcd   Thumb Code   678  drs.o(i.StoreData)
+    SysCtlClockSet                           0x00004285   Thumb Code   270  sysctl.o(i.SysCtlClockSet)
+    SysCtlPeripheralEnable                   0x000043a5   Thumb Code    36  sysctl.o(i.SysCtlPeripheralEnable)
+    SysTickEnable                            0x000043cd   Thumb Code    14  systick.o(i.SysTickEnable)
+    SysTickIntEnable                         0x000043db   Thumb Code    14  systick.o(i.SysTickIntEnable)
+    SysTickIntHandler                        0x000043e9   Thumb Code    16  es_port.o(i.SysTickIntHandler)
+    SysTickPeriodSet                         0x000043fd   Thumb Code    10  systick.o(i.SysTickPeriodSet)
+    TERMIO_GetChar                           0x00004407   Thumb Code     4  termio.o(i.TERMIO_GetChar)
+    TERMIO_Init                              0x0000440d   Thumb Code    62  termio.o(i.TERMIO_Init)
+    TERMIO_PutChar                           0x0000445d   Thumb Code     8  termio.o(i.TERMIO_PutChar)
+    TurnOffShooter                           0x00004469   Thumb Code    24  balllauncher.o(i.TurnOffShooter)
+    TurnOnShooter                            0x000044a9   Thumb Code    24  balllauncher.o(i.TurnOnShooter)
+    UARTCharPut                              0x000044e5   Thumb Code    12  uart.o(i.UARTCharPut)
+    UARTClockSourceSet                       0x000044f1   Thumb Code     6  uart.o(i.UARTClockSourceSet)
+    UARTStdioConfig                          0x000044f9   Thumb Code    82  uartstdio.o(i.UARTStdioConfig)
+    UARTgetc                                 0x00004555   Thumb Code    20  uartstdio.o(i.UARTgetc)
+    _HW_Process_Pending_Ints                 0x0000456d   Thumb Code    26  es_port.o(i._HW_Process_Pending_Ints)
+    _HW_Timer_Init                           0x0000458d   Thumb Code    22  es_port.o(i._HW_Timer_Init)
+    __ARM_fpclassify                         0x000045a3   Thumb Code    48  fpclassify.o(i.__ARM_fpclassify)
+    __hardfp_atan                            0x000045d9   Thumb Code   632  atan.o(i.__hardfp_atan)
+    __hardfp_atan2                           0x000048b9   Thumb Code   426  atan2.o(i.__hardfp_atan2)
+    __kernel_poly                            0x00004aa9   Thumb Code   248  poly.o(i.__kernel_poly)
+    __mathlib_dbl_underflow                  0x00004ba1   Thumb Code    24  dunder.o(i.__mathlib_dbl_underflow)
+    _is_digit                                0x00004bc1   Thumb Code    14  __printf_wp.o(i._is_digit)
+    _sys_exit                                0x00004bcf   Thumb Code     2  retarget.o(i._sys_exit)
+    atan                                     0x00004bd1   Thumb Code    16  atan.o(i.atan)
+    fabs                                     0x00004be1   Thumb Code    24  fabs.o(i.fabs)
+    ferror                                   0x00004bf9   Thumb Code     6  retarget.o(i.ferror)
+    fgetc                                    0x00004bff   Thumb Code     4  retarget.o(i.fgetc)
+    fputc                                    0x00004c03   Thumb Code    14  retarget.o(i.fputc)
+    kbhit                                    0x00004c11   Thumb Code    16  termio.o(i.kbhit)
+    main                                     0x00004c25   Thumb Code   112  main.o(i.main)
+    _get_lc_ctype                            0x00004d75   Thumb Code    44  lc_ctype_c.o(locale$$code)
+    _get_lc_numeric                          0x00004da1   Thumb Code    44  lc_numeric_c.o(locale$$code)
+    __aeabi_dneg                             0x00004dcd   Thumb Code     0  basic.o(x$fpl$basic)
+    _dneg                                    0x00004dcd   Thumb Code     6  basic.o(x$fpl$basic)
+    __aeabi_fneg                             0x00004dd3   Thumb Code     0  basic.o(x$fpl$basic)
+    _fneg                                    0x00004dd3   Thumb Code     6  basic.o(x$fpl$basic)
+    _dabs                                    0x00004dd9   Thumb Code     6  basic.o(x$fpl$basic)
+    _fabs                                    0x00004ddf   Thumb Code     6  basic.o(x$fpl$basic)
+    __aeabi_dadd                             0x00004de5   Thumb Code     0  daddsub_clz.o(x$fpl$dadd)
+    _dadd                                    0x00004de5   Thumb Code   332  daddsub_clz.o(x$fpl$dadd)
+    __aeabi_ddiv                             0x00004f35   Thumb Code     0  ddiv.o(x$fpl$ddiv)
+    _ddiv                                    0x00004f35   Thumb Code   552  ddiv.o(x$fpl$ddiv)
+    __aeabi_i2d                              0x000051e5   Thumb Code     0  dflt_clz.o(x$fpl$dflt)
+    _dflt                                    0x000051e5   Thumb Code    46  dflt_clz.o(x$fpl$dflt)
+    __aeabi_dmul                             0x00005215   Thumb Code     0  dmul.o(x$fpl$dmul)
+    _dmul                                    0x00005215   Thumb Code   332  dmul.o(x$fpl$dmul)
+    __fpl_dnaninf                            0x00005369   Thumb Code   156  dnaninf.o(x$fpl$dnaninf)
+    __fpl_dretinf                            0x00005405   Thumb Code    12  dretinf.o(x$fpl$dretinf)
+    __aeabi_drsub                            0x00005411   Thumb Code     0  daddsub_clz.o(x$fpl$drsb)
+    _drsb                                    0x00005411   Thumb Code    22  daddsub_clz.o(x$fpl$drsb)
+    __aeabi_dsub                             0x00005429   Thumb Code     0  daddsub_clz.o(x$fpl$dsub)
+    _dsub                                    0x00005429   Thumb Code   464  daddsub_clz.o(x$fpl$dsub)
+    _fp_init                                 0x000055fd   Thumb Code    10  fpinit.o(x$fpl$fpinit)
+    __fplib_config_fpu_vfp                   0x00005605   Thumb Code     0  fpinit.o(x$fpl$fpinit)
+    __fplib_config_pureend_doubles           0x00005605   Thumb Code     0  fpinit.o(x$fpl$fpinit)
+    _printf_fp_dec                           0x00005607   Thumb Code     4  printf1.o(x$fpl$printf1)
+    __I$use$fp                               0x0000560a   Number         0  usenofp.o(x$fpl$usenofp)
+    BitNum2SetMask                           0x000056e0   Data          32  es_lookuptables.o(.constdata)
+    Nybble2MSBitNum                          0x00005700   Data          15  es_lookuptables.o(.constdata)
+    __mathlib_zero                           0x00005a18   Data           8  qnan.o(.constdata)
+    Region$$Table$$Base                      0x00005d88   Number         0  anon$$obj.o(Region$$Table)
+    Region$$Table$$Limit                     0x00005da8   Number         0  anon$$obj.o(Region$$Table)
+    __ctype                                  0x00005db5   Data           0  lc_ctype_c.o(locale$$data)
     CurrentQuery                             0x20000004   Data           1  drs.o(.data)
     MyKart                                   0x20000008   Data           4  drs.o(.data)
     Kart1                                    0x20000014   Data          12  drs.o(.data)
@@ -2102,9 +2102,9 @@ Memory Map of the image
 
   Image Entry point : 0x0000026d
 
-  Load Region LR_IROM1 (Base: 0x00000000, Size: 0x00005f34, Max: 0x00040000, ABSOLUTE)
+  Load Region LR_IROM1 (Base: 0x00000000, Size: 0x00005fb4, Max: 0x00040000, ABSOLUTE)
 
-    Execution Region ER_IROM1 (Base: 0x00000000, Size: 0x00005e54, Max: 0x00040000, ABSOLUTE)
+    Execution Region ER_IROM1 (Base: 0x00000000, Size: 0x00005ed4, Max: 0x00040000, ABSOLUTE)
 
     Base Addr    Size         Type   Attr      Idx    E Section Name        Object
 
@@ -2212,174 +2212,174 @@ Memory Map of the image
     0x00001710   0x00000006   Code   RO         1053    i.CPUsetPRIMASK     es_port.o
     0x00001716   0x00000002   PAD
     0x00001718   0x0000002c   Code   RO           92    i.Check4Keystroke   eventcheckers.o
-    0x00001744   0x0000002c   Code   RO           93    i.CheckBumpSensor   eventcheckers.o
-    0x00001770   0x00000054   Code   RO           94    i.CheckIRSensor     eventcheckers.o
-    0x000017c4   0x0000000c   Code   RO          660    i.DisablePIDcontrol  drivemotorspid.o
-    0x000017d0   0x0000007c   Code   RO          460    i.DriveBackward     drivemotors.o
-    0x0000184c   0x00000050   Code   RO          461    i.DriveBackwardsWithBias  drivemotors.o
-    0x0000189c   0x00000078   Code   RO          462    i.DriveForward      drivemotors.o
-    0x00001914   0x00000050   Code   RO          463    i.DriveForwardWithBias  drivemotors.o
-    0x00001964   0x00000030   Code   RO          169    i.EOTIntHandler     drs.o
-    0x00001994   0x00000028   Code   RO          921    i.ES_CheckUserEvents  es_checkevents.o
-    0x000019bc   0x00000054   Code   RO         1086    i.ES_DeQueue        es_queue.o
-    0x00001a10   0x00000048   Code   RO         1087    i.ES_EnQueueFIFO    es_queue.o
-    0x00001a58   0x00000034   Code   RO          996    i.ES_GetMSBitSet    es_lookuptables.o
-    0x00001a8c   0x00000010   Code   RO         1089    i.ES_InitQueue      es_queue.o
-    0x00001a9c   0x0000004c   Code   RO          947    i.ES_Initialize     es_framework.o
-    0x00001ae8   0x00000038   Code   RO          949    i.ES_PostToService  es_framework.o
-    0x00001b20   0x00000060   Code   RO          951    i.ES_Run            es_framework.o
-    0x00001b80   0x00000004   Code   RO         1129    i.ES_Timer_Init     es_timers.o
-    0x00001b84   0x0000003c   Code   RO         1130    i.ES_Timer_InitTimer  es_timers.o
-    0x00001bc0   0x00000024   Code   RO         1133    i.ES_Timer_StopTimer  es_timers.o
-    0x00001be4   0x0000006c   Code   RO         1134    i.ES_Timer_Tick_Resp  es_timers.o
-    0x00001c50   0x0000000c   Code   RO          661    i.EnablePIDcontrol  drivemotorspid.o
-    0x00001c5c   0x00000028   Code   RO         1333    i.GPIODirModeSet    driverlib.lib(gpio.o)
-    0x00001c84   0x0000013a   Code   RO         1343    i.GPIOPadConfigSet  driverlib.lib(gpio.o)
-    0x00001dbe   0x00000002   PAD
-    0x00001dc0   0x00000048   Code   RO         1344    i.GPIOPinConfigure  driverlib.lib(gpio.o)
-    0x00001e08   0x0000001c   Code   RO         1369    i.GPIOPinTypeUART   driverlib.lib(gpio.o)
-    0x00001e24   0x000000c8   Code   RO          436    i.GamefieldPositionString  gamefieldpositions.o
-    0x00001eec   0x00000068   Code   RO          437    i.GetAngle          gamefieldpositions.o
-    0x00001f54   0x00000028   Code   RO          843    i.GetAveragePerioduS  beaconsensor.o
-    0x00001f7c   0x00000066   Code   RO          438    i.GetGamefieldPosition  gamefieldpositions.o
-    0x00001fe2   0x00000002   PAD
-    0x00001fe4   0x00000034   Code   RO          170    i.GetKartData       drs.o
-    0x00002018   0x00000018   Code   RO          171    i.GetMyKart         drs.o
-    0x00002030   0x00000024   Code   RO          602    i.GetRPML           drivemotorsencoder.o
-    0x00002054   0x00000024   Code   RO          603    i.GetRPMR           drivemotorsencoder.o
-    0x00002078   0x000000ac   Code   RO          846    i.InitBeaconSensingCapture  beaconsensor.o
-    0x00002124   0x00000020   Code   RO          304    i.InitDRS_SM        sm_drs.o
-    0x00002144   0x0000000c   Code   RO          403    i.InitDisplay       display.o
-    0x00002150   0x0000000c   Code   RO          574    i.InitDriveMotorsService  drivemotorsservice.o
-    0x0000215c   0x000000f8   Code   RO          604    i.InitInputCapturePeriod  drivemotorsencoder.o
-    0x00002254   0x0000000c   Code   RO          139    i.InitMapKeys       mapkeys.o
-    0x00002260   0x0000001c   Code   RO          262    i.InitMasterSM      sm_master.o
-    0x0000227c   0x0000005c   Code   RO          662    i.InitPeriodicInt   drivemotorspid.o
-    0x000022d8   0x0000013c   Code   RO          747    i.InitializeBallLauncher  balllauncher.o
-    0x00002414   0x00000038   Code   RO          895    i.InitializeBumpSensors  bumpsensor.o
-    0x0000244c   0x0000011c   Code   RO          172    i.InitializeDRS     drs.o
-    0x00002568   0x00000120   Code   RO          468    i.InitializeDriveMotors  drivemotors.o
-    0x00002688   0x0000000e   Code   RO         1658    i.IntMasterEnable   driverlib.lib(interrupt.o)
-    0x00002696   0x00000002   PAD
-    0x00002698   0x0000002c   Code   RO          847    i.IsBeaconSensed    beaconsensor.o
-    0x000026c4   0x00000058   Code   RO          605    i.LDriveCaptureResponse  drivemotorsencoder.o
-    0x0000271c   0x00000010   Code   RO          305    i.PostDRS_SM        sm_drs.o
-    0x0000272c   0x00000010   Code   RO          404    i.PostDisplay       display.o
-    0x0000273c   0x00000010   Code   RO          575    i.PostDriveMotorsService  drivemotorsservice.o
-    0x0000274c   0x00000010   Code   RO          140    i.PostMapKeys       mapkeys.o
-    0x0000275c   0x00000010   Code   RO          263    i.PostMasterSM      sm_master.o
-    0x0000276c   0x0000005c   Code   RO          606    i.RDriveCaptureResponse  drivemotorsencoder.o
-    0x000027c8   0x00000078   Code   RO          469    i.RotateCCW         drivemotors.o
-    0x00002840   0x00000074   Code   RO          470    i.RotateCCWwithDuty  drivemotors.o
-    0x000028b4   0x00000074   Code   RO          471    i.RotateCW          drivemotors.o
-    0x00002928   0x00000074   Code   RO          472    i.RotateCWwithDuty  drivemotors.o
-    0x0000299c   0x00000254   Code   RO          816    i.RunBallLaunchingSM  sm_balllaunching.o
-    0x00002bf0   0x000000fc   Code   RO          307    i.RunDRS_SM         sm_drs.o
-    0x00002cec   0x000002b8   Code   RO          406    i.RunDisplay        display.o
-    0x00002fa4   0x00000022   Code   RO          576    i.RunDriveMotorsService  drivemotorsservice.o
-    0x00002fc6   0x00000002   PAD
-    0x00002fc8   0x000003d0   Code   RO          141    i.RunMapKeys        mapkeys.o
-    0x00003398   0x00000158   Code   RO          265    i.RunMasterSM       sm_master.o
-    0x000034f0   0x000001b4   Code   RO          789    i.RunObstacleCrossingSM  sm_obstaclecrossing.o
-    0x000036a4   0x00000144   Code   RO          338    i.RunPlayingSM      sm_playing.o
-    0x000037e8   0x000003fc   Code   RO          374    i.RunRacingSM       sm_racing.o
-    0x00003be4   0x00000034   Code   RO          175    i.SendQuery         drs.o
-    0x00003c18   0x00000040   Code   RO          748    i.ServoForward      balllauncher.o
-    0x00003c58   0x00000040   Code   RO          749    i.ServoReverse      balllauncher.o
-    0x00003c98   0x00000050   Code   RO          473    i.SetMotorDirection  drivemotors.o
-    0x00003ce8   0x00000078   Code   RO          474    i.SetMotorPWM       drivemotors.o
-    0x00003d60   0x00000100   Code   RO          663    i.SetRPMResponse    drivemotorspid.o
-    0x00003e60   0x00000010   Code   RO          664    i.SetTargetRPM      drivemotorspid.o
-    0x00003e70   0x00000010   Code   RO          817    i.StartBallLaunchingSM  sm_balllaunching.o
-    0x00003e80   0x00000010   Code   RO          266    i.StartMasterSM     sm_master.o
-    0x00003e90   0x00000014   Code   RO          790    i.StartObstacleCrossingSM  sm_obstaclecrossing.o
-    0x00003ea4   0x00000010   Code   RO          339    i.StartPlayingSM    sm_playing.o
-    0x00003eb4   0x0000004c   Code   RO          375    i.StartRacingSM     sm_racing.o
-    0x00003f00   0x0000004c   Code   RO          475    i.StopMotors        drivemotors.o
-    0x00003f4c   0x000002b8   Code   RO          176    i.StoreData         drs.o
-    0x00004204   0x00000120   Code   RO         1775    i.SysCtlClockSet    driverlib.lib(sysctl.o)
-    0x00004324   0x00000028   Code   RO         1804    i.SysCtlPeripheralEnable  driverlib.lib(sysctl.o)
-    0x0000434c   0x0000000e   Code   RO         2113    i.SysTickEnable     driverlib.lib(systick.o)
-    0x0000435a   0x0000000e   Code   RO         2115    i.SysTickIntEnable  driverlib.lib(systick.o)
-    0x00004368   0x00000014   Code   RO         1013    i.SysTickIntHandler  es_port.o
-    0x0000437c   0x0000000a   Code   RO         2119    i.SysTickPeriodSet  driverlib.lib(systick.o)
-    0x00004386   0x00000004   Code   RO         1230    i.TERMIO_GetChar    termio.o
-    0x0000438a   0x00000002   PAD
-    0x0000438c   0x00000050   Code   RO         1231    i.TERMIO_Init       termio.o
-    0x000043dc   0x0000000c   Code   RO         1232    i.TERMIO_PutChar    termio.o
-    0x000043e8   0x00000040   Code   RO          751    i.TurnOffShooter    balllauncher.o
-    0x00004428   0x0000003c   Code   RO          752    i.TurnOnShooter     balllauncher.o
-    0x00004464   0x0000000c   Code   RO         2183    i.UARTCharPut       driverlib.lib(uart.o)
-    0x00004470   0x00000006   Code   RO         2187    i.UARTClockSourceSet  driverlib.lib(uart.o)
-    0x00004476   0x00000002   PAD
-    0x00004478   0x0000005c   Code   RO         1273    i.UARTStdioConfig   uartstdio.o
-    0x000044d4   0x00000018   Code   RO         1274    i.UARTgetc          uartstdio.o
-    0x000044ec   0x00000020   Code   RO         1015    i._HW_Process_Pending_Ints  es_port.o
-    0x0000450c   0x00000016   Code   RO         1016    i._HW_Timer_Init    es_port.o
-    0x00004522   0x00000030   Code   RO         2643    i.__ARM_fpclassify  m_wm.l(fpclassify.o)
-    0x00004552   0x00000006   PAD
-    0x00004558   0x000002e0   Code   RO         2621    i.__hardfp_atan     m_wm.l(atan.o)
-    0x00004838   0x000001f0   Code   RO         2552    i.__hardfp_atan2    m_wm.l(atan2.o)
-    0x00004a28   0x000000f8   Code   RO         2645    i.__kernel_poly     m_wm.l(poly.o)
-    0x00004b20   0x00000020   Code   RO         2635    i.__mathlib_dbl_underflow  m_wm.l(dunder.o)
-    0x00004b40   0x0000000e   Code   RO         2504    i._is_digit         c_w.l(__printf_wp.o)
-    0x00004b4e   0x00000002   Code   RO         1180    i._sys_exit         retarget.o
-    0x00004b50   0x00000010   Code   RO         2623    i.atan              m_wm.l(atan.o)
-    0x00004b60   0x00000018   Code   RO         2639    i.fabs              m_wm.l(fabs.o)
-    0x00004b78   0x00000006   Code   RO         1182    i.ferror            retarget.o
-    0x00004b7e   0x00000004   Code   RO         1183    i.fgetc             retarget.o
-    0x00004b82   0x0000000e   Code   RO         1184    i.fputc             retarget.o
-    0x00004b90   0x00000014   Code   RO         1233    i.kbhit             termio.o
-    0x00004ba4   0x00000150   Code   RO            1    i.main              main.o
-    0x00004cf4   0x0000002c   Code   RO         2709    locale$$code        c_w.l(lc_ctype_c.o)
-    0x00004d20   0x0000002c   Code   RO         2712    locale$$code        c_w.l(lc_numeric_c.o)
-    0x00004d4c   0x00000018   Code   RO         2606    x$fpl$basic         fz_wm.l(basic.o)
-    0x00004d64   0x00000150   Code   RO         2526    x$fpl$dadd          fz_wm.l(daddsub_clz.o)
-    0x00004eb4   0x000002b0   Code   RO         2533    x$fpl$ddiv          fz_wm.l(ddiv.o)
-    0x00005164   0x0000002e   Code   RO         2541    x$fpl$dflt          fz_wm.l(dflt_clz.o)
-    0x00005192   0x00000002   PAD
-    0x00005194   0x00000154   Code   RO         2548    x$fpl$dmul          fz_wm.l(dmul.o)
-    0x000052e8   0x0000009c   Code   RO         2610    x$fpl$dnaninf       fz_wm.l(dnaninf.o)
-    0x00005384   0x0000000c   Code   RO         2612    x$fpl$dretinf       fz_wm.l(dretinf.o)
-    0x00005390   0x00000016   Code   RO         2527    x$fpl$drsb          fz_wm.l(daddsub_clz.o)
-    0x000053a6   0x00000002   PAD
-    0x000053a8   0x000001d4   Code   RO         2528    x$fpl$dsub          fz_wm.l(daddsub_clz.o)
-    0x0000557c   0x0000000a   Code   RO         2790    x$fpl$fpinit        fz_wm.l(fpinit.o)
-    0x00005586   0x00000004   Code   RO         2550    x$fpl$printf1       fz_wm.l(printf1.o)
-    0x0000558a   0x00000000   Code   RO         2620    x$fpl$usenofp       fz_wm.l(usenofp.o)
-    0x0000558a   0x00000002   PAD
-    0x0000558c   0x00000008   Data   RO           95    .constdata          eventcheckers.o
-    0x00005594   0x0000003c   Data   RO          177    .constdata          drs.o
-    0x000055d0   0x00000004   Data   RO          267    .constdata          sm_master.o
-    0x000055d4   0x00000008   Data   RO          308    .constdata          sm_drs.o
-    0x000055dc   0x00000004   Data   RO          340    .constdata          sm_playing.o
-    0x000055e0   0x0000000c   Data   RO          376    .constdata          sm_racing.o
-    0x000055ec   0x00000008   Data   RO          608    .constdata          drivemotorsencoder.o
-    0x000055f4   0x00000008   Data   RO          791    .constdata          sm_obstaclecrossing.o
-    0x000055fc   0x00000008   Data   RO          818    .constdata          sm_balllaunching.o
-    0x00005604   0x0000000c   Data   RO          922    .constdata          es_checkevents.o
-    0x00005610   0x00000050   Data   RO          957    .constdata          es_framework.o
-    0x00005660   0x00000020   Data   RO          997    .constdata          es_lookuptables.o
-    0x00005680   0x0000000f   Data   RO          998    .constdata          es_lookuptables.o
-    0x0000568f   0x00000001   PAD
-    0x00005690   0x00000040   Data   RO         1136    .constdata          es_timers.o
-    0x000056d0   0x0000001c   Data   RO         1279    .constdata          uartstdio.o
-    0x000056ec   0x00000210   Data   RO         1376    .constdata          driverlib.lib(gpio.o)
-    0x000058fc   0x00000004   PAD
-    0x00005900   0x00000098   Data   RO         2624    .constdata          m_wm.l(atan.o)
-    0x00005998   0x00000008   Data   RO         2647    .constdata          m_wm.l(qnan.o)
-    0x000059a0   0x00000094   Data   RO         2684    .constdata          c_w.l(bigflt0.o)
-    0x00005a34   0x0000013d   Data   RO          142    .conststring        mapkeys.o
-    0x00005b71   0x00000003   PAD
-    0x00005b74   0x000000e3   Data   RO          178    .conststring        drs.o
-    0x00005c57   0x00000001   PAD
-    0x00005c58   0x0000009a   Data   RO          476    .conststring        drivemotors.o
-    0x00005cf2   0x00000002   PAD
-    0x00005cf4   0x00000011   Data   RO         1280    .conststring        uartstdio.o
-    0x00005d05   0x00000003   PAD
-    0x00005d08   0x00000020   Data   RO         2860    Region$$Table       anon$$obj.o
-    0x00005d28   0x00000110   Data   RO         2708    locale$$data        c_w.l(lc_ctype_c.o)
-    0x00005e38   0x0000001c   Data   RO         2711    locale$$data        c_w.l(lc_numeric_c.o)
+    0x00001744   0x00000038   Code   RO           93    i.CheckBumpSensor   eventcheckers.o
+    0x0000177c   0x0000005c   Code   RO           94    i.CheckIRSensor     eventcheckers.o
+    0x000017d8   0x0000000c   Code   RO          660    i.DisablePIDcontrol  drivemotorspid.o
+    0x000017e4   0x0000007c   Code   RO          460    i.DriveBackward     drivemotors.o
+    0x00001860   0x00000050   Code   RO          461    i.DriveBackwardsWithBias  drivemotors.o
+    0x000018b0   0x00000078   Code   RO          462    i.DriveForward      drivemotors.o
+    0x00001928   0x00000050   Code   RO          463    i.DriveForwardWithBias  drivemotors.o
+    0x00001978   0x00000030   Code   RO          169    i.EOTIntHandler     drs.o
+    0x000019a8   0x00000028   Code   RO          921    i.ES_CheckUserEvents  es_checkevents.o
+    0x000019d0   0x00000054   Code   RO         1086    i.ES_DeQueue        es_queue.o
+    0x00001a24   0x00000048   Code   RO         1087    i.ES_EnQueueFIFO    es_queue.o
+    0x00001a6c   0x00000034   Code   RO          996    i.ES_GetMSBitSet    es_lookuptables.o
+    0x00001aa0   0x00000010   Code   RO         1089    i.ES_InitQueue      es_queue.o
+    0x00001ab0   0x0000004c   Code   RO          947    i.ES_Initialize     es_framework.o
+    0x00001afc   0x00000038   Code   RO          949    i.ES_PostToService  es_framework.o
+    0x00001b34   0x00000060   Code   RO          951    i.ES_Run            es_framework.o
+    0x00001b94   0x00000004   Code   RO         1129    i.ES_Timer_Init     es_timers.o
+    0x00001b98   0x0000003c   Code   RO         1130    i.ES_Timer_InitTimer  es_timers.o
+    0x00001bd4   0x00000024   Code   RO         1133    i.ES_Timer_StopTimer  es_timers.o
+    0x00001bf8   0x0000006c   Code   RO         1134    i.ES_Timer_Tick_Resp  es_timers.o
+    0x00001c64   0x0000000c   Code   RO          661    i.EnablePIDcontrol  drivemotorspid.o
+    0x00001c70   0x00000028   Code   RO         1333    i.GPIODirModeSet    driverlib.lib(gpio.o)
+    0x00001c98   0x0000013a   Code   RO         1343    i.GPIOPadConfigSet  driverlib.lib(gpio.o)
+    0x00001dd2   0x00000002   PAD
+    0x00001dd4   0x00000048   Code   RO         1344    i.GPIOPinConfigure  driverlib.lib(gpio.o)
+    0x00001e1c   0x0000001c   Code   RO         1369    i.GPIOPinTypeUART   driverlib.lib(gpio.o)
+    0x00001e38   0x000000c8   Code   RO          436    i.GamefieldPositionString  gamefieldpositions.o
+    0x00001f00   0x00000068   Code   RO          437    i.GetAngle          gamefieldpositions.o
+    0x00001f68   0x00000028   Code   RO          843    i.GetAveragePerioduS  beaconsensor.o
+    0x00001f90   0x00000066   Code   RO          438    i.GetGamefieldPosition  gamefieldpositions.o
+    0x00001ff6   0x00000002   PAD
+    0x00001ff8   0x00000034   Code   RO          170    i.GetKartData       drs.o
+    0x0000202c   0x00000018   Code   RO          171    i.GetMyKart         drs.o
+    0x00002044   0x00000024   Code   RO          602    i.GetRPML           drivemotorsencoder.o
+    0x00002068   0x00000024   Code   RO          603    i.GetRPMR           drivemotorsencoder.o
+    0x0000208c   0x000000ac   Code   RO          846    i.InitBeaconSensingCapture  beaconsensor.o
+    0x00002138   0x00000020   Code   RO          304    i.InitDRS_SM        sm_drs.o
+    0x00002158   0x0000000c   Code   RO          403    i.InitDisplay       display.o
+    0x00002164   0x0000000c   Code   RO          574    i.InitDriveMotorsService  drivemotorsservice.o
+    0x00002170   0x000000f8   Code   RO          604    i.InitInputCapturePeriod  drivemotorsencoder.o
+    0x00002268   0x0000000c   Code   RO          139    i.InitMapKeys       mapkeys.o
+    0x00002274   0x0000001c   Code   RO          262    i.InitMasterSM      sm_master.o
+    0x00002290   0x0000005c   Code   RO          662    i.InitPeriodicInt   drivemotorspid.o
+    0x000022ec   0x0000013c   Code   RO          747    i.InitializeBallLauncher  balllauncher.o
+    0x00002428   0x00000038   Code   RO          895    i.InitializeBumpSensors  bumpsensor.o
+    0x00002460   0x0000011c   Code   RO          172    i.InitializeDRS     drs.o
+    0x0000257c   0x00000120   Code   RO          468    i.InitializeDriveMotors  drivemotors.o
+    0x0000269c   0x0000000e   Code   RO         1658    i.IntMasterEnable   driverlib.lib(interrupt.o)
+    0x000026aa   0x00000002   PAD
+    0x000026ac   0x0000002c   Code   RO          847    i.IsBeaconSensed    beaconsensor.o
+    0x000026d8   0x00000058   Code   RO          605    i.LDriveCaptureResponse  drivemotorsencoder.o
+    0x00002730   0x00000010   Code   RO          305    i.PostDRS_SM        sm_drs.o
+    0x00002740   0x00000010   Code   RO          404    i.PostDisplay       display.o
+    0x00002750   0x00000010   Code   RO          575    i.PostDriveMotorsService  drivemotorsservice.o
+    0x00002760   0x00000010   Code   RO          140    i.PostMapKeys       mapkeys.o
+    0x00002770   0x00000010   Code   RO          263    i.PostMasterSM      sm_master.o
+    0x00002780   0x0000005c   Code   RO          606    i.RDriveCaptureResponse  drivemotorsencoder.o
+    0x000027dc   0x00000078   Code   RO          469    i.RotateCCW         drivemotors.o
+    0x00002854   0x00000074   Code   RO          470    i.RotateCCWwithDuty  drivemotors.o
+    0x000028c8   0x00000074   Code   RO          471    i.RotateCW          drivemotors.o
+    0x0000293c   0x00000074   Code   RO          472    i.RotateCWwithDuty  drivemotors.o
+    0x000029b0   0x0000028c   Code   RO          816    i.RunBallLaunchingSM  sm_balllaunching.o
+    0x00002c3c   0x000000fc   Code   RO          307    i.RunDRS_SM         sm_drs.o
+    0x00002d38   0x000002dc   Code   RO          406    i.RunDisplay        display.o
+    0x00003014   0x00000022   Code   RO          576    i.RunDriveMotorsService  drivemotorsservice.o
+    0x00003036   0x00000002   PAD
+    0x00003038   0x000003d0   Code   RO          141    i.RunMapKeys        mapkeys.o
+    0x00003408   0x00000158   Code   RO          265    i.RunMasterSM       sm_master.o
+    0x00003560   0x000001c0   Code   RO          789    i.RunObstacleCrossingSM  sm_obstaclecrossing.o
+    0x00003720   0x00000144   Code   RO          338    i.RunPlayingSM      sm_playing.o
+    0x00003864   0x000003fc   Code   RO          374    i.RunRacingSM       sm_racing.o
+    0x00003c60   0x00000034   Code   RO          175    i.SendQuery         drs.o
+    0x00003c94   0x00000040   Code   RO          748    i.ServoForward      balllauncher.o
+    0x00003cd4   0x00000040   Code   RO          749    i.ServoReverse      balllauncher.o
+    0x00003d14   0x00000050   Code   RO          473    i.SetMotorDirection  drivemotors.o
+    0x00003d64   0x00000078   Code   RO          474    i.SetMotorPWM       drivemotors.o
+    0x00003ddc   0x00000100   Code   RO          663    i.SetRPMResponse    drivemotorspid.o
+    0x00003edc   0x00000010   Code   RO          664    i.SetTargetRPM      drivemotorspid.o
+    0x00003eec   0x00000010   Code   RO          817    i.StartBallLaunchingSM  sm_balllaunching.o
+    0x00003efc   0x00000010   Code   RO          266    i.StartMasterSM     sm_master.o
+    0x00003f0c   0x00000014   Code   RO          790    i.StartObstacleCrossingSM  sm_obstaclecrossing.o
+    0x00003f20   0x00000014   Code   RO          339    i.StartPlayingSM    sm_playing.o
+    0x00003f34   0x0000004c   Code   RO          375    i.StartRacingSM     sm_racing.o
+    0x00003f80   0x0000004c   Code   RO          475    i.StopMotors        drivemotors.o
+    0x00003fcc   0x000002b8   Code   RO          176    i.StoreData         drs.o
+    0x00004284   0x00000120   Code   RO         1775    i.SysCtlClockSet    driverlib.lib(sysctl.o)
+    0x000043a4   0x00000028   Code   RO         1804    i.SysCtlPeripheralEnable  driverlib.lib(sysctl.o)
+    0x000043cc   0x0000000e   Code   RO         2113    i.SysTickEnable     driverlib.lib(systick.o)
+    0x000043da   0x0000000e   Code   RO         2115    i.SysTickIntEnable  driverlib.lib(systick.o)
+    0x000043e8   0x00000014   Code   RO         1013    i.SysTickIntHandler  es_port.o
+    0x000043fc   0x0000000a   Code   RO         2119    i.SysTickPeriodSet  driverlib.lib(systick.o)
+    0x00004406   0x00000004   Code   RO         1230    i.TERMIO_GetChar    termio.o
+    0x0000440a   0x00000002   PAD
+    0x0000440c   0x00000050   Code   RO         1231    i.TERMIO_Init       termio.o
+    0x0000445c   0x0000000c   Code   RO         1232    i.TERMIO_PutChar    termio.o
+    0x00004468   0x00000040   Code   RO          751    i.TurnOffShooter    balllauncher.o
+    0x000044a8   0x0000003c   Code   RO          752    i.TurnOnShooter     balllauncher.o
+    0x000044e4   0x0000000c   Code   RO         2183    i.UARTCharPut       driverlib.lib(uart.o)
+    0x000044f0   0x00000006   Code   RO         2187    i.UARTClockSourceSet  driverlib.lib(uart.o)
+    0x000044f6   0x00000002   PAD
+    0x000044f8   0x0000005c   Code   RO         1273    i.UARTStdioConfig   uartstdio.o
+    0x00004554   0x00000018   Code   RO         1274    i.UARTgetc          uartstdio.o
+    0x0000456c   0x00000020   Code   RO         1015    i._HW_Process_Pending_Ints  es_port.o
+    0x0000458c   0x00000016   Code   RO         1016    i._HW_Timer_Init    es_port.o
+    0x000045a2   0x00000030   Code   RO         2643    i.__ARM_fpclassify  m_wm.l(fpclassify.o)
+    0x000045d2   0x00000006   PAD
+    0x000045d8   0x000002e0   Code   RO         2621    i.__hardfp_atan     m_wm.l(atan.o)
+    0x000048b8   0x000001f0   Code   RO         2552    i.__hardfp_atan2    m_wm.l(atan2.o)
+    0x00004aa8   0x000000f8   Code   RO         2645    i.__kernel_poly     m_wm.l(poly.o)
+    0x00004ba0   0x00000020   Code   RO         2635    i.__mathlib_dbl_underflow  m_wm.l(dunder.o)
+    0x00004bc0   0x0000000e   Code   RO         2504    i._is_digit         c_w.l(__printf_wp.o)
+    0x00004bce   0x00000002   Code   RO         1180    i._sys_exit         retarget.o
+    0x00004bd0   0x00000010   Code   RO         2623    i.atan              m_wm.l(atan.o)
+    0x00004be0   0x00000018   Code   RO         2639    i.fabs              m_wm.l(fabs.o)
+    0x00004bf8   0x00000006   Code   RO         1182    i.ferror            retarget.o
+    0x00004bfe   0x00000004   Code   RO         1183    i.fgetc             retarget.o
+    0x00004c02   0x0000000e   Code   RO         1184    i.fputc             retarget.o
+    0x00004c10   0x00000014   Code   RO         1233    i.kbhit             termio.o
+    0x00004c24   0x00000150   Code   RO            1    i.main              main.o
+    0x00004d74   0x0000002c   Code   RO         2709    locale$$code        c_w.l(lc_ctype_c.o)
+    0x00004da0   0x0000002c   Code   RO         2712    locale$$code        c_w.l(lc_numeric_c.o)
+    0x00004dcc   0x00000018   Code   RO         2606    x$fpl$basic         fz_wm.l(basic.o)
+    0x00004de4   0x00000150   Code   RO         2526    x$fpl$dadd          fz_wm.l(daddsub_clz.o)
+    0x00004f34   0x000002b0   Code   RO         2533    x$fpl$ddiv          fz_wm.l(ddiv.o)
+    0x000051e4   0x0000002e   Code   RO         2541    x$fpl$dflt          fz_wm.l(dflt_clz.o)
+    0x00005212   0x00000002   PAD
+    0x00005214   0x00000154   Code   RO         2548    x$fpl$dmul          fz_wm.l(dmul.o)
+    0x00005368   0x0000009c   Code   RO         2610    x$fpl$dnaninf       fz_wm.l(dnaninf.o)
+    0x00005404   0x0000000c   Code   RO         2612    x$fpl$dretinf       fz_wm.l(dretinf.o)
+    0x00005410   0x00000016   Code   RO         2527    x$fpl$drsb          fz_wm.l(daddsub_clz.o)
+    0x00005426   0x00000002   PAD
+    0x00005428   0x000001d4   Code   RO         2528    x$fpl$dsub          fz_wm.l(daddsub_clz.o)
+    0x000055fc   0x0000000a   Code   RO         2790    x$fpl$fpinit        fz_wm.l(fpinit.o)
+    0x00005606   0x00000004   Code   RO         2550    x$fpl$printf1       fz_wm.l(printf1.o)
+    0x0000560a   0x00000000   Code   RO         2620    x$fpl$usenofp       fz_wm.l(usenofp.o)
+    0x0000560a   0x00000002   PAD
+    0x0000560c   0x00000008   Data   RO           95    .constdata          eventcheckers.o
+    0x00005614   0x0000003c   Data   RO          177    .constdata          drs.o
+    0x00005650   0x00000004   Data   RO          267    .constdata          sm_master.o
+    0x00005654   0x00000008   Data   RO          308    .constdata          sm_drs.o
+    0x0000565c   0x00000004   Data   RO          340    .constdata          sm_playing.o
+    0x00005660   0x0000000c   Data   RO          376    .constdata          sm_racing.o
+    0x0000566c   0x00000008   Data   RO          608    .constdata          drivemotorsencoder.o
+    0x00005674   0x00000008   Data   RO          791    .constdata          sm_obstaclecrossing.o
+    0x0000567c   0x00000008   Data   RO          818    .constdata          sm_balllaunching.o
+    0x00005684   0x0000000c   Data   RO          922    .constdata          es_checkevents.o
+    0x00005690   0x00000050   Data   RO          957    .constdata          es_framework.o
+    0x000056e0   0x00000020   Data   RO          997    .constdata          es_lookuptables.o
+    0x00005700   0x0000000f   Data   RO          998    .constdata          es_lookuptables.o
+    0x0000570f   0x00000001   PAD
+    0x00005710   0x00000040   Data   RO         1136    .constdata          es_timers.o
+    0x00005750   0x0000001c   Data   RO         1279    .constdata          uartstdio.o
+    0x0000576c   0x00000210   Data   RO         1376    .constdata          driverlib.lib(gpio.o)
+    0x0000597c   0x00000004   PAD
+    0x00005980   0x00000098   Data   RO         2624    .constdata          m_wm.l(atan.o)
+    0x00005a18   0x00000008   Data   RO         2647    .constdata          m_wm.l(qnan.o)
+    0x00005a20   0x00000094   Data   RO         2684    .constdata          c_w.l(bigflt0.o)
+    0x00005ab4   0x0000013d   Data   RO          142    .conststring        mapkeys.o
+    0x00005bf1   0x00000003   PAD
+    0x00005bf4   0x000000e3   Data   RO          178    .conststring        drs.o
+    0x00005cd7   0x00000001   PAD
+    0x00005cd8   0x0000009a   Data   RO          476    .conststring        drivemotors.o
+    0x00005d72   0x00000002   PAD
+    0x00005d74   0x00000011   Data   RO         1280    .conststring        uartstdio.o
+    0x00005d85   0x00000003   PAD
+    0x00005d88   0x00000020   Data   RO         2860    Region$$Table       anon$$obj.o
+    0x00005da8   0x00000110   Data   RO         2708    locale$$data        c_w.l(lc_ctype_c.o)
+    0x00005eb8   0x0000001c   Data   RO         2711    locale$$data        c_w.l(lc_numeric_c.o)
 
 
     Execution Region RW_IRAM1 (Base: 0x20000000, Size: 0x000009d0, Max: 0x00008000, ABSOLUTE)
@@ -2435,7 +2435,7 @@ Image component sizes
        568        206          0          0          0       3438   balllauncher.o
        312         48          0         12         32       3378   beaconsensor.o
         76         18          0          0          0        977   bumpsensor.o
-       724        604          0          1          0       1845   display.o
+       760        636          0          1          0       1853   display.o
       1436        398        154          4          0       8416   drivemotors.o
        500         80          8         40          0       3369   drivemotorsencoder.o
        388         28          0         48          0       3757   drivemotorspid.o
@@ -2447,23 +2447,23 @@ Image component sizes
         88         10          0          4          0       3574   es_port.o
        172         10          0          4          0       2437   es_queue.o
        208         42         64         10         32       2951   es_timers.o
-       172         54          8          2          0       2524   eventcheckers.o
+       192         54          8          2          0       2548   eventcheckers.o
        406        164          0          0          0       2336   gamefieldpositions.o
        336        224          0          0          0      12043   main.o
       1004        256        317          1          0       2049   mapkeys.o
         26          0          0          8          0       3659   retarget.o
-       612        196          8          2          0       2856   sm_balllaunching.o
+       668        194          8          2          0       2896   sm_balllaunching.o
        300         20          8          4          0       3086   sm_drs.o
-       404        136          4          2          0       3820   sm_master.o
-       456        128          8          2          0       2650   sm_obstaclecrossing.o
-       340        106          4          1          0       3564   sm_playing.o
+       404        136          4          2          0       3852   sm_master.o
+       468        130          8          2          0       2634   sm_obstaclecrossing.o
+       344        104          4          1          0       3576   sm_playing.o
       1096        370         12          4          0       3694   sm_racing.o
        672        636          0          0       2048        556   startup_rvmdk.o
        116         26          0          0          0       1960   termio.o
        116         14         45          8          0       2728   uartstdio.o
 
     ----------------------------------------------------------------------
-     12074       3934       1108        224       2188      94638   Object Totals
+     12202       3964       1108        224       2188      94738   Object Totals
          0          0         32          0          0          0   (incl. Generated)
          8          0         10          8          0          0   (incl. Padding)
 
@@ -2564,15 +2564,15 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-     21900       4540       2248        224       2288      97288   Grand Totals
-     21900       4540       2248        224       2288      97288   ELF Image Totals
-     21900       4540       2248        224          0          0   ROM Totals
+     22028       4570       2248        224       2288      97388   Grand Totals
+     22028       4570       2248        224       2288      97388   ELF Image Totals
+     22028       4570       2248        224          0          0   ROM Totals
 
 ==============================================================================
 
-    Total RO  Size (Code + RO Data)                24148 (  23.58kB)
+    Total RO  Size (Code + RO Data)                24276 (  23.71kB)
     Total RW  Size (RW Data + ZI Data)              2512 (   2.45kB)
-    Total ROM Size (Code + RO Data + RW Data)      24372 (  23.80kB)
+    Total ROM Size (Code + RO Data + RW Data)      24500 (  23.93kB)
 
 ==============================================================================
 

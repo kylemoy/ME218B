@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\Outputs\BaseTarget.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Outputs\BaseTarget.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5040049: Last Updated: Sun Mar 01 13:57:03 2015
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5040049: Last Updated: Sun Mar 01 17:51:53 2015
 <BR><P>
 <H3>Maximum Stack Usage =        328 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -594,7 +594,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> es_checkevents.o(.constdata)
 </UL>
-<P><STRONG><a name="[12]"></a>CheckBumpSensor</STRONG> (Thumb, 36 bytes, Stack size 8 bytes, eventcheckers.o(i.CheckBumpSensor))
+<P><STRONG><a name="[12]"></a>CheckBumpSensor</STRONG> (Thumb, 48 bytes, Stack size 8 bytes, eventcheckers.o(i.CheckBumpSensor))
 <BR><BR>[Stack]<UL><LI>Max Depth = 32<LI>Call Chain = CheckBumpSensor &rArr; PostMasterSM &rArr; ES_PostToService &rArr; ES_EnQueueFIFO
 </UL>
 <BR>[Calls]<UL><LI><a href="#[67]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PostMasterSM
@@ -602,7 +602,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> es_checkevents.o(.constdata)
 </UL>
-<P><STRONG><a name="[13]"></a>CheckIRSensor</STRONG> (Thumb, 42 bytes, Stack size 8 bytes, eventcheckers.o(i.CheckIRSensor))
+<P><STRONG><a name="[13]"></a>CheckIRSensor</STRONG> (Thumb, 50 bytes, Stack size 8 bytes, eventcheckers.o(i.CheckIRSensor))
 <BR><BR>[Stack]<UL><LI>Max Depth = 144 + Unknown Stack Size
 <LI>Call Chain = CheckIRSensor &rArr; __2printf &rArr; _printf_char_file &rArr; _printf_char_common &rArr; __printf
 </UL>
@@ -1027,7 +1027,6 @@ Global Symbols
 <LI><a href="#[44]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 </UL>
 <BR>[Called By]<UL><LI><a href="#[a6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RunRacingSM
-<LI><a href="#[a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RunObstacleCrossingSM
 <LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RunBallLaunchingSM
 </UL>
 
@@ -1071,7 +1070,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[15]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RunMapKeys
 </UL>
 
-<P><STRONG><a name="[99]"></a>RunBallLaunchingSM</STRONG> (Thumb, 406 bytes, Stack size 40 bytes, sm_balllaunching.o(i.RunBallLaunchingSM))
+<P><STRONG><a name="[99]"></a>RunBallLaunchingSM</STRONG> (Thumb, 464 bytes, Stack size 40 bytes, sm_balllaunching.o(i.RunBallLaunchingSM))
 <BR><BR>[Stack]<UL><LI>Max Depth = 192 + Unknown Stack Size
  + In Cycle
 <LI>Call Chain = RunBallLaunchingSM &rArr;  RunBallLaunchingSM (Cycle)
@@ -1112,7 +1111,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> es_framework.o(.constdata)
 </UL>
-<P><STRONG><a name="[1b]"></a>RunDisplay</STRONG> (Thumb, 124 bytes, Stack size 8 bytes, display.o(i.RunDisplay))
+<P><STRONG><a name="[1b]"></a>RunDisplay</STRONG> (Thumb, 132 bytes, Stack size 8 bytes, display.o(i.RunDisplay))
 <BR><BR>[Stack]<UL><LI>Max Depth = 144 + Unknown Stack Size
 <LI>Call Chain = RunDisplay &rArr; __2printf &rArr; _printf_char_file &rArr; _printf_char_common &rArr; __printf
 </UL>
@@ -1163,6 +1162,7 @@ Global Symbols
 <LI><a href="#[a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RunPlayingSM
 <LI><a href="#[1b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RunDisplay
 <LI><a href="#[17]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RunMasterSM
+<LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TurnOffShooter
 <LI><a href="#[9a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;StopMotors
 <LI><a href="#[44]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 </UL>
@@ -1171,13 +1171,12 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> es_framework.o(.constdata)
 </UL>
-<P><STRONG><a name="[a5]"></a>RunObstacleCrossingSM</STRONG> (Thumb, 312 bytes, Stack size 40 bytes, sm_obstaclecrossing.o(i.RunObstacleCrossingSM))
+<P><STRONG><a name="[a5]"></a>RunObstacleCrossingSM</STRONG> (Thumb, 322 bytes, Stack size 40 bytes, sm_obstaclecrossing.o(i.RunObstacleCrossingSM))
 <BR><BR>[Stack]<UL><LI>Max Depth = 192 + Unknown Stack Size
  + In Cycle
 <LI>Call Chain = RunObstacleCrossingSM &rArr;  RunObstacleCrossingSM (Cycle)
 </UL>
 <BR>[Calls]<UL><LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RotateCW
-<LI><a href="#[94]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RotateCCW
 <LI><a href="#[70]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DriveForwardWithBias
 <LI><a href="#[6e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DriveBackwardsWithBias
 <LI><a href="#[a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RunObstacleCrossingSM
@@ -1323,7 +1322,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RunPlayingSM
 </UL>
 
-<P><STRONG><a name="[a4]"></a>StartPlayingSM</STRONG> (Thumb, 10 bytes, Stack size 0 bytes, sm_playing.o(i.StartPlayingSM))
+<P><STRONG><a name="[a4]"></a>StartPlayingSM</STRONG> (Thumb, 16 bytes, Stack size 0 bytes, sm_playing.o(i.StartPlayingSM))
 <BR><BR>[Stack]<UL><LI>Max Depth = 264 + Unknown Stack Size
 <LI>Call Chain = StartPlayingSM &rArr; RunPlayingSM &rArr;  RunPlayingSM (Cycle)
 </UL>
@@ -1432,6 +1431,7 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[44]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 </UL>
 <BR>[Called By]<UL><LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RunBallLaunchingSM
+<LI><a href="#[17]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RunMasterSM
 <LI><a href="#[15]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RunMapKeys
 <LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;InitializeBallLauncher
 </UL>

@@ -157,10 +157,10 @@ void InitializeDRS(void) {
 		
 		// Initialize the Kart Number switch hardware
 		// For now, assume we are Kart1
-		MyKart = &Kart2; // Kart1 = Green/Pink
+		MyKart = &Kart3; // Kart1 = Green/Pink
 										 // Kart2 = Yellow/Orange
 									   // Kart3 = Yellow/Blue
-}
+} 
 
 
 /****************************************************************************

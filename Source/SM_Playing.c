@@ -126,8 +126,10 @@ Returns:			void
 Description:	Does any required initialization for this state machine
 ****************************************************************************/
 void StartPlayingSM(ES_Event CurrentEvent) {
-  // Initialize the state variable
-  CurrentState = RACING;
+	if (CurrentEvent.EventType != ES_ENTRY_HISTORY) {
+		// Initialize the state variable
+		CurrentState = RACING;
+	}
 	// Let the Run function init the lower level state machines
   RunPlayingSM(CurrentEvent);
   return;

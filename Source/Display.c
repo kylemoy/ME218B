@@ -87,7 +87,8 @@ ES_Event RunDisplay(ES_Event ThisEvent) {
 			case E_DRS_EOT: printf("(EVENT) E_DRS_EOT\r\n"); break;
 			
 			// Other Events
-			//case E_BUMP_DETECTED: printf("(EVENT) E_BUMP_DETECTED\r\n"); break;
+			case E_BUMP_DETECTED: printf("(EVENT) E_BUMP_DETECTED\r\n"); break;
+			//case E_IR_BEACON_DETECTED: printf("(EVENT) E_IR_BEACON_DETECTED\r\n"); break;
 			
 			default: break;
 		}

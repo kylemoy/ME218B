@@ -56,10 +56,10 @@ bool CheckBumpSensor(void) {
 		ES_Event Event = {E_BUMP_DETECTED, 0};
 		PostMasterSM(Event);
 		return true;
-	} else {
+	} else if (LastBumpState && !BumpSensorDetected()) {
 		LastBumpState = false;
-		return false;
 	}
+	return false;
 }
 
 /****************************************************************************
@@ -77,9 +77,9 @@ bool CheckIRSensor(void) {
 		ES_Event Event = {E_IR_BEACON_DETECTED, 0};
 		PostMasterSM(Event);
 		return true;
-	} else {
+	} else if (!IsBeaconSensed()){
 		//printf("IR sensor lost the signal.\r\n");
 		LastIRstate = false;
-		return false;
 	}
+	return false;
 }
