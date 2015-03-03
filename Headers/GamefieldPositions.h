@@ -32,11 +32,11 @@ typedef enum {
 
 /* THESE ARE THE IMPORTANT TRIGGERS */
 #define Straight2CenterY 93	// Calibrate this value
-#define BallLaunchingYOffset 50	// This offset should be constant
+#define BallLaunchingYOffset 60	// This offset should be constant
 #define BallLaunchingEntryYBound (Straight2CenterY - BallLaunchingYOffset)
 
 #define Straight3CenterX	156	// Calibrate this value
-#define ObstacleEntryXOffset 25	// This offset should be constant
+#define ObstacleEntryXOffset 40	// This offset should be constant
 #define ObstacleEntryXBound (Straight3CenterX - ObstacleEntryXOffset)
 
 

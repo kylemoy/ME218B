@@ -73,7 +73,7 @@ ES_Event RunBallLaunchingSM(ES_Event CurrentEvent) {
 							MotorTimeoutCase = 3;
 						} else if (MotorTimeoutCase == 3) {
 							StopMotors();
-							DriveForwardWithBias(100, 100, 118);
+							DriveForwardWithBias(100, 100, 108);
 							MotorTimeoutCase = 4;
 						} else {
 							StopMotors();
@@ -94,11 +94,10 @@ ES_Event RunBallLaunchingSM(ES_Event CurrentEvent) {
 			if (CurrentEvent.EventType != ES_NO_EVENT) { // If an event is active
 				switch (CurrentEvent.EventType) {
 					case E_IR_BEACON_DETECTED:
-						// Apply some delay to the IR Beacon detection
-						ES_Timer_InitTimer(DRIVE_MOTOR_TIMER, 10);
-						break;
+						//RotateCCW(30, 3);
+						//break;
 					
-					case E_MOTOR_TIMEOUT:
+					//case E_MOTOR_TIMEOUT:
 						StopMotors();
 						NextState = BALL_LAUNCHING_LAUNCH;
 						MakeTransition = true;
@@ -117,10 +116,10 @@ ES_Event RunBallLaunchingSM(ES_Event CurrentEvent) {
 				switch (CurrentEvent.EventType) {
 					
 					case E_MOTOR_TIMEOUT:
-						StopMotors();
 						if (MotorTimeoutCase == 0) {
+							StopMotors();
 							TurnOnShooter();
-							ES_Timer_InitTimer(DRIVE_MOTOR_TIMER, 700);
+							ES_Timer_InitTimer(DRIVE_MOTOR_TIMER, 1000);
 							MotorTimeoutCase = 1;
 						} else if (MotorTimeoutCase == 1) {
 							ServoForward();
@@ -129,15 +128,15 @@ ES_Event RunBallLaunchingSM(ES_Event CurrentEvent) {
 						} else if (MotorTimeoutCase == 2) {
 							ServoReverse();
 							ES_Timer_InitTimer(DRIVE_MOTOR_TIMER, 50);
-							MotorTimeoutCase = 3;
-						} else if (MotorTimeoutCase == 3) {
-							ServoForward();
-							ES_Timer_InitTimer(DRIVE_MOTOR_TIMER, 50);
-							MotorTimeoutCase = 4;
-						} else if (MotorTimeoutCase == 4) {
-							ServoReverse();
-							ES_Timer_InitTimer(DRIVE_MOTOR_TIMER, 50);
 							MotorTimeoutCase = 5;
+						//} else if (MotorTimeoutCase == 3) {
+						//	ServoForward();
+						//	ES_Timer_InitTimer(DRIVE_MOTOR_TIMER, 50);
+						//	MotorTimeoutCase = 4;
+						//} else if (MotorTimeoutCase == 4) {
+						//	ServoReverse();
+						//	ES_Timer_InitTimer(DRIVE_MOTOR_TIMER, 50);
+						//	MotorTimeoutCase = 5;
 						} else if (MotorTimeoutCase == 5) {
 							TurnOffShooter();
 							ES_Timer_InitTimer(DRIVE_MOTOR_TIMER, 400);
@@ -159,15 +158,20 @@ ES_Event RunBallLaunchingSM(ES_Event CurrentEvent) {
 			// Process any events
 			if (CurrentEvent.EventType != ES_NO_EVENT) { // If an event is active
 				switch (CurrentEvent.EventType) {
+					case E_BUMP_DETECTED:
+						DriveBackwardsWithBias(100, 100, 25);
+						MotorTimeoutCase = 0;
+						break;
+					
 					case E_MOTOR_TIMEOUT:
 						if (MotorTimeoutCase == 0) {
-							RotateCCW(40, 60);
+							PivotCCWwithSetTicks(150, 12);
 							MotorTimeoutCase = 1;
 						} else {
 							StopMotors();
-							MotorTimeoutCase = 0;
 							ES_Event Event = {E_BALL_LAUNCHING_EXIT, 0};
 							PostMasterSM(Event);
+							MotorTimeoutCase = 0;
 						}
 						break;
 				}
@@ -258,7 +262,7 @@ static ES_Event DuringBallLaunchingExit(ES_Event Event) {
 	// Process ES_ENTRY, ES_ENTRY_HISTORY & ES_EXIT events
 	if ((Event.EventType == ES_ENTRY) || (Event.EventType == ES_ENTRY_HISTORY)) {
 		if(DisplayEntryStateTransitions && DisplaySM_Racing) printf("SM3_Ball_Launching: BALL_LAUNCHING_EXIT\r\n");
-		DriveForwardWithBias(100, 100, 140);
+		DriveForward(100, 0);
 	} else if ( Event.EventType == ES_EXIT ) {
 	} else {
 	}

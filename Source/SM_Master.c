@@ -30,6 +30,7 @@ static ES_Event DuringWaitingFinish(ES_Event Event);
 /*---------------------------- Module Variables ---------------------------*/
 static MasterState_t CurrentState;
 static uint8_t MyPriority;
+//static uint8_t MotorTimeoutCase = 0;
 
 
 /*------------------------------ Module Code ------------------------------*/
@@ -100,10 +101,22 @@ ES_Event RunMasterSM(ES_Event CurrentEvent) {
 			// Process any events
 			if (CurrentEvent.EventType != ES_NO_EVENT) { // If an event is active
 				switch (CurrentEvent.EventType) {
-					//case E_MOTOR_TIMEOUT:
-					//	StopMotors();
-					//	break;
 					
+//					case E_BUMP_DETECTED:
+//							StopMotors();
+//							DriveBackwardsWithBias(100, 100, 25);
+//							break;
+//					
+//					case E_MOTOR_TIMEOUT:
+//						if (MotorTimeoutCase == 0) {
+//							PivotCCWwithSetTicks(40, 12);
+//							MotorTimeoutCase = 1;
+//						} else {
+//							StopMotors();
+//							MotorTimeoutCase = 0;
+//						}
+//						break;
+//					
 					case E_RACE_CAUTION:
 						NextState = PAUSED;
 						MakeTransition = true;
@@ -220,7 +233,9 @@ static ES_Event DuringPlaying(ES_Event Event) {
 		if(DisplayEntryStateTransitions && DisplaySM_Master) printf("SM1_Master: PLAYING\r\n");
 		TurnOnRaceLED();
 		StartPlayingSM(Event);
-		
+		//DriveForward(100, 0);
+		//MotorTimeoutCase = 0;
+							//PivotCCWwithSetTicks(150, 18);
 			//SetPIDgains(0.03, 0.03, 0);
 		
 							//DriveForwardWithBias(105, 100, 0);

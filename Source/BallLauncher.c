@@ -121,10 +121,10 @@ void InitializeBallLauncher(void) {
 	TurnOffShooter();
 	
 	
-	// ENABLE BALL LAUNCHER MOTOR ON PIN D3
-	HWREG(SYSCTL_RCGCGPIO) |= SYSCTL_RCGCGPIO_R3; // Port D
-	HWREG(GPIO_PORTD_BASE+GPIO_O_DEN) |= GPIO_PIN_3; // Enable Pin D3 for Digital I/O
-	HWREG(GPIO_PORTD_BASE+GPIO_O_DIR) |= GPIO_PIN_3; // Enable Pin D3 as Output
+	// ENABLE BALL LAUNCHER MOTOR ON PIN A7
+	HWREG(SYSCTL_RCGCGPIO) |= SYSCTL_RCGCGPIO_R0; // Port A
+	HWREG(GPIO_PORTA_BASE+GPIO_O_DEN) |= GPIO_PIN_7; // Enable Pin A7 for Digital I/O
+	HWREG(GPIO_PORTA_BASE+GPIO_O_DIR) |= GPIO_PIN_7; // Enable Pin A7 as Output
 }
 
 /****************************************************************************
@@ -188,12 +188,12 @@ void ServoReverse(void){
 
 void TurnOnShooter(void) {
 	printf("Turning on the shooter motor.\r\n");
-	HWREG(GPIO_PORTD_BASE+(GPIO_O_DATA + ALL_BITS)) |= GPIO_PIN_3;
+	HWREG(GPIO_PORTA_BASE+(GPIO_O_DATA + ALL_BITS)) |= GPIO_PIN_7;
 }
 
 void TurnOffShooter(void) {
 	printf("Turning off the shooter motor.\r\n");
-	HWREG(GPIO_PORTD_BASE+(GPIO_O_DATA + ALL_BITS)) &= ~GPIO_PIN_3;
+	HWREG(GPIO_PORTA_BASE+(GPIO_O_DATA + ALL_BITS)) &= ~GPIO_PIN_7;
 }
 	
 

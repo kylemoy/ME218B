@@ -286,10 +286,11 @@ Description: 	Pivot the bot clockwise
 ****************************************************************************/
 void PivotCWwithSetTicks(uint16_t TargetRPM, uint32_t Ticks) {
 	EnablePIDcontrol();
+	SetPIDgains(0.05, 0.02, 0);
 	SetMotorDirection(LEFT_MOTOR, FORWARD);
 	SetMotorDirection(RIGHT_MOTOR, BACKWARD);
 	SetTargetRPM(0, TargetRPM);
-	if (DisplayMotorInfo) printf("Drive Motors: Pivoting CW, TargetTicks = %d\r\n", Ticks);
+	if (DisplayMotorInfo) printf("Drive Motors: Pivoting CW, TargetRPM = %d, TargetTicks = %d\r\n", TargetRPM, Ticks);
 	SetTargetTickCount(0, Ticks);
 }
 
@@ -301,10 +302,11 @@ Description: 	Pivot the bot counter-clockwise
 ****************************************************************************/
 void PivotCCWwithSetTicks(uint16_t TargetRPM, uint32_t Ticks) {
 	EnablePIDcontrol();
+	SetPIDgains(0.05, 0.02, 0);
 	SetMotorDirection(LEFT_MOTOR, BACKWARD);
 	SetMotorDirection(RIGHT_MOTOR, FORWARD);
 	SetTargetRPM(0, TargetRPM);
-	if (DisplayMotorInfo) printf("Drive Motors: Pivoting CCW, TargetTicks = %d\r\n", Ticks);
+	if (DisplayMotorInfo) printf("Drive Motors: Pivoting CCW, TargetRPM = %d, TargetTicks = %d\r\n", TargetRPM, Ticks);
 	SetTargetTickCount(Ticks, 0);
 }
 

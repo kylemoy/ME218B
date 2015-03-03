@@ -156,23 +156,23 @@ void InitializeDRS(void) {
 		// Print to console if successful initialization
 		printf("DRS Initialized\n\r");
 		
-		// Initialize the Kart Number switch hardware
-		// For now, assume we are Kart1
-		MyKart = &Kart1; // Kart1 = Green/Pink
-										 // Kart2 = Yellow/Orange
-									   // Kart3 = Yellow/Blue
+		// Read our Kart number from the switch hardware
 		switch(ReadKartSwitch()) {
 			case 1:
 			default:
 				printf("We are Kart1.\r\n");
+				MyKart = &Kart1;
 				break;
 			case 2:
 				printf("We are Kart2.\r\n");
+				MyKart = &Kart2;
 				break;
 			case 3:
 				printf("We are Kart3.\r\n");
+				MyKart = &Kart3;
 				break;
 		}
+		MyKart = &Kart1;
 } 
 
 

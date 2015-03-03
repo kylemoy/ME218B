@@ -61,7 +61,7 @@ ES_Event RunObstacleCrossingSM(ES_Event CurrentEvent) {
 						if (MotorTimeoutCase == 0) {
 							SetPIDgains(0.05, 0.02, 0);
 							MotorTimeoutCase = 1;
-							PivotCCWwithSetTicks(60, 18);
+							PivotCCWwithSetTicks(150, 18);
 						} else if (MotorTimeoutCase == 1) {
 							DriveBackwardsWithBias(100, 100, 150);
 							MotorTimeoutCase = 2;
@@ -102,7 +102,7 @@ ES_Event RunObstacleCrossingSM(ES_Event CurrentEvent) {
 				switch (CurrentEvent.EventType) {
 					case E_MOTOR_TIMEOUT:
 						if (MotorTimeoutCase == 0) {
-							PivotCCWwithSetTicks(40, 18);
+							PivotCCWwithSetTicks(150, 12);
 							MotorTimeoutCase = 1;
 						} else {
 							StopMotors();
@@ -182,6 +182,7 @@ static ES_Event DuringCrossing(ES_Event Event) {
 		DriveForward(100, 0);
 	} else if ( Event.EventType == ES_EXIT ) {
 	} else {
+		DriveForward(100, 0);
 	}
 	return(ReturnEvent);
 }

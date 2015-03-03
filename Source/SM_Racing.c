@@ -34,7 +34,7 @@ static ES_Event DuringCorner(ES_Event Event);
 /*---------------------------- Module Variables ---------------------------*/
 static RacingState_t CurrentState;
 static bool WillCrossObstacle = true;
-static bool WillBallLaunch = false;
+static bool WillBallLaunch = true;
 static uint8_t MotorTimeoutCase = 0;
 static GamefieldPosition_t CurrentStraight;
 
@@ -72,6 +72,13 @@ ES_Event RunRacingSM(ES_Event CurrentEvent) {
 								printf("Entering the Obstacle\r\n");
 								ES_Event Event = {E_OBSTACLE_CROSSING_ENTRY, 0};
 								PostMasterSM(Event);
+								
+								
+						} else if (CurrentStraight == Straight2 && WillBallLaunch) {
+							StopMotors();
+							printf("Entering the Obstacle\r\n");
+							ES_Event Event = {E_BALL_LAUNCHING_ENTRY, 0};
+							PostMasterSM(Event);
 						
 						// This is for the standard case where we timeout for a encoder movement 
 						// on any any straight, to slow down before a corner
@@ -92,24 +99,24 @@ ES_Event RunRacingSM(ES_Event CurrentEvent) {
 							PrintMyKartStatus();
 						}
 						// Test for entry into ball shooting using DRS
-						if (CurrentStraight == Straight2 && GetMyKart().KartY > BallLaunchingEntryYBound) {
-							if (WillBallLaunch) {
-								printf("Passed the Ball Shooting Entry Y-Bound = %d.\r\n", BallLaunchingEntryYBound);
-								printf("Entering the Ball Launch\r\n");
-								ES_Event Event = {E_BALL_LAUNCHING_ENTRY, 0};
-								PostMasterSM(Event);
-							}
+						//if (CurrentStraight == Straight2 && GetMyKart().KartY > BallLaunchingEntryYBound) {
+						//	if (WillBallLaunch) {
+						//		printf("Passed the Ball Shooting Entry Y-Bound = %d.\r\n", BallLaunchingEntryYBound);
+						//		printf("Entering the Ball Launch\r\n");
+						//		ES_Event Event = {E_BALL_LAUNCHING_ENTRY, 0};
+						//		PostMasterSM(Event);
+						//	}
 						
 						// Test for entry into obstacle crossing using DRS
-						}	else if (CurrentStraight == Straight3 && GetMyKart().KartX > ObstacleEntryXBound) {
-							if (WillCrossObstacle) {
-								printf("Passed the Obstacle Entry X-Bound = %d.\r\n", ObstacleEntryXBound);
-								printf("Entering the Obstacle\r\n");
-								ES_Event Event = {E_OBSTACLE_CROSSING_ENTRY, 0};
-								PostMasterSM(Event);
-							}
-						}						
-						break;
+						//}	else if (CurrentStraight == Straight3 && GetMyKart().KartX > ObstacleEntryXBound) {
+						//	if (WillCrossObstacle) {
+						//		printf("Passed the Obstacle Entry X-Bound = %d.\r\n", ObstacleEntryXBound);
+						//		printf("Entering the Obstacle\r\n");
+						//		ES_Event Event = {E_OBSTACLE_CROSSING_ENTRY, 0};
+						//		PostMasterSM(Event);
+						//	}
+						//}						
+						//break;
 				}
 			}
 			break;
@@ -126,7 +133,7 @@ ES_Event RunRacingSM(ES_Event CurrentEvent) {
 							PivotCCWwithSetTicks(150, 18);
 							MotorTimeoutCase = 1;
 						} else if (MotorTimeoutCase == 1) {
-							DriveBackwardsWithBias(100, 100, 100);
+							DriveBackwardsWithBias(100, 100, 150);
 							ClearSumError();
 							MotorTimeoutCase = 2;
 						} else {
@@ -212,17 +219,30 @@ static ES_Event DuringStraight(ES_Event Event) {
 	if ((Event.EventType == ES_ENTRY) || (Event.EventType == ES_ENTRY_HISTORY)) {
 		if(DisplayEntryStateTransitions && DisplaySM_Racing) printf("SM3_Racing: STRAIGHT (%s)\r\n", GamefieldPositionString(CurrentStraight));
 		
+		// Make it so that we attempt a ball launch every lap
+		if (CurrentStraight == Straight1) {
+			WillBallLaunch = true;
+		}
+		
 		// If we just exited out of the ball launch area,
 		// then let's not trip the ball launch again
 		if (WillBallLaunch && Event.EventType == ES_ENTRY_HISTORY && CurrentStraight == Straight2) {
 			WillBallLaunch = false;
-			SetPIDgains(0.1, 0.5, 0);
-			DriveForwardWithSetDistance(500, 400);
+			//SetPIDgains(0.1, 0.5, 0);
+			//DriveForwardWithSetDistance(500, 400);
+			
+			SetPIDgains(0.05, 0.02, 0);
+			DriveForwardWithBias(105, 100, 0);
+			
+		// If we are triggering a encoder movement to ball launch
+		} else if (CurrentStraight == Straight2 && WillBallLaunch) {
+			SetPIDgains(0.05, 0.02, 0);
+			DriveForwardWithSetDistance(200, 1000);
 			
 		// If we are triggering a encoder movement towards the obstacle
 		} else if (CurrentStraight == Straight3 && WillCrossObstacle) {
 			SetPIDgains(0.05, 0.02, 0);
-			DriveForwardWithSetDistance(200, 1300);
+			DriveForwardWithSetDistance(200, 1250);
 			
 		// Standard encoder movement for any other lap leg
 		} else {

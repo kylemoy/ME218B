@@ -3,9 +3,9 @@
 <title>Static Call Graph - [.\Outputs\BaseTarget.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Outputs\BaseTarget.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5040049: Last Updated: Mon Mar 02 23:36:11 2015
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5040049: Last Updated: Tue Mar 03 07:51:50 2015
 <BR><P>
-<H3>Maximum Stack Usage =        432 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
+<H3>Maximum Stack Usage =        416 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
 RunMasterSM &rArr;  RunMasterSM (Cycle)
 <P>
@@ -219,7 +219,7 @@ Global Symbols
 
 <P><STRONG><a name="[33]"></a>__rt_entry_main</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, rtentry2.o(.ARM.Collect$$rtentry$$0000000D))
 <BR><BR>[Stack]<UL><LI>Max Depth = 152 + Unknown Stack Size
-<LI>Call Chain = __rt_entry_main &rArr; main &rArr; InitializeBallLauncher &rArr; TurnOffShooter &rArr; __2printf &rArr; _printf_char_file &rArr; _printf_char_common &rArr; __printf
+<LI>Call Chain = __rt_entry_main &rArr; main &rArr; InitializeDRS &rArr; __2printf &rArr; _printf_char_file &rArr; _printf_char_common &rArr; __printf
 </UL>
 <BR>[Calls]<UL><LI><a href="#[34]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 <LI><a href="#[35]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;exit
@@ -320,7 +320,6 @@ Global Symbols
 <LI><a href="#[5e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DriveForwardWithSetDistance
 <LI><a href="#[56]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DriveBackward
 <LI><a href="#[14]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RunMapKeys
-<LI><a href="#[12]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CheckIRSensor
 <LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;InitializeDriveMotors
 <LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;InitializeDRS
 <LI><a href="#[34]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
@@ -501,13 +500,11 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> es_checkevents.o(.constdata)
 </UL>
-<P><STRONG><a name="[12]"></a>CheckIRSensor</STRONG> (Thumb, 64 bytes, Stack size 16 bytes, eventcheckers.o(i.CheckIRSensor))
-<BR><BR>[Stack]<UL><LI>Max Depth = 152 + Unknown Stack Size
-<LI>Call Chain = CheckIRSensor &rArr; __2printf &rArr; _printf_char_file &rArr; _printf_char_common &rArr; __printf
+<P><STRONG><a name="[12]"></a>CheckIRSensor</STRONG> (Thumb, 52 bytes, Stack size 16 bytes, eventcheckers.o(i.CheckIRSensor))
+<BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = CheckIRSensor &rArr; PostMasterSM &rArr; ES_PostToService &rArr; ES_EnQueueFIFO
 </UL>
 <BR>[Calls]<UL><LI><a href="#[54]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PostMasterSM
 <LI><a href="#[55]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IsBeaconSensed
-<LI><a href="#[3f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> es_checkevents.o(.constdata)
 </UL>
@@ -558,6 +555,7 @@ Global Symbols
 <LI><a href="#[3f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 </UL>
 <BR>[Called By]<UL><LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RunObstacleCrossingSM
+<LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RunBallLaunchingSM
 </UL>
 
 <P><STRONG><a name="[5d]"></a>DriveForwardWithBias</STRONG> (Thumb, 76 bytes, Stack size 16 bytes, drivemotors.o(i.DriveForwardWithBias))
@@ -570,7 +568,8 @@ Global Symbols
 <LI><a href="#[5a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ES_Timer_InitTimer
 <LI><a href="#[3f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 </UL>
-<BR>[Called By]<UL><LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RunRacingSM
+<BR>[Called By]<UL><LI><a href="#[63]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DuringStraight
+<LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RunRacingSM
 <LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RunBallLaunchingSM
 </UL>
 
@@ -756,7 +755,6 @@ Global Symbols
 
 <P><STRONG><a name="[87]"></a>GetMyKart</STRONG> (Thumb, 18 bytes, Stack size 0 bytes, drs.o(i.GetMyKart))
 <BR><BR>[Called By]<UL><LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;StartRacingSM
-<LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RunRacingSM
 <LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PrintMyKartStatus
 </UL>
 
@@ -794,7 +792,7 @@ Global Symbols
 <BR>[Address Reference Count : 1]<UL><LI> es_framework.o(.constdata)
 </UL>
 <P><STRONG><a name="[15]"></a>InitMasterSM</STRONG> (Thumb, 22 bytes, Stack size 8 bytes, sm_master.o(i.InitMasterSM))
-<BR><BR>[Stack]<UL><LI>Max Depth = 408 + Unknown Stack Size
+<BR><BR>[Stack]<UL><LI>Max Depth = 392 + Unknown Stack Size
 <LI>Call Chain = InitMasterSM &rArr; StartMasterSM &rArr; RunMasterSM &rArr;  RunMasterSM (Cycle)
 </UL>
 <BR>[Calls]<UL><LI><a href="#[77]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;StartMasterSM
@@ -821,8 +819,8 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[34]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[7b]"></a>InitializeDRS</STRONG> (Thumb, 254 bytes, Stack size 8 bytes, drs.o(i.InitializeDRS))
-<BR><BR>[Stack]<UL><LI>Max Depth = 144 + Unknown Stack Size
+<P><STRONG><a name="[7b]"></a>InitializeDRS</STRONG> (Thumb, 272 bytes, Stack size 16 bytes, drs.o(i.InitializeDRS))
+<BR><BR>[Stack]<UL><LI>Max Depth = 152 + Unknown Stack Size
 <LI>Call Chain = InitializeDRS &rArr; __2printf &rArr; _printf_char_file &rArr; _printf_char_common &rArr; __printf
 </UL>
 <BR>[Calls]<UL><LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ReadKartSwitch
@@ -872,7 +870,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> startup_rvmdk.o(RESET)
 </UL>
-<P><STRONG><a name="[84]"></a>PivotCCWwithSetTicks</STRONG> (Thumb, 62 bytes, Stack size 16 bytes, drivemotors.o(i.PivotCCWwithSetTicks))
+<P><STRONG><a name="[84]"></a>PivotCCWwithSetTicks</STRONG> (Thumb, 80 bytes, Stack size 16 bytes, drivemotors.o(i.PivotCCWwithSetTicks))
 <BR><BR>[Stack]<UL><LI>Max Depth = 152 + Unknown Stack Size
 <LI>Call Chain = PivotCCWwithSetTicks &rArr; __2printf &rArr; _printf_char_file &rArr; _printf_char_common &rArr; __printf
 </UL>
@@ -880,6 +878,7 @@ Global Symbols
 <LI><a href="#[59]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SetTargetRPM
 <LI><a href="#[57]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EnablePIDcontrol
 <LI><a href="#[58]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SetMotorDirection
+<LI><a href="#[65]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SetPIDgains
 <LI><a href="#[3f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 </UL>
 <BR>[Called By]<UL><LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RunRacingSM
@@ -888,7 +887,7 @@ Global Symbols
 <LI><a href="#[14]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RunMapKeys
 </UL>
 
-<P><STRONG><a name="[85]"></a>PivotCWwithSetTicks</STRONG> (Thumb, 62 bytes, Stack size 16 bytes, drivemotors.o(i.PivotCWwithSetTicks))
+<P><STRONG><a name="[85]"></a>PivotCWwithSetTicks</STRONG> (Thumb, 80 bytes, Stack size 16 bytes, drivemotors.o(i.PivotCWwithSetTicks))
 <BR><BR>[Stack]<UL><LI>Max Depth = 152 + Unknown Stack Size
 <LI>Call Chain = PivotCWwithSetTicks &rArr; __2printf &rArr; _printf_char_file &rArr; _printf_char_common &rArr; __printf
 </UL>
@@ -896,6 +895,7 @@ Global Symbols
 <LI><a href="#[59]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SetTargetRPM
 <LI><a href="#[57]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EnablePIDcontrol
 <LI><a href="#[58]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SetMotorDirection
+<LI><a href="#[65]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SetPIDgains
 <LI><a href="#[3f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 </UL>
 <BR>[Called By]<UL><LI><a href="#[14]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RunMapKeys
@@ -970,7 +970,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> startup_rvmdk.o(RESET)
 </UL>
-<P><STRONG><a name="[7c]"></a>ReadKartSwitch</STRONG> (Thumb, 30 bytes, Stack size 0 bytes, kartswitchandled.o(i.ReadKartSwitch))
+<P><STRONG><a name="[7c]"></a>ReadKartSwitch</STRONG> (Thumb, 46 bytes, Stack size 0 bytes, kartswitchandled.o(i.ReadKartSwitch))
 <BR><BR>[Called By]<UL><LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;InitializeDRS
 </UL>
 
@@ -1000,13 +1000,14 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RunBallLaunchingSM
 </UL>
 
-<P><STRONG><a name="[8a]"></a>RunBallLaunchingSM</STRONG> (Thumb, 502 bytes, Stack size 40 bytes, sm_balllaunching.o(i.RunBallLaunchingSM))
+<P><STRONG><a name="[8a]"></a>RunBallLaunchingSM</STRONG> (Thumb, 460 bytes, Stack size 40 bytes, sm_balllaunching.o(i.RunBallLaunchingSM))
 <BR><BR>[Stack]<UL><LI>Max Depth = 192 + Unknown Stack Size
  + In Cycle
 <LI>Call Chain = RunBallLaunchingSM &rArr;  RunBallLaunchingSM (Cycle)
 </UL>
 <BR>[Calls]<UL><LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RotateCW
 <LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RotateCCW
+<LI><a href="#[5c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DriveForward
 <LI><a href="#[65]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SetPIDgains
 <LI><a href="#[5d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DriveForwardWithBias
 <LI><a href="#[5b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DriveBackwardsWithBias
@@ -1085,7 +1086,7 @@ Global Symbols
 <BR>[Address Reference Count : 1]<UL><LI> es_framework.o(.constdata)
 </UL>
 <P><STRONG><a name="[16]"></a>RunMasterSM</STRONG> (Thumb, 230 bytes, Stack size 32 bytes, sm_master.o(i.RunMasterSM))
-<BR><BR>[Stack]<UL><LI>Max Depth = 432 + Unknown Stack Size
+<BR><BR>[Stack]<UL><LI>Max Depth = 416 + Unknown Stack Size
  + In Cycle
 <LI>Call Chain = RunMasterSM &rArr;  RunMasterSM (Cycle)
 </UL>
@@ -1104,7 +1105,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> es_framework.o(.constdata)
 </UL>
-<P><STRONG><a name="[96]"></a>RunObstacleCrossingSM</STRONG> (Thumb, 272 bytes, Stack size 32 bytes, sm_obstaclecrossing.o(i.RunObstacleCrossingSM))
+<P><STRONG><a name="[96]"></a>RunObstacleCrossingSM</STRONG> (Thumb, 280 bytes, Stack size 32 bytes, sm_obstaclecrossing.o(i.RunObstacleCrossingSM))
 <BR><BR>[Stack]<UL><LI>Max Depth = 184 + Unknown Stack Size
  + In Cycle
 <LI>Call Chain = RunObstacleCrossingSM &rArr;  RunObstacleCrossingSM (Cycle)
@@ -1125,7 +1126,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[92]"></a>RunPlayingSM</STRONG> (Thumb, 224 bytes, Stack size 32 bytes, sm_playing.o(i.RunPlayingSM))
-<BR><BR>[Stack]<UL><LI>Max Depth = 368 + Unknown Stack Size
+<BR><BR>[Stack]<UL><LI>Max Depth = 352 + Unknown Stack Size
  + In Cycle
 <LI>Call Chain = RunPlayingSM &rArr;  RunPlayingSM (Cycle)
 </UL>
@@ -1143,8 +1144,8 @@ Global Symbols
 <LI><a href="#[16]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RunMasterSM
 </UL>
 
-<P><STRONG><a name="[97]"></a>RunRacingSM</STRONG> (Thumb, 400 bytes, Stack size 48 bytes, sm_racing.o(i.RunRacingSM))
-<BR><BR>[Stack]<UL><LI>Max Depth = 312 + Unknown Stack Size
+<P><STRONG><a name="[97]"></a>RunRacingSM</STRONG> (Thumb, 332 bytes, Stack size 32 bytes, sm_racing.o(i.RunRacingSM))
+<BR><BR>[Stack]<UL><LI>Max Depth = 296 + Unknown Stack Size
  + In Cycle
 <LI>Call Chain = RunRacingSM &rArr;  RunRacingSM (Cycle)
 </UL>
@@ -1154,7 +1155,6 @@ Global Symbols
 <LI><a href="#[9b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ClearSumError
 <LI><a href="#[63]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DuringStraight
 <LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RunRacingSM
-<LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GetMyKart
 <LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PrintMyKartStatus
 <LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;StopMotors
 <LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PivotCCWwithSetTicks
@@ -1222,6 +1222,8 @@ Global Symbols
 <LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RunRacingSM
 <LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RunObstacleCrossingSM
 <LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RunBallLaunchingSM
+<LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PivotCWwithSetTicks
+<LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PivotCCWwithSetTicks
 </UL>
 
 <P><STRONG><a name="[b]"></a>SetRPMResponse</STRONG> (Thumb, 248 bytes, Stack size 16 bytes, drivemotorspid.o(i.SetRPMResponse))
@@ -1262,7 +1264,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[77]"></a>StartMasterSM</STRONG> (Thumb, 10 bytes, Stack size 0 bytes, sm_master.o(i.StartMasterSM))
-<BR><BR>[Stack]<UL><LI>Max Depth = 400 + Unknown Stack Size
+<BR><BR>[Stack]<UL><LI>Max Depth = 384 + Unknown Stack Size
 <LI>Call Chain = StartMasterSM &rArr; RunMasterSM &rArr;  RunMasterSM (Cycle)
 </UL>
 <BR>[Calls]<UL><LI><a href="#[16]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RunMasterSM
@@ -1280,7 +1282,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[94]"></a>StartPlayingSM</STRONG> (Thumb, 16 bytes, Stack size 0 bytes, sm_playing.o(i.StartPlayingSM))
-<BR><BR>[Stack]<UL><LI>Max Depth = 368 + Unknown Stack Size
+<BR><BR>[Stack]<UL><LI>Max Depth = 352 + Unknown Stack Size
 <LI>Call Chain = StartPlayingSM &rArr; RunPlayingSM &rArr;  RunPlayingSM (Cycle)
 </UL>
 <BR>[Calls]<UL><LI><a href="#[92]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RunPlayingSM
@@ -1289,7 +1291,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[98]"></a>StartRacingSM</STRONG> (Thumb, 70 bytes, Stack size 24 bytes, sm_racing.o(i.StartRacingSM))
-<BR><BR>[Stack]<UL><LI>Max Depth = 336 + Unknown Stack Size
+<BR><BR>[Stack]<UL><LI>Max Depth = 320 + Unknown Stack Size
 <LI>Call Chain = StartRacingSM &rArr; RunRacingSM &rArr;  RunRacingSM (Cycle)
 </UL>
 <BR>[Calls]<UL><LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RunRacingSM
@@ -1385,7 +1387,7 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[16]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RunMasterSM
 </UL>
 
-<P><STRONG><a name="[7a]"></a>TurnOffShooter</STRONG> (Thumb, 24 bytes, Stack size 8 bytes, balllauncher.o(i.TurnOffShooter))
+<P><STRONG><a name="[7a]"></a>TurnOffShooter</STRONG> (Thumb, 26 bytes, Stack size 8 bytes, balllauncher.o(i.TurnOffShooter))
 <BR><BR>[Stack]<UL><LI>Max Depth = 144 + Unknown Stack Size
 <LI>Call Chain = TurnOffShooter &rArr; __2printf &rArr; _printf_char_file &rArr; _printf_char_common &rArr; __printf
 </UL>
@@ -1401,7 +1403,7 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[16]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RunMasterSM
 </UL>
 
-<P><STRONG><a name="[8c]"></a>TurnOnShooter</STRONG> (Thumb, 24 bytes, Stack size 8 bytes, balllauncher.o(i.TurnOnShooter))
+<P><STRONG><a name="[8c]"></a>TurnOnShooter</STRONG> (Thumb, 26 bytes, Stack size 8 bytes, balllauncher.o(i.TurnOnShooter))
 <BR><BR>[Stack]<UL><LI>Max Depth = 144 + Unknown Stack Size
 <LI>Call Chain = TurnOnShooter &rArr; __2printf &rArr; _printf_char_file &rArr; _printf_char_common &rArr; __printf
 </UL>
@@ -1491,7 +1493,7 @@ Global Symbols
 
 <P><STRONG><a name="[34]"></a>main</STRONG> (Thumb, 116 bytes, Stack size 0 bytes, main.o(i.main))
 <BR><BR>[Stack]<UL><LI>Max Depth = 152 + Unknown Stack Size
-<LI>Call Chain = main &rArr; InitializeBallLauncher &rArr; TurnOffShooter &rArr; __2printf &rArr; _printf_char_file &rArr; _printf_char_common &rArr; __printf
+<LI>Call Chain = main &rArr; InitializeDRS &rArr; __2printf &rArr; _printf_char_file &rArr; _printf_char_common &rArr; __printf
 </UL>
 <BR>[Calls]<UL><LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TERMIO_Init
 <LI><a href="#[a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SysCtlClockSet
@@ -1581,11 +1583,12 @@ Global Symbols
 <H3>
 Local Symbols
 </H3>
-<P><STRONG><a name="[63]"></a>DuringStraight</STRONG> (Thumb, 128 bytes, Stack size 24 bytes, sm_racing.o(i.DuringStraight))
+<P><STRONG><a name="[63]"></a>DuringStraight</STRONG> (Thumb, 160 bytes, Stack size 24 bytes, sm_racing.o(i.DuringStraight))
 <BR><BR>[Stack]<UL><LI>Max Depth = 176 + Unknown Stack Size
-<LI>Call Chain = DuringStraight &rArr; DriveForwardWithSetDistance &rArr; __2printf &rArr; _printf_char_file &rArr; _printf_char_common &rArr; __printf
+<LI>Call Chain = DuringStraight &rArr; DriveForwardWithBias &rArr; __2printf &rArr; _printf_char_file &rArr; _printf_char_common &rArr; __printf
 </UL>
 <BR>[Calls]<UL><LI><a href="#[65]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SetPIDgains
+<LI><a href="#[5d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DriveForwardWithBias
 <LI><a href="#[5e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DriveForwardWithSetDistance
 <LI><a href="#[64]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GamefieldPositionString
 <LI><a href="#[3f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf

@@ -72,13 +72,13 @@ Description: Checks to see if the IR sensor has changed states.
 bool CheckIRSensor(void) {
 	static bool LastIRstate = false;
 	if (!LastIRstate && IsBeaconSensed()) {
-		printf("IR sensor detected a signal.\r\n");
+		//printf("IR sensor detected a signal.\r\n");
 		LastIRstate = true;
 		ES_Event Event = {E_IR_BEACON_DETECTED, 0};
 		PostMasterSM(Event);
 		return true;
 	} else if (LastIRstate && !IsBeaconSensed()){
-		printf("IR sensor lost the signal.\r\n");
+		//printf("IR sensor lost the signal.\r\n");
 		LastIRstate = false;
 		ES_Event Event = {E_IR_BEACON_LOST, 0};
 		PostMasterSM(Event);
