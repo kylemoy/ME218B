@@ -15,6 +15,7 @@
 
 #include "DriveMotorEncoder.h"
 #include "SM_Master.h"
+#include "DriveMotorsService.h"
 
 // 40,000 ticks per mS assumes a 40Mhz clock
 #define TicksPerMS 40000
@@ -32,8 +33,11 @@ static uint32_t RPML;
 
 static uint32_t TickCountR = 0;
 static uint32_t TickCountL = 0;
-static uint32_t TickCountAverage = 0;
-static uint32_t TargetTickCount;
+static uint32_t TargetTickCountR;
+static uint32_t TargetTickCountL;
+
+static bool TargetTickRHasBeenSet = false;
+static bool TargetTickLHasBeenSet = false;
 
 // we will use Timer A in Wide Timer 0 to capture the input
 void InitInputCapturePeriod( void ){
@@ -130,11 +134,12 @@ void RDriveCaptureResponse( void ){
 	
 	// Update the tick count
 	TickCountR++;
-	TickCountAverage = (TickCountR + TickCountL) / 2;
-	//printf("TickCountAverage = %d\r\n", TickCountAverage);
-	if (TickCountAverage > TargetTickCount) {
+	//printf("TickCountR = %d\r\n", TickCountR);
+	if (TickCountR > TargetTickCountR && TargetTickRHasBeenSet) {
 		ES_Event Event = {E_MOTOR_TICK_TIMEOUT, 0};
-		PostMasterSM(Event);
+		PostDriveMotorsService(Event);
+		TargetTickRHasBeenSet = false;
+		TargetTickLHasBeenSet = false;
 	}
 }
 
@@ -154,11 +159,12 @@ void LDriveCaptureResponse( void ){
 	
 	// Update the tick count
 	TickCountL++;
-	TickCountAverage = (TickCountR + TickCountL) / 2;
-	//printf("TickCountAverage = %d\r\n", TickCountAverage);
-	if (TickCountAverage > TargetTickCount) {
+	//printf("TickCountL = %d\r\n", TickCountL);
+	if (TickCountL > TargetTickCountL && TargetTickLHasBeenSet) {
 		ES_Event Event = {E_MOTOR_TICK_TIMEOUT, 0};
-		PostMasterSM(Event);
+		PostDriveMotorsService(Event);
+		TargetTickLHasBeenSet = false;
+		TargetTickRHasBeenSet = false;
 	}
 	
 }
@@ -185,11 +191,13 @@ uint32_t GetRPML(void){
 	return RPML;
 }
 
-void SetTargetTickCount(uint32_t NumberOfTicks) {
+void SetTargetTickCount(uint32_t NumberOfTicksL, uint32_t NumberOfTicksR) {
 	TickCountR = 0;
 	TickCountL = 0;
-	TickCountAverage = 0;
-	TargetTickCount = NumberOfTicks;
+	TargetTickCountR = NumberOfTicksR;
+	TargetTickCountL = NumberOfTicksL;
+	if (NumberOfTicksR != 0) TargetTickRHasBeenSet = true;
+	if (NumberOfTicksL != 0) TargetTickLHasBeenSet = true;
 }
 
 /*------------------------------- Footnotes -------------------------------*/

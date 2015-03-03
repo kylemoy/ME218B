@@ -28,16 +28,16 @@ GamefieldPosition_t GetGamefieldPosition(uint16_t Xcoord, uint16_t Ycoord) {
 	if (Xcoord == 0 && Ycoord == 0)
 		return Undefined;
 	
-	else if (Xcoord < (Corner1XBound + Corner1Entry) && Ycoord < (Corner1YBound))
+	else if (Xcoord < (Corner1XBound) && Ycoord < (Corner1YBound))
 		return Corner1;
 	
-	else if (Xcoord < (Corner2XBound) && Ycoord > (Corner2YBound - Corner2Entry))
+	else if (Xcoord < (Corner2XBound) && Ycoord > (Corner2YBound))
 		return Corner2;
 	
-	else if (Xcoord > (Corner3XBound - Corner3Entry) && Ycoord > (Corner3YBound))
+	else if (Xcoord > (Corner3XBound) && Ycoord > (Corner3YBound))
 		return Corner3;
 	
-	else if (Xcoord > (Corner4XBound) && Ycoord < (Corner4YBound + Corner4Entry))
+	else if (Xcoord > (Corner4XBound) && Ycoord < (Corner4YBound))
 		return Corner4;
 	
 	else if (Xcoord < Straight2XBound)
@@ -57,44 +57,6 @@ GamefieldPosition_t GetGamefieldPosition(uint16_t Xcoord, uint16_t Ycoord) {
 	
 	else
 		return ObstacleCrossingArea;
-//	if (Xcoord < Xright) {
-//		if (Ycoord < Ybottom)
-//			return Corner1;
-//		else if (Ycoord < Ytop) {
-//			if (Ycoord < Ytop - CornerEntry)
-//				return Straight2;
-//			else
-//				return Corner2;
-//		} else
-//			return Corner2;
-//	} else if (Xcoord < Xleft) {
-//		if (Ycoord < Ybottom) {
-//			if (Xcoord < Xright + CornerEntry)
-//				return Corner1;
-//			else
-//				return Straight1;
-//		} else if (Ycoord < Ytop)
-//			if (Xcoord < Xcenter)
-//				return BallShootingArea;
-//			else
-//				return ObstacleCrossingArea;
-//		else {
-//			if (Xcoord < Xleft - CornerEntry)
-//				return Straight3;
-//			else
-//				return Corner3;
-//		}
-//	} else {
-//		if (Ycoord < Ybottom)
-//			return Corner4;
-//		else if (Ycoord < Ytop)
-//			if (Ycoord < Ybottom + CornerEntry)
-//				return Corner4;
-//			else
-//				return Straight4;
-//		else
-//			return Corner3;
-//	}
 }
 
 /****************************************************************************

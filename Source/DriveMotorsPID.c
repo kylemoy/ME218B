@@ -26,6 +26,12 @@
 //650 target, p 0.03, i 0.15, 1ms loop time
 //500 target, p 0.03, i 0.15, 1ms loop time
 
+static float SumErrorR=0.0; /* error integrator */
+static float SumErrorL=0.0; /* error integrator */
+
+static float pGain = 0.05;//1.92;
+static float iGain = 0.02;
+static float dGain = 0.00;
 static float TargetRPMR = 100.0;
 static float TargetRPML = 100.0;
 static bool PIDcontrolEnabled = true;
@@ -69,18 +75,13 @@ void InitPeriodicInt( void ){
 }
 
 void SetRPMResponse( void ){
-	static float SumErrorR=0.0; /* error integrator */
 	static float RPMErrorR; /* make static for speed */
 	static float LastErrorR; /* for Derivative Control */
 
-	static float SumErrorL=0.0; /* error integrator */
 	static float RPMErrorL; /* make static for speed */
 	static float LastErrorL; /* for Derivative Control */
 
 	//static float pGain = 1.26;
-	static float pGain = 0.05;//1.92;
-	static float iGain = 0.02;
-	static float dGain = 0.00;
 
 	// start by clearing the source of the interrupt
   HWREG(WTIMER1_BASE+TIMER_O_ICR) = TIMER_ICR_TBTOCINT;
@@ -132,11 +133,23 @@ void SetTargetRPM(float SetRPMR, float SetRPML){
 }
 
 
+
 void EnablePIDcontrol(void) {
 	PIDcontrolEnabled = true;
 }
 void DisablePIDcontrol(void) {
 	PIDcontrolEnabled = false;
+}
+
+void ClearSumError(void) {
+	SumErrorR = 0;
+	SumErrorL = 0;
+}
+
+void SetPIDgains(double p, double i, double d) {
+	pGain = p;
+	iGain = i;
+	dGain = d;
 }
 /*
 uint32_t GetTimeoutCount( void ){

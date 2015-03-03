@@ -18,11 +18,13 @@ Author: Kyle Moy, 2/22/15
 #include "DriveMotors.h"
 #include "DriveMotorsService.h"
 #include "SM_Master.h"
+#include "DriveMotorPID.h"
 
 
 /*---------------------------- Module Variables ---------------------------*/
 static uint8_t MyPriority;
-
+bool R_Tick_TimedOut = false;
+bool L_Tick_TimedOut = false;
 
 /*------------------------------ Module Code ------------------------------*/
 /****************************************************************************
@@ -69,6 +71,44 @@ ES_Event RunDriveMotorsService(ES_Event ThisEvent) {
 			Event.EventType = E_MOTOR_TIMEOUT;
 			PostMasterSM(Event);
 			break;
+//		
+//		case E_MOTOR_R_TICK_TIMEOUT:
+//			if (!R_Tick_TimedOut)
+//				printf("E_MOTOR_R_TICK_TIMEOUT\r\n");
+//			R_Tick_TimedOut = true;
+//			SetTargetRPMR(0);
+//			if (L_Tick_TimedOut) {
+//				Event.EventType = E_MOTOR_TICK_TIMEOUT;
+//				printf("Both R and L Timed Out, so E_MOTOR_TICK_TIMEOUT\r\n");
+//				PostMasterSM(Event);
+//				R_Tick_TimedOut = false;
+//				L_Tick_TimedOut = false;
+//			}
+//			break;
+//			
+//		case E_MOTOR_L_TICK_TIMEOUT:
+//			if (!L_Tick_TimedOut)
+//				printf("E_MOTOR_L_TICK_TIMEOUT\r\n");
+//			StopMotors();
+//			L_Tick_TimedOut = true;
+//			SetTargetRPML(0);
+//			if (R_Tick_TimedOut) {
+//				printf("Both R and L Timed Out, so E_MOTOR_TICK_TIMEOUT\r\n");
+//				Event.EventType = E_MOTOR_TICK_TIMEOUT;
+//				PostMasterSM(Event);
+//				R_Tick_TimedOut = false;
+//				L_Tick_TimedOut = false;
+//			}
+//			break;
+			
+			
+		case E_MOTOR_TICK_TIMEOUT:
+			printf("E_MOTOR_TICK_TIMEOUT\r\n");
+			StopMotors();
+			Event.EventType = E_MOTOR_TIMEOUT;
+			PostMasterSM(Event);
+			break;
+		
 		default:
 			break;
 	}

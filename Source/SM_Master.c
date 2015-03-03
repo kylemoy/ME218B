@@ -17,6 +17,8 @@ Author: Kyle Moy, 2/18/15
 #include "Display.h"
 #include "DriveMotors.h"
 #include "BallLauncher.h"
+#include "KartSwitchAndLED.h"
+#include "DriveMotorPID.h"
 
 /*---------------------------- Module Functions ---------------------------*/
 static ES_Event DuringWaitingStart(ES_Event Event);
@@ -98,30 +100,16 @@ ES_Event RunMasterSM(ES_Event CurrentEvent) {
 			// Process any events
 			if (CurrentEvent.EventType != ES_NO_EVENT) { // If an event is active
 				switch (CurrentEvent.EventType) {
-					//case E_MOTOR_TICK_TIMEOUT:
-						//StopMotors();
-						//printf("Motor Tick Count / Distance reached.\r\n");
-						//break;
-					
 					//case E_MOTOR_TIMEOUT:
-						//if (MotorTimeoutCase == 0) {
-						//	RotateCCW(40, 50);
-						//	MotorTimeoutCase = 1;
-						//} else if (MotorTimeoutCase == 1) {
-						//	DriveBackwardsWithBias(100, 100, 50);
-						//	MotorTimeoutCase = 2;
-						//} else {
-						//	StopMotors();
-						//	MotorTimeoutCase = 0;
-						//}
-						//break;
+					//	StopMotors();
+					//	break;
+					
 					case E_RACE_CAUTION:
 						NextState = PAUSED;
 						MakeTransition = true;
 						ReturnEvent.EventType = ES_NO_EVENT;
 						break;
 				
-					
 					case E_RACE_FINISHED:
 						NextState = WAITING_FINISHED;
 						MakeTransition = true;
@@ -217,21 +205,9 @@ static ES_Event DuringWaitingStart(ES_Event Event) {
 		// Implement any entry actions required for this state machine
 		if(DisplayEntryStateTransitions && DisplaySM_Master) printf("SM1_Master: WAITING_START\r\n");
 		StopMotors();
-		// after that start any lower level machines that run in this state
-		//StartLowerLevelSM( Event );
-		// repeat the StartxxxSM() functions for concurrent state machines
-		// on the lower level
+		TurnOffShooter();
 	} else if (Event.EventType == ES_EXIT) {
-		// on exit, give the lower levels a chance to clean up first
-		//RunLowerLevelSM(Event);
-		// repeat for any concurrently running state machines
-		// now do any local exit functionality
 	} else {
-    // do the 'during' function for this state
-		// run any lower level state machine
-		// ReturnEvent = RunLowerLevelSM(Event);
-		// repeat for any concurrent lower level machines
-		// do any activity that is repeated as long as we are in this state
 	}
 	return(ReturnEvent);
 }
@@ -242,12 +218,15 @@ static ES_Event DuringPlaying(ES_Event Event) {
 	// Process ES_ENTRY, ES_ENTRY_HISTORY & ES_EXIT events
 	if ((Event.EventType == ES_ENTRY) || (Event.EventType == ES_ENTRY_HISTORY)) {
 		if(DisplayEntryStateTransitions && DisplaySM_Master) printf("SM1_Master: PLAYING\r\n");
+		TurnOnRaceLED();
 		StartPlayingSM(Event);
-		//DriveForwardWithSetDistance(200, 1000);
-		//DriveBackwardsWithBias(100, 100, 25);
-		//MotorTimeoutCase = 0;
-	} else if (Event.EventType == ES_EXIT) {
 		
+			//SetPIDgains(0.03, 0.03, 0);
+		
+							//DriveForwardWithBias(105, 100, 0);
+			//DriveForwardWithSetDistance(100, 1000);
+	} else if (Event.EventType == ES_EXIT) {
+		TurnOffRaceLED();
 	} else {
 		RunPlayingSM(Event);
 	}
@@ -262,7 +241,6 @@ static ES_Event DuringPaused(ES_Event Event) {
 		if(DisplayEntryStateTransitions && DisplaySM_Master) printf("SM1_Master: PAUSED\r\n");
 		StopMotors();
 	} else if (Event.EventType == ES_EXIT) {
-		
 	} else {
 	}
 	return(ReturnEvent);
@@ -276,9 +254,7 @@ static ES_Event DuringWaitingFinish(ES_Event Event) {
 		StopMotors();
 		TurnOffShooter();
 	} else if (Event.EventType == ES_EXIT) {
-		
 	} else {
-		
 	}
 	return(ReturnEvent);
 }

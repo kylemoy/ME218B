@@ -418,6 +418,11 @@
           <GroupName>Source</GroupName>
           <Files>
             <File>
+              <FileName>GamefieldPositions.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Source\GamefieldPositions.c</FilePath>
+            </File>
+            <File>
               <FileName>EventCheckers.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Source\EventCheckers.c</FilePath>
@@ -426,6 +431,11 @@
               <FileName>MapKeys.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Source\MapKeys.c</FilePath>
+            </File>
+            <File>
+              <FileName>Display.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Source\Display.c</FilePath>
             </File>
             <File>
               <FileName>DRS.c</FileName>
@@ -453,14 +463,14 @@
               <FilePath>.\Source\SM_Racing.c</FilePath>
             </File>
             <File>
-              <FileName>Display.c</FileName>
+              <FileName>SM_ObstacleCrossing.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Source\Display.c</FilePath>
+              <FilePath>.\Source\SM_ObstacleCrossing.c</FilePath>
             </File>
             <File>
-              <FileName>GamefieldPositions.c</FileName>
+              <FileName>SM_BallLaunching.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Source\GamefieldPositions.c</FilePath>
+              <FilePath>.\Source\SM_BallLaunching.c</FilePath>
             </File>
             <File>
               <FileName>DriveMotors.c</FileName>
@@ -483,24 +493,9 @@
               <FilePath>.\Source\DriveMotorsPID.c</FilePath>
             </File>
             <File>
-              <FileName>SM_Navigation.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Source\SM_Navigation.c</FilePath>
-            </File>
-            <File>
               <FileName>BallLauncher.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Source\BallLauncher.c</FilePath>
-            </File>
-            <File>
-              <FileName>SM_ObstacleCrossing.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Source\SM_ObstacleCrossing.c</FilePath>
-            </File>
-            <File>
-              <FileName>SM_BallLaunching.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Source\SM_BallLaunching.c</FilePath>
             </File>
             <File>
               <FileName>BeaconSensor.c</FileName>
@@ -512,11 +507,21 @@
               <FileType>1</FileType>
               <FilePath>.\Source\BumpSensor.c</FilePath>
             </File>
+            <File>
+              <FileName>KartSwitchAndLED.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Source\KartSwitchAndLED.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
           <GroupName>Headers</GroupName>
           <Files>
+            <File>
+              <FileName>GamefieldPositions.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Headers\GamefieldPositions.h</FilePath>
+            </File>
             <File>
               <FileName>ES_Configure.h</FileName>
               <FileType>5</FileType>
@@ -531,6 +536,11 @@
               <FileName>MapKeys.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\Headers\MapKeys.h</FilePath>
+            </File>
+            <File>
+              <FileName>Display.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Headers\Display.h</FilePath>
             </File>
             <File>
               <FileName>DRS.h</FileName>
@@ -558,14 +568,14 @@
               <FilePath>.\Headers\SM_Racing.h</FilePath>
             </File>
             <File>
-              <FileName>Display.h</FileName>
+              <FileName>SM_ObstacleCrossing.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\Headers\Display.h</FilePath>
+              <FilePath>.\Headers\SM_ObstacleCrossing.h</FilePath>
             </File>
             <File>
-              <FileName>GamefieldPositions.h</FileName>
+              <FileName>SM_BallLaunching.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\Headers\GamefieldPositions.h</FilePath>
+              <FilePath>.\Headers\SM_BallLaunching.h</FilePath>
             </File>
             <File>
               <FileName>DriveMotors.h</FileName>
@@ -598,16 +608,6 @@
               <FilePath>.\Headers\BallLauncher.h</FilePath>
             </File>
             <File>
-              <FileName>SM_ObstacleCrossing.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Headers\SM_ObstacleCrossing.h</FilePath>
-            </File>
-            <File>
-              <FileName>SM_BallLaunching.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Headers\SM_BallLaunching.h</FilePath>
-            </File>
-            <File>
               <FileName>BeaconSensor.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\Headers\BeaconSensor.h</FilePath>
@@ -616,6 +616,11 @@
               <FileName>BumpSensor.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\Headers\BumpSensor.h</FilePath>
+            </File>
+            <File>
+              <FileName>KartSwitchAndLED.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Headers\KartSwitchAndLED.h</FilePath>
             </File>
           </Files>
         </Group>

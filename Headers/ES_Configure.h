@@ -280,9 +280,9 @@ typedef enum {  ES_NO_EVENT = 0,
 										
 										// SM_Ball_Launching Events
 										E_BALL_LAUNCHING_COMPLETE,
-										E_BALL_LAUNCHING_COMPLETE2,
 										E_TARGET_SUCCESS,
 										E_IR_BEACON_DETECTED,
+										E_IR_BEACON_LOST,
 										
 										// SM_Obstacle_Crossing Events
 										E_OBSTACLE_COMPLETED,
@@ -294,6 +294,8 @@ typedef enum {  ES_NO_EVENT = 0,
 										// Motor Events
 										E_MOTOR_TIMEOUT,
 										E_MOTOR_TICK_TIMEOUT,
+										//E_MOTOR_L_TICK_TIMEOUT,
+										//E_MOTOR_R_TICK_TIMEOUT,
 										
 										// Navigation Events
 										E_DRS_UPDATED,

@@ -12,5 +12,7 @@ void SetRPMResponse( void );
 void SetTargetRPM (float SetRPMR, float SetRPML);
 void EnablePIDcontrol(void);
 void DisablePIDcontrol(void);
+void ClearSumError(void);
+void SetPIDgains(double p, double i, double d);
 
 #endif //_IntSample_H_

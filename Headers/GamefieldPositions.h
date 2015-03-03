@@ -29,68 +29,46 @@ typedef enum {
 	Undefined
 } GamefieldPosition_t;
 
+
+/* THESE ARE THE IMPORTANT TRIGGERS */
+#define Straight2CenterY 93	// Calibrate this value
+#define BallLaunchingYOffset 50	// This offset should be constant
+#define BallLaunchingEntryYBound (Straight2CenterY - BallLaunchingYOffset)
+
+#define Straight3CenterX	156	// Calibrate this value
+#define ObstacleEntryXOffset 25	// This offset should be constant
+#define ObstacleEntryXBound (Straight3CenterX - ObstacleEntryXOffset)
+
+
 // The bounding lines
-#define Corner1XBound 101
-#define Corner1YBound 33
-#define Corner2XBound 101
-#define Corner2YBound 145
-#define Corner3XBound 217
-#define Corner3YBound 149
+#define Corner1XBound 105
+#define Corner1YBound 29
+#define Corner2XBound 105
+#define Corner2YBound 140
+#define Corner3XBound 220
+#define Corner3YBound 148
 #define Corner4XBound 220
-#define Corner4YBound 37
-
-#define Straight1YBound 29
-#define Straight2XBound 97
-#define Straight3YBound 154 
-#define Straight4XBound 225
-
+#define Corner4YBound 33
+#define Straight1YBound 32
+#define Straight2XBound 104
+#define Straight3YBound 140 
+#define Straight4XBound 214
 #define BallLaunchingObstacleBound  163
 
-#define ObstacleEntryXBound 150 // X-value that initiates the turn into the obstacle
-#define BallLaunchingEntryYBound 50 // Y-value that initiates the turn into the obstacle
- 
-#define CornerExit 0
-#define Corner1Entry 50 // Not being used, using encoder trip
-#define Corner2Entry 25
-#define Corner3Entry 50 // Not being used, using encoder trip
-#define Corner4Entry 40
 
-// Target points (not being used right now)
-#define Corner1X 101
-#define Corner1Y 33 //22
+/* OUTDATED CODE */
+// We no longer use these, since we're using bumpers to trigger corners
+//#define CornerExit 0
+//#define Corner1Entry 0
+//#define Corner2Entry 0
+//#define Corner3Entry 0
+//#define Corner4Entry 0
 
-#define Corner2X 101
-#define Corner2Y 145
-
-#define Corner3X 217 
-#define Corner3Y 149
-
-#define Corner4X 230
-#define Corner4Y 17
-
-#define ObstacleEntryX 67
-#define ObstacleEntryY 67
-
-#define ObstacleExitX 67
-#define ObstacleExitY 67
-
-#define BallLaunchingEntryExitX 67
-#define BallLaunchingEntryExitY 67
-
-#define BallLaunchingX 67
-#define BallLaunchingY 67
-
-
-// Target angles
-//#define East 75  // i.e. Direction to Corner1 (Green/Pink facing forward)
-//#define North 165	// i.e. Direction to Corner2
-//#define West 255	// i.e. Direction to Corner3
-//#define South 345	// i.e. Direction to Corner4
 
 /*----------------------- Public Function Prototypes ----------------------*/
 GamefieldPosition_t GetGamefieldPosition(uint16_t Xcoord, uint16_t Ycoord);
 const char * GamefieldPositionString(GamefieldPosition_t GamefieldPosition);
-double GetAngle(uint8_t Xcoord, uint8_t Ycoord, uint8_t Xtarget, uint8_t Ytarget);
+//double GetAngle(uint8_t Xcoord, uint8_t Ycoord, uint8_t Xtarget, uint8_t Ytarget);
 
 #endif /*GamefieldPositions_H */
 

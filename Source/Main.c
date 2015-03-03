@@ -24,6 +24,7 @@ Author: Kyle Moy, 2/18/15
 #include "BeaconSensor.h"
 #include "BallLauncher.h"
 #include "BumpSensor.h"
+#include "KartSwitchAndLED.h"
 
 /*----------------------------- Module Defines ----------------------------*/
 #define clrScrn() 	puts("\x1b[2J")
@@ -50,6 +51,7 @@ int main (void)
 	printf("\r\n");
     
 	// Hardware initialization functions can go here
+	InitializeKartSwitchAndLED();
 	InitializeDRS();
 	InitBeaconSensingCapture();
 	InitializeDriveMotors();

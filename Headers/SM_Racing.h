@@ -2,8 +2,7 @@
 Module: SM_Racing.h
 Description:
 	The third level state machine for our robot in the RACING state.
-	Contains eight states: STRAIGHT1, CORNER1, STRAIGHT2, CORNER2,
-												 STRAIGHT3, CORNER3, STRAIGHT4, CORNER4
+	Contains two states: STRAIGHT, CORNER
 Author: Kyle Moy, 2/19/15
 ****************************************************************************/
 
@@ -12,8 +11,7 @@ Author: Kyle Moy, 2/19/15
 
 /*----------------------------- Module Defines ----------------------------*/
 // States of the SM_Racing state machine
-typedef enum {STRAIGHT1, CORNER1, STRAIGHT2, CORNER2, \
-						  STRAIGHT3, CORNER3, STRAIGHT4, CORNER4} RacingState_t;
+typedef enum {STRAIGHT, CORNER} RacingState_t;
 
 
 /*----------------------- Public Function Prototypes ----------------------*/

@@ -153,24 +153,11 @@ static ES_Event DuringRacing(ES_Event Event) {
 	ES_Event ReturnEvent = Event; // Assume no re-mapping or consumption
 	// Process ES_ENTRY, ES_ENTRY_HISTORY & ES_EXIT events
 	if ((Event.EventType == ES_ENTRY) || (Event.EventType == ES_ENTRY_HISTORY)) {
-		// Implement any entry actions required for this state machine
 		if(DisplayEntryStateTransitions && DisplaySM_Playing) printf("SM2_Playing: RACING\r\n");
-		// after that start any lower level machines that run in this state
 		StartRacingSM(Event);
-		
-		// repeat the StartxxxSM() functions for concurrent state machines
-		// on the lower level
 	} else if (Event.EventType == ES_EXIT) {
-		// on exit, give the lower levels a chance to clean up first
-		//RunLowerLevelSM(Event);
-		// repeat for any concurrently running state machines
-		// now do any local exit functionality
 	} else {
-    // do the 'during' function for this state
-		// run any lower level state machine
 		RunRacingSM(Event);
-		// repeat for any concurrent lower level machines
-		// do any activity that is repeated as long as we are in this state
 	}
 	return(ReturnEvent);
 }
@@ -183,10 +170,8 @@ static ES_Event DuringCrossingObstacle(ES_Event Event) {
 		if(DisplayEntryStateTransitions && DisplaySM_Playing) printf("SM2_Playing: CROSSING_OBSTACLE\r\n");
 		StartObstacleCrossingSM(Event);
 	} else if ( Event.EventType == ES_EXIT ) {
-		
 	} else {
 		RunObstacleCrossingSM(Event);
-		
 	}
 	return(ReturnEvent);
 }
@@ -198,7 +183,6 @@ static ES_Event DuringBallLaunching(ES_Event Event) {
 		if(DisplayEntryStateTransitions && DisplaySM_Playing) printf("SM2_Playing: BALL_LAUNCHING\r\n");
 		StartBallLaunchingSM(Event);
 	} else if ( Event.EventType == ES_EXIT ) {
-		
 	} else {
 		RunBallLaunchingSM(Event);
 	}

@@ -36,6 +36,7 @@ Author: Kyle Moy, 2/21/15
 #include "DriveMotorPID.h"
 #include "DriveMotorEncoder.h"
 #include "Display.h"
+#include "SM_Master.h"
 
 
 /*----------------------------- Module Defines ----------------------------*/
@@ -278,6 +279,37 @@ void DriveForward(uint16_t TargetRPM, uint16_t Duration) {
 
 
 /****************************************************************************
+Function: 		PivotCWwithSetTicks
+Parameters: 	void
+Returns: 			void
+Description: 	Pivot the bot clockwise
+****************************************************************************/
+void PivotCWwithSetTicks(uint16_t TargetRPM, uint32_t Ticks) {
+	EnablePIDcontrol();
+	SetMotorDirection(LEFT_MOTOR, FORWARD);
+	SetMotorDirection(RIGHT_MOTOR, BACKWARD);
+	SetTargetRPM(0, TargetRPM);
+	if (DisplayMotorInfo) printf("Drive Motors: Pivoting CW, TargetTicks = %d\r\n", Ticks);
+	SetTargetTickCount(0, Ticks);
+}
+
+/****************************************************************************
+Function: 		PivotCCWwithSetTicks
+Parameters: 	void
+Returns: 			void
+Description: 	Pivot the bot counter-clockwise
+****************************************************************************/
+void PivotCCWwithSetTicks(uint16_t TargetRPM, uint32_t Ticks) {
+	EnablePIDcontrol();
+	SetMotorDirection(LEFT_MOTOR, BACKWARD);
+	SetMotorDirection(RIGHT_MOTOR, FORWARD);
+	SetTargetRPM(0, TargetRPM);
+	if (DisplayMotorInfo) printf("Drive Motors: Pivoting CCW, TargetTicks = %d\r\n", Ticks);
+	SetTargetTickCount(Ticks, 0);
+}
+
+
+/****************************************************************************
 Function: 		DriveForwardWithSetDistance
 Parameters: 	void
 Returns: 			void
@@ -289,7 +321,7 @@ void DriveForwardWithSetDistance(uint16_t TargetRPM, uint32_t DistanceInMM) {
 	SetMotorDirection(RIGHT_MOTOR, FORWARD);
 	SetTargetRPM(TargetRPM, TargetRPM);
 	uint32_t NumberOfTicks = DistanceInMM / (3.141592 * 94 / 28); // 94mm diameter, 28 pulse/rev
-	SetTargetTickCount(NumberOfTicks);
+	SetTargetTickCount(NumberOfTicks, NumberOfTicks);
 	if (DisplayMotorInfo) printf("Drive Motors: Driving Forward with Set Distance = %d, TargetTicks = %d, TargetRPM = %d\r\n", DistanceInMM, NumberOfTicks, TargetRPM);
 	
 }
@@ -304,12 +336,11 @@ Description: 	Drive the bot forward
 void DriveForwardWithBiasAndSetDistance(uint16_t TargetRPML, uint16_t TargetRPMR, uint32_t DistanceInMM) {
 	EnablePIDcontrol();
 	uint32_t NumberOfTicks = DistanceInMM / (3.141592 * 94 / 28); // 94mm diameter, 28 pulse/rev
-	SetTargetTickCount(NumberOfTicks);
+	SetTargetTickCount(NumberOfTicks, NumberOfTicks);
 	SetMotorDirection(LEFT_MOTOR, FORWARD);
 	SetMotorDirection(RIGHT_MOTOR, FORWARD);
 	SetTargetRPM(TargetRPMR, TargetRPML);
 	if (DisplayMotorInfo) printf("Drive Motors: Driving Forward with Set Distance = %d, TargetTicks = %d, TargetRPMR = %d, TargetRPML = %d\r\n", DistanceInMM, NumberOfTicks, TargetRPMR, TargetRPML);
-	
 }
 
 /****************************************************************************

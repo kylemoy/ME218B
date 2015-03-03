@@ -188,7 +188,7 @@ Function:			SetTargetPosition
 Parameters:		uint8_t X, the target X coordinate
 							uint8_t Y, the target Y coordinate
 Returns:			void
-Description:	Sets the target coordinate that this state machine will direct to
+Description:	Sets the target coordinate that this state machine will direct to 
 ****************************************************************************/
 void SetTargetPosition(uint8_t X, uint8_t Y) {
 	TargetX = X;

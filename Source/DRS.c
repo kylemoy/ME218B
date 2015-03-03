@@ -43,6 +43,7 @@ Author: Kyle Moy, 2/18/15
 #include "SM_DRS.h"
 #include "Display.h"
 #include "SM_Master.h"
+#include "KartSwitchAndLED.h"
 
 /*----------------------------- Module Defines ----------------------------*/
 #define BitsPerNibble 	4
@@ -157,9 +158,21 @@ void InitializeDRS(void) {
 		
 		// Initialize the Kart Number switch hardware
 		// For now, assume we are Kart1
-		MyKart = &Kart3; // Kart1 = Green/Pink
+		MyKart = &Kart1; // Kart1 = Green/Pink
 										 // Kart2 = Yellow/Orange
 									   // Kart3 = Yellow/Blue
+		switch(ReadKartSwitch()) {
+			case 1:
+			default:
+				printf("We are Kart1.\r\n");
+				break;
+			case 2:
+				printf("We are Kart2.\r\n");
+				break;
+			case 3:
+				printf("We are Kart3.\r\n");
+				break;
+		}
 } 
 
 
@@ -316,7 +329,6 @@ bool StoreData(void) {
 			PostMasterSM(Event);
 		};
 		
-		
 		// Check if our gamefield position has changed
 		GamefieldPosition_t NewGamefieldPosition = GetGamefieldPosition(Kart->KartX, Kart->KartY);
 		if (Kart->GamefieldPosition != NewGamefieldPosition) {
@@ -324,42 +336,42 @@ bool StoreData(void) {
 			if (Kart == &Kart1) KartNumber = 1;
 			if (Kart == &Kart2) KartNumber = 2;
 			if (Kart == &Kart3) KartNumber = 3;
-			
-			// Post an event if this is our Kart
-			if (Kart == MyKart) {
-				if (Kart->GamefieldPosition == Straight1 && NewGamefieldPosition == Corner1) {
-					ES_Event Event = {E_CORNER1_ENTRY};
-					PostMasterSM(Event);
-				} else if (Kart->GamefieldPosition == Corner1 && NewGamefieldPosition == Straight2) {
-					ES_Event Event = {E_CORNER1_EXIT};
-					PostMasterSM(Event);
-				} else if (Kart->GamefieldPosition == Straight2 && NewGamefieldPosition == Corner2) {
-					ES_Event Event = {E_CORNER2_ENTRY};
-					PostMasterSM(Event);
-				} else if (Kart->GamefieldPosition == Corner2 && NewGamefieldPosition == Straight3) {
-					ES_Event Event = {E_CORNER2_EXIT};
-					PostMasterSM(Event);
-				} else if (Kart->GamefieldPosition == Straight3 && NewGamefieldPosition == Corner3) {
-					ES_Event Event = {E_CORNER3_ENTRY};
-					PostMasterSM(Event);
-				} else if (Kart->GamefieldPosition == Corner3 && NewGamefieldPosition == Straight4) {
-					ES_Event Event = {E_CORNER3_EXIT};
-					PostMasterSM(Event);
-				} else if (Kart->GamefieldPosition == Straight4 && NewGamefieldPosition == Corner4) {
-					ES_Event Event = {E_CORNER4_ENTRY};
-					PostMasterSM(Event);
-				} else if (Kart->GamefieldPosition == Corner4 && NewGamefieldPosition == Straight1) {
-					ES_Event Event = {E_CORNER4_EXIT};
-					PostMasterSM(Event);
-				//} else if (Kart->GamefieldPosition == Straight2 && NewGamefieldPosition == BallLaunchingArea) {
-				//	ES_Event Event = {E_BALL_LAUNCHING_ENTRY};
-				//	PostMasterSM(Event);
-				//} else if (Kart->GamefieldPosition == BallLaunchingArea && NewGamefieldPosition == Straight2) {
-				//	ES_Event Event = {E_BALL_LAUNCHING_EXIT};
-				//	PostMasterSM(Event);
-				}
-			}
-			
+//			
+//			// Post an event if this is our Kart
+//			if (Kart == MyKart) {
+//				if (Kart->GamefieldPosition == Straight1 && NewGamefieldPosition == Corner1) {
+//					ES_Event Event = {E_CORNER1_ENTRY};
+//					PostMasterSM(Event);
+//				} else if (Kart->GamefieldPosition == Corner1 && NewGamefieldPosition == Straight2) {
+//					ES_Event Event = {E_CORNER1_EXIT};
+//					PostMasterSM(Event);
+//				} else if (Kart->GamefieldPosition == Straight2 && NewGamefieldPosition == Corner2) {
+//					ES_Event Event = {E_CORNER2_ENTRY};
+//					PostMasterSM(Event);
+//				} else if (Kart->GamefieldPosition == Corner2 && NewGamefieldPosition == Straight3) {
+//					ES_Event Event = {E_CORNER2_EXIT};
+//					PostMasterSM(Event);
+//				} else if (Kart->GamefieldPosition == Straight3 && NewGamefieldPosition == Corner3) {
+//					ES_Event Event = {E_CORNER3_ENTRY};
+//					PostMasterSM(Event);
+//				} else if (Kart->GamefieldPosition == Corner3 && NewGamefieldPosition == Straight4) {
+//					ES_Event Event = {E_CORNER3_EXIT};
+//					PostMasterSM(Event);
+//				} else if (Kart->GamefieldPosition == Straight4 && NewGamefieldPosition == Corner4) {
+//					ES_Event Event = {E_CORNER4_ENTRY};
+//					PostMasterSM(Event);
+//				} else if (Kart->GamefieldPosition == Corner4 && NewGamefieldPosition == Straight1) {
+//					ES_Event Event = {E_CORNER4_EXIT};
+//					PostMasterSM(Event);
+//				//} else if (Kart->GamefieldPosition == Straight2 && NewGamefieldPosition == BallLaunchingArea) {
+//				//	ES_Event Event = {E_BALL_LAUNCHING_ENTRY};
+//				//	PostMasterSM(Event);
+//				//} else if (Kart->GamefieldPosition == BallLaunchingArea && NewGamefieldPosition == Straight2) {
+//				//	ES_Event Event = {E_BALL_LAUNCHING_EXIT};
+//				//	PostMasterSM(Event);
+//				}
+//			}
+//			
 			// Print statements to the display (don't print if transitioning from Undefined)
 			if (Kart->GamefieldPosition != Undefined) {
 				if (DisplayMyGamefieldPosition && Kart == MyKart)
@@ -373,7 +385,7 @@ bool StoreData(void) {
 					printf("Kart %d: X = %d, Y = %d, Theta = %d, Laps Left = %d, Obstacle = %d, Target = %d, Gamefield Position = %s\r\n", \
 					KartNumber, GetKartData(KartNumber).KartX, GetKartData(KartNumber).KartY, \
 					GetKartData(KartNumber).KartTheta, GetKartData(KartNumber).LapsRemaining, \
-					GetKartData(KartNumber).ObstacleCompleted, GetKartData(KartNumber).TargetSuccess, \
+  				GetKartData(KartNumber).ObstacleCompleted, GetKartData(KartNumber).TargetSuccess, \
 					GamefieldPositionString(NewGamefieldPosition));
 			}
 			

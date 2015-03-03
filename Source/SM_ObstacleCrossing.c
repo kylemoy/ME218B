@@ -18,10 +18,8 @@ Author: Kyle Moy, 2/25/15
 #include "SM_Navigation.h"
 #include "GamefieldPositions.h"
 #include "SM_Master.h"
+#include "DriveMotorPID.h"
 
-
-/*----------------------------- Module Defines ----------------------------*/
-#define ENTRY_STATE STRAIGHT3_OBSTACLE_ENTRY
 
 /*---------------------------- Module Functions ---------------------------*/
 static ES_Event DuringObstacleEntry(ES_Event Event);
@@ -58,18 +56,15 @@ ES_Event RunObstacleCrossingSM(ES_Event CurrentEvent) {
 			// Process any events
 			if (CurrentEvent.EventType != ES_NO_EVENT) { // If an event is active
 				switch (CurrentEvent.EventType) {
+					
 					case E_MOTOR_TIMEOUT:
 						if (MotorTimeoutCase == 0) {
-							DriveForwardWithBias(100, 100, 150);
+							SetPIDgains(0.05, 0.02, 0);
 							MotorTimeoutCase = 1;
+							PivotCCWwithSetTicks(60, 18);
 						} else if (MotorTimeoutCase == 1) {
-							StopMotors();
-							ES_Timer_InitTimer(DRIVE_MOTOR_TIMER, 50);
+							DriveBackwardsWithBias(100, 100, 150);
 							MotorTimeoutCase = 2;
-						} else if (MotorTimeoutCase == 2) {
-							StopMotors();
-							DriveBackwardsWithBias(100, 100, 100);
-							MotorTimeoutCase = 3;
 						} else {
 							StopMotors();
 							MotorTimeoutCase = 0;
@@ -89,40 +84,27 @@ ES_Event RunObstacleCrossingSM(ES_Event CurrentEvent) {
 			if (CurrentEvent.EventType != ES_NO_EVENT) { // If an event is active
 				switch (CurrentEvent.EventType) {
 					
-					case E_MOTOR_TIMEOUT:
-						if (MotorTimeoutCase == 0) {
+					case E_BUMP_DETECTED:
 							StopMotors();
-							ES_Timer_InitTimer(DRIVE_MOTOR_TIMER, 250);
-							MotorTimeoutCase = 1;
-						} else if (MotorTimeoutCase == 1) {
-							DriveBackward(100,350);
-							MotorTimeoutCase = 2;
-						} else {
-							StopMotors();
-							MotorTimeoutCase = 0;
 							NextState = OBSTACLE_EXIT;
 							MakeTransition = true;
 							ReturnEvent.EventType = ES_NO_EVENT;
-						}
 						break;
 				}
 			}
 			break;
 			
     case OBSTACLE_EXIT:
-			// Execute During function for STRAIGHT1_OBSTACLE_EXIT.
+			// Execute During function for OBSTACLE_EXIT.
 			CurrentEvent = DuringObstacleExit(CurrentEvent);
 			// Process any events
 			if (CurrentEvent.EventType != ES_NO_EVENT) { // If an event is active
 				switch (CurrentEvent.EventType) {
 					case E_MOTOR_TIMEOUT:
 						if (MotorTimeoutCase == 0) {
-							DriveForwardWithBias(100, 100, 25);
+							PivotCCWwithSetTicks(40, 18);
 							MotorTimeoutCase = 1;
-						} else if (MotorTimeoutCase == 1) {
-							RotateCW(40, 50);
-							MotorTimeoutCase = 2;
-						}else {
+						} else {
 							StopMotors();
 							MotorTimeoutCase = 0;
 							ES_Event Event = {E_OBSTACLE_CROSSING_EXIT, 0};
@@ -139,13 +121,9 @@ ES_Event RunObstacleCrossingSM(ES_Event CurrentEvent) {
 		// Execute exit function for current state
 		CurrentEvent.EventType = ES_EXIT;
 		RunObstacleCrossingSM(CurrentEvent);
-		CurrentState = NextState; //Modify state variable
-		// Execute entry function for new state
-		// this defaults to ES_ENTRY
+		CurrentState = NextState;
 		RunObstacleCrossingSM(EntryEventKind);
 	}
-	// In the absence of an error the top level state machine should
-	// always return ES_NO_EVENT, which we initialized at the top of func
 	return(ReturnEvent);
 }
 
@@ -161,7 +139,6 @@ void StartObstacleCrossingSM(ES_Event CurrentEvent) {
 		// Initialize the state variable
 		CurrentState = OBSTACLE_ENTRY;
 	}
-  
 	// Let the Run function init the lower level state machines
   RunObstacleCrossingSM(CurrentEvent);
   return;
@@ -185,12 +162,13 @@ static ES_Event DuringObstacleEntry(ES_Event Event) {
 	ES_Event ReturnEvent = Event; // Assume no re-mapping or consumption
 	// Process ES_ENTRY, ES_ENTRY_HISTORY & ES_EXIT events
 	if ((Event.EventType == ES_ENTRY) || (Event.EventType == ES_ENTRY_HISTORY)) {
-		if(DisplayEntryStateTransitions && DisplaySM_Racing) printf("SM3_Obstacle_Crossing: OBSTACLE_ENTRY\r\n");
-		RotateCW(40, 75);
+		if(DisplayEntryStateTransitions && DisplaySM_Racing) printf("SM3_Obstacle_Crossing: OBSTACLE_ENTRY\r\n");StopMotors();
+		// A timer to allow bot to come to a standstill
+		ES_Timer_InitTimer(DRIVE_MOTOR_TIMER, 100);
+		MotorTimeoutCase = 0;
 	} else if ( Event.EventType == ES_EXIT ) {
-		
 	} else {
-		//RunNavigationSM(Event);
+		
 	}
 	return(ReturnEvent);
 }
@@ -200,10 +178,9 @@ static ES_Event DuringCrossing(ES_Event Event) {
 	// Process ES_ENTRY, ES_ENTRY_HISTORY & ES_EXIT events
 	if ((Event.EventType == ES_ENTRY) || (Event.EventType == ES_ENTRY_HISTORY)) {
 		if(DisplayEntryStateTransitions && DisplaySM_Racing) printf("SM3_Obstacle_Crossing: CROSSING\r\n");
-		DriveBackward(100, 240);
-		StopMotors();
+		// Drive forward (until bump detected)
+		DriveForward(100, 0);
 	} else if ( Event.EventType == ES_EXIT ) {
-		
 	} else {
 	}
 	return(ReturnEvent);
@@ -214,9 +191,9 @@ static ES_Event DuringObstacleExit(ES_Event Event) {
 	// Process ES_ENTRY, ES_ENTRY_HISTORY & ES_EXIT events
 	if ((Event.EventType == ES_ENTRY) || (Event.EventType == ES_ENTRY_HISTORY)) {
 		if(DisplayEntryStateTransitions && DisplaySM_Racing) printf("SM3_Obstacle_Crossing: OBSTACLE_EXIT\r\n");
-		ES_Timer_InitTimer(DRIVE_MOTOR_TIMER, 50);
+		// Drive backwards a little bit
+		DriveBackwardsWithBias(100, 100, 25);
 	} else if ( Event.EventType == ES_EXIT ) {
-		
 	} else {
 	}
 	return(ReturnEvent);

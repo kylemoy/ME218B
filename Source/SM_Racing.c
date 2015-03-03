@@ -2,8 +2,7 @@
 Module: SM_Racing.c
 Description:
 	The third level state machine for our robot in the RACING state.
-	Contains eight states: STRAIGHT1, CORNER1, STRAIGHT2, CORNER2,
-												 STRAIGHT3, CORNER3, STRAIGHT4, CORNER4
+	Contains two states: STRAIGHT, CORNER
 Author: Kyle Moy, 2/19/15
 ****************************************************************************/
 
@@ -20,28 +19,24 @@ Author: Kyle Moy, 2/19/15
 #include "GamefieldPositions.h"
 #include "SM_Master.h"
 #include "DRS.h"
+#include "DriveMotorPID.h"
 
 
 /*----------------------------- Module Defines ----------------------------*/
-#define ENTRY_STATE STRAIGHT1
+#define ENTRY_STATE STRAIGHT
 
 /*---------------------------- Module Functions ---------------------------*/
-static ES_Event DuringStraight1(ES_Event Event);
-static ES_Event DuringCorner1(ES_Event Event);
-static ES_Event DuringStraight2(ES_Event Event);
-static ES_Event DuringCorner2(ES_Event Event);
-static ES_Event DuringStraight3(ES_Event Event);
-static ES_Event DuringCorner3(ES_Event Event);
-static ES_Event DuringStraight4(ES_Event Event);
-static ES_Event DuringCorner4(ES_Event Event);
+static ES_Event DuringStraight(ES_Event Event);
+static ES_Event DuringCorner(ES_Event Event);
 
 
 
 /*---------------------------- Module Variables ---------------------------*/
 static RacingState_t CurrentState;
 static bool WillCrossObstacle = true;
-static bool WillBallLaunch = true;
+static bool WillBallLaunch = false;
 static uint8_t MotorTimeoutCase = 0;
+static GamefieldPosition_t CurrentStraight;
 
 
 /*------------------------------ Module Code ------------------------------*/
@@ -59,372 +54,102 @@ ES_Event RunRacingSM(ES_Event CurrentEvent) {
 	ES_Event ReturnEvent = {ES_NO_EVENT, 0}; // Assume no error
 	
 	switch(CurrentState) {
-		case STRAIGHT1:
+		case STRAIGHT:
 		default:
-			// Execute During function for STRAIGHT1.
+			// Execute During function for STRAIGHT.
 			// ES_ENTRY & ES_EXIT are processed here allow the lower
 			// level state machines to re-map or consume the event
-			CurrentEvent = DuringStraight1(CurrentEvent);
+			CurrentEvent = DuringStraight(CurrentEvent);
 			// Process any events
 			if (CurrentEvent.EventType != ES_NO_EVENT) { // If an event is active
 				switch (CurrentEvent.EventType) {
-					//case E_DRS_UPDATED:
-						//PrintMyKartStatus();
-						//if (GetMyKart().KartX < Corner1XBound + Corner1Entry) {
-							//NextState = CORNER1;
-							//MakeTransition = true;
-							//ReturnEvent.EventType = ES_NO_EVENT;
-						//}
-						//break;
-						
-					//case E_MOTOR_TICK_TIMEOUT:
-					case E_BUMP_DETECTED:
-						//StopMotors();
-						//printf("Motor Tick Timeout, Initiating Turn\r\n");
-						printf("Bump is detected\r\n");
-						NextState = CORNER1;
-						MakeTransition = true;
-						ReturnEvent.EventType = ES_NO_EVENT;
-						
 					
-					//case E_MOTOR_TIMEOUT:
-						//StopMotors();
-						//printf("Motor Timeout!\r\n");
-						//printf("Missed the DRS Corner1XBound Trigger!\r\n");
-						//NextState = CORNER1;
-						//MakeTransition = true;
-						//ReturnEvent.EventType = ES_NO_EVENT;
-						//break;
-					// For now, let's stay in Straight1 while we Debug our SM_Navigation module
-					//case E_CORNER1_ENTRY:
-						//NextState = CORNER1;
-						//MakeTransition = true;
-						//ReturnEvent.EventType = ES_NO_EVENT;
-						//break;
-				}
-			}
-			break;
-			
-		case CORNER1:
-			// Execute During function for CORNER1.
-			CurrentEvent = DuringCorner1(CurrentEvent);
-			// Process any events
-			if (CurrentEvent.EventType != ES_NO_EVENT) { // If an event is active
-				switch (CurrentEvent.EventType) {
 					case E_MOTOR_TIMEOUT:
-						if (MotorTimeoutCase == 0) {
-							RotateCCW(40, 40);
-							MotorTimeoutCase = 1;
-						} else if (MotorTimeoutCase == 1) {
-							DriveBackwardsWithBias(100, 100, 50);
-							MotorTimeoutCase = 2;
-						} else if (MotorTimeoutCase == 2) {
-							DriveForwardWithBias(60, 50, 50);
-							MotorTimeoutCase = 3;
+						// This is for the case where we timeout for a encoder movement 
+						// on Straight 3, moving towards the Obstacle Entry
+						if (CurrentStraight == Straight3 && WillCrossObstacle) {
+								StopMotors();
+								printf("Entering the Obstacle\r\n");
+								ES_Event Event = {E_OBSTACLE_CROSSING_ENTRY, 0};
+								PostMasterSM(Event);
+						
+						// This is for the standard case where we timeout for a encoder movement 
+						// on any any straight, to slow down before a corner
 						} else {
-							StopMotors();
-							MotorTimeoutCase = 0;
-							NextState = STRAIGHT2;
-							MakeTransition = true;
-							ReturnEvent.EventType = ES_NO_EVENT;
+							SetPIDgains(0.05, 0.02, 0);
+							DriveForwardWithBias(105, 100, 0);
 						}
 						break;
-						//DriveForward(100, 0);
-						//DriveForwardWithBias(250, 400, 0);
-						//break;
-//						// After turning is complete
-//						//DriveForward();
-//					case E_MOTOR_TIMEOUT:
-					case E_DRS_UPDATED:
-						//PrintMyKartStatus();
-						//if (GetMyKart().KartY > Corner1YBound - CornerExit) {
-						//	NextState = STRAIGHT2;
-						//	MakeTransition = true;
-						//	ReturnEvent.EventType = ES_NO_EVENT;
-						//}
-						break;
-					
-					//case E_CORNER1_EXIT:
-					//	NextState = STRAIGHT2;
-					//	MakeTransition = true;
-					//	ReturnEvent.EventType = ES_NO_EVENT;
-					//	break;
-				}
-			}
-			break;
-			
-    case STRAIGHT2:
-			// Execute During function for STRAIGHT2.
-			CurrentEvent = DuringStraight2(CurrentEvent);
-			// Process any events
-			if (CurrentEvent.EventType != ES_NO_EVENT) { // If an event is active
-				switch (CurrentEvent.EventType) {
-					
-					
-					//case E_MOTOR_TICK_TIMEOUT:
-						//StopMotors();
-						//printf("Motor Tick Timeout, Initiating Turn\r\n");
+						
 					case E_BUMP_DETECTED:
 						printf("Bump is detected\r\n");
-						NextState = CORNER2;
+						NextState = CORNER;
 						MakeTransition = true;
 						ReturnEvent.EventType = ES_NO_EVENT;
 					
-					case E_MOTOR_TIMEOUT:
-						//StopMotors();
-						//printf("Driving Forward Motor Timeout.\r\n");
-						break;
 					case E_DRS_UPDATED:
-						//PrintMyKartStatus();
-						//if (GetMyKart().KartY > Corner2YBound - Corner2Entry) {
-							//NextState = CORNER2;
-							//MakeTransition = true;
-							//ReturnEvent.EventType = ES_NO_EVENT;
-						//} else
-						if (GetMyKart().KartY > BallLaunchingEntryYBound) {
-							printf("Passed the Ball Shooting Entry Y-Bound = %d.\r\n", BallLaunchingEntryYBound);
+						if (CurrentStraight == Straight3) {
+							PrintMyKartStatus();
+						}
+						// Test for entry into ball shooting using DRS
+						if (CurrentStraight == Straight2 && GetMyKart().KartY > BallLaunchingEntryYBound) {
 							if (WillBallLaunch) {
-								printf("Posting E_BALL_LAUNCHING_ENTRY\r\n");
+								printf("Passed the Ball Shooting Entry Y-Bound = %d.\r\n", BallLaunchingEntryYBound);
+								printf("Entering the Ball Launch\r\n");
 								ES_Event Event = {E_BALL_LAUNCHING_ENTRY, 0};
 								PostMasterSM(Event);
-								//ReturnEvent.EventType = E_BALL_LAUNCHING_ENTRY;
 							}
-						}							
-						break;
-					
-					//case E_CORNER2_ENTRY:
-						//NextState = CORNER2;
-						//MakeTransition = true;
-						//ReturnEvent.EventType = ES_NO_EVENT;
-						//break;
-				}
-			}
-			break;
-
-		case CORNER2:
-			// Execute During function for CORNER2.
-			CurrentEvent = DuringCorner2(CurrentEvent);
-			// Process any events
-			if (CurrentEvent.EventType != ES_NO_EVENT) { // If an event is active
-				switch (CurrentEvent.EventType) {
 						
-					case E_MOTOR_TIMEOUT:
-						if (MotorTimeoutCase == 0) {
-							RotateCCW(40, 40);
-							MotorTimeoutCase = 1;
-						} else if (MotorTimeoutCase == 1) {
-							DriveBackwardsWithBias(100, 100, 50);
-							MotorTimeoutCase = 2;
-						} else if (MotorTimeoutCase == 2) {
-							DriveForwardWithBias(60, 50, 50);
-							MotorTimeoutCase = 3;
-						} else {
-							StopMotors();
-							MotorTimeoutCase = 0;
-							NextState = STRAIGHT3;
-							MakeTransition = true;
-							ReturnEvent.EventType = ES_NO_EVENT;
-						}
-						break;
-					//case E_MOTOR_TIMEOUT:
-					//case E_DRS_UPDATED:
-						//PrintMyKartStatus();
-						//if (GetMyKart().KartX > Corner2XBound - CornerExit) {
-							//printf("DRS Corner Exit Trip!\r\n");
-							//NextState = STRAIGHT3;
-							//MakeTransition = true;
-							//ReturnEvent.EventType = ES_NO_EVENT;
-						//}
-						//break;
-						
-					//case E_CORNER2_EXIT:
-						//NextState = STRAIGHT3;
-						//MakeTransition = true;
-						//ReturnEvent.EventType = ES_NO_EVENT;
-						//break;
-				}
-			}
-			break;
-			
-		case STRAIGHT3:
-			// Execute During function for STRAIGHT3.
-			CurrentEvent = DuringStraight3(CurrentEvent);
-			// Process any events
-			if (CurrentEvent.EventType != ES_NO_EVENT) { // If an event is active
-				switch (CurrentEvent.EventType) {
-					
-					case E_BUMP_DETECTED:
-						printf("Bump is detected\r\n");
-						NextState = CORNER2;
-						MakeTransition = true;
-						ReturnEvent.EventType = ES_NO_EVENT;
-					
-					//case E_MOTOR_TICK_TIMEOUT:
-						//StopMotors();
-						//printf("Motor Tick Timeout, Initiating Turn\r\n");
-						//NextState = CORNER3;
-						//MakeTransition = true;
-						//ReturnEvent.EventType = ES_NO_EVENT;
-					
-					//case E_MOTOR_TIMEOUT:
-						//StopMotors();
-						//printf("Driving Forward Motor Timeout.\r\n");
-						//break;
-					case E_DRS_UPDATED:
-						//PrintMyKartStatus();
-						//if (GetMyKart().KartX > Corner3XBound - Corner3Entry) {
-							//NextState = CORNER3;
-							//MakeTransition = true;
-							//ReturnEvent.EventType = ES_NO_EVENT;
-						//} else 
-						if (GetMyKart().KartX > ObstacleEntryXBound) {
-							printf("Passed the Obstacle Entry X-Bound = %d.\r\n", ObstacleEntryXBound);
+						// Test for entry into obstacle crossing using DRS
+						}	else if (CurrentStraight == Straight3 && GetMyKart().KartX > ObstacleEntryXBound) {
 							if (WillCrossObstacle) {
+								printf("Passed the Obstacle Entry X-Bound = %d.\r\n", ObstacleEntryXBound);
+								printf("Entering the Obstacle\r\n");
 								ES_Event Event = {E_OBSTACLE_CROSSING_ENTRY, 0};
 								PostMasterSM(Event);
 							}
-						}
+						}						
 						break;
-						
-					//case E_CORNER3_ENTRY:
-						//NextState = CORNER3;
-						//MakeTransition = true;
-						//ReturnEvent.EventType = ES_NO_EVENT;
-						//break;
 				}
 			}
 			break;
 			
-    case CORNER3:
-			// Execute During function for CORNER3.
-			CurrentEvent = DuringCorner3(CurrentEvent);
+		case CORNER:
+			// Execute During function for CORNER.
+			CurrentEvent = DuringCorner(CurrentEvent);
 			// Process any events
 			if (CurrentEvent.EventType != ES_NO_EVENT) { // If an event is active
 				switch (CurrentEvent.EventType) {
 					
 					case E_MOTOR_TIMEOUT:
 						if (MotorTimeoutCase == 0) {
-							RotateCCW(40, 40);
+							PivotCCWwithSetTicks(150, 18);
 							MotorTimeoutCase = 1;
 						} else if (MotorTimeoutCase == 1) {
-							DriveBackwardsWithBias(100, 100, 50);
+							DriveBackwardsWithBias(100, 100, 100);
+							ClearSumError();
 							MotorTimeoutCase = 2;
-						} else if (MotorTimeoutCase == 2) {
-							DriveForwardWithBias(60, 50, 50);
-							MotorTimeoutCase = 3;
 						} else {
 							StopMotors();
 							MotorTimeoutCase = 0;
-							NextState = STRAIGHT4;
+							// Update to the next straight
+							switch (CurrentStraight) {
+								case Straight1: CurrentStraight = Straight2; break;
+								case Straight2: CurrentStraight = Straight3; break;
+								case Straight3: CurrentStraight = Straight4; break;
+								case Straight4: CurrentStraight = Straight1; break;
+							}
+							NextState = STRAIGHT;
 							MakeTransition = true;
 							ReturnEvent.EventType = ES_NO_EVENT;
+							
 						}
 						break;
-					case E_DRS_UPDATED:
-						//PrintMyKartStatus();
-						//if (GetMyKart().KartY < Corner3YBound + CornerExit) {
-						//	NextState = STRAIGHT4;
-						//	MakeTransition = true;
-						//	ReturnEvent.EventType = ES_NO_EVENT;
-						//}
-						break;
-					//case E_CORNER3_EXIT:
-						//NextState = STRAIGHT4;
-						//MakeTransition = true;
-						//ReturnEvent.EventType = ES_NO_EVENT;
-						//break;
 				}
 			}
 			break;
+		}
 			
-		case STRAIGHT4:
-			// Execute During function for STRAIGHT4.
-			CurrentEvent = DuringStraight4(CurrentEvent);
-			// Process any events
-			if (CurrentEvent.EventType != ES_NO_EVENT) { // If an event is active
-				switch (CurrentEvent.EventType) {
-					
-					//case E_MOTOR_TICK_TIMEOUT:
-						//StopMotors();
-						//printf("Motor Tick Timeout, Initiating Turn\r\n");
-						//NextState = CORNER4;
-						//MakeTransition = true;
-					//	ReturnEvent.EventType = ES_NO_EVENT;
-					
-					//case E_MOTOR_TIMEOUT:
-						//StopMotors();
-						//printf("Driving Forward Motor Timeout.\r\n");
-						//break;
-					
-					case E_BUMP_DETECTED:
-						printf("Bump is detected\r\n");
-						NextState = CORNER2;
-						MakeTransition = true;
-						ReturnEvent.EventType = ES_NO_EVENT;
-					//case E_DRS_UPDATED:
-						//PrintMyKartStatus();
-						//if (GetMyKart().KartY < Corner4YBound + Corner4Entry) {
-						//	NextState = CORNER4;
-						//	MakeTransition = true;
-						//	ReturnEvent.EventType = ES_NO_EVENT;
-						///}
-						//break;
-					
-					//case E_CORNER4_ENTRY:
-						//NextState = CORNER4;
-						//MakeTransition = true;
-						//ReturnEvent.EventType = ES_NO_EVENT;
-						//break;
-				}
-			}
-			break;
-			
-    case CORNER4:
-			// Execute During function for CORNER4.
-			CurrentEvent = DuringCorner4(CurrentEvent);
-			// Process any events
-			if (CurrentEvent.EventType != ES_NO_EVENT) { // If an event is active
-				switch (CurrentEvent.EventType) {
-					case E_MOTOR_TIMEOUT:
-						if (MotorTimeoutCase == 0) {
-							RotateCCW(40, 40);
-							MotorTimeoutCase = 1;
-						} else if (MotorTimeoutCase == 1) {
-							DriveBackwardsWithBias(100, 100, 50);
-							MotorTimeoutCase = 2;
-						} else if (MotorTimeoutCase == 2) {
-							DriveForwardWithBias(60, 50, 50);
-							MotorTimeoutCase = 3;
-						} else {
-							StopMotors();
-							MotorTimeoutCase = 0;
-							NextState = STRAIGHT1;
-							MakeTransition = true;
-							ReturnEvent.EventType = ES_NO_EVENT;
-						}
-						break;
-					//case E_MOTOR_TIMEOUT:
-						// After turning is complete
-						//DriveForward();
-					//case E_MOTOR_TIMEOUT:
-					case E_DRS_UPDATED:
-						//PrintMyKartStatus();
-						//if (GetMyKart().KartX < Corner4XBound + CornerExit) {
-							//NextState = STRAIGHT1;
-							//MakeTransition = true;
-							//ReturnEvent.EventType = ES_NO_EVENT;
-						//}
-						break;
-					//case E_CORNER4_EXIT:
-						//NextState = STRAIGHT1;
-						//MakeTransition = true;
-						//ReturnEvent.EventType = ES_NO_EVENT;
-						//break;
-				}
-			}
-			break;
-	}
-	
 	// If we are making a state transition
 	if (MakeTransition == true) {
 		// Execute exit function for current state
@@ -449,21 +174,19 @@ Description:	Does any required initialization for this state machine
 ****************************************************************************/
 void StartRacingSM(ES_Event CurrentEvent) {
 	if (ES_ENTRY_HISTORY != CurrentEvent.EventType) {
-		// Initialize the state variable based on currnet position
+		// Initialize the state variable based on current position
 		switch (GetMyKart().GamefieldPosition) {
 			case Undefined: case Straight1: case Corner4: default:
-				CurrentState = STRAIGHT1; break;
+				CurrentStraight = Straight1; break;
 			case Corner1: case Straight2:
-				CurrentState = STRAIGHT2; break;
+				CurrentStraight = Straight2; break;
 			case Corner2: case Straight3:
-				CurrentState = STRAIGHT3; break;
+				CurrentStraight = Straight3; break;
 			case Corner3: case Straight4:
-				CurrentState = STRAIGHT4; break;
+				CurrentStraight = Straight4; break;
 		}
-		// Hard code CurrentState into Straight1
-		CurrentState = STRAIGHT1;
+		CurrentState = STRAIGHT;
 	}
-  
 	// Let the Run function init the lower level state machines
   RunRacingSM(CurrentEvent);
   return;
@@ -483,172 +206,45 @@ RacingState_t QueryRacingSM(void) {
 
 /*------------------------- Private Function Code -------------------------*/
 
-static ES_Event DuringStraight1(ES_Event Event) {
+static ES_Event DuringStraight(ES_Event Event) {
 	ES_Event ReturnEvent = Event; // Assume no re-mapping or consumption
 	// Process ES_ENTRY, ES_ENTRY_HISTORY & ES_EXIT events
 	if ((Event.EventType == ES_ENTRY) || (Event.EventType == ES_ENTRY_HISTORY)) {
-		if(DisplayEntryStateTransitions && DisplaySM_Racing) printf("SM3_Racing: STRAIGHT1\r\n");
-		//SetTargetTheta(East);
-		//SetTargetPosition(Corner1X, Corner1Y);
-		//StartNavigationSM(Event);
+		if(DisplayEntryStateTransitions && DisplaySM_Racing) printf("SM3_Racing: STRAIGHT (%s)\r\n", GamefieldPositionString(CurrentStraight));
 		
-		//DriveForward(100, 0);
-		//DriveForwardWithBias(105, 100, 225);
-		//DriveForwardWithSetDistance(200, 800);
-		DriveForwardWithBias(110, 100, 0);
-		//DriveForwardWithBiasAndSetDistance(210, 200, 850);
-	} else if ( Event.EventType == ES_EXIT ) {
-		
-	} else {
-		//RunNavigationSM(Event);
-	}
-	return(ReturnEvent);
-}
-
-static ES_Event DuringCorner1(ES_Event Event) {
-	ES_Event ReturnEvent = Event; // Assume no re-mapping or consumption
-	// Process ES_ENTRY, ES_ENTRY_HISTORY & ES_EXIT events
-	if ((Event.EventType == ES_ENTRY) || (Event.EventType == ES_ENTRY_HISTORY)) {
-		if(DisplayEntryStateTransitions && DisplaySM_Racing) printf("SM3_Racing: CORNER1\r\n");
-		//SetTargetTheta(North);
-		//SetTargetPosition(Corner2X, Corner2Y);
-		//StartNavigationSM(Event);
-		DriveBackwardsWithBias(100, 100, 25);
-		//RotateCCW(40, 75);
-		//StopMotors();
-		//printf("Braking...\r\n");
-		//ES_Timer_InitTimer(DRIVE_MOTOR_TIMER, 20);
-	} else if ( Event.EventType == ES_EXIT ) {
-		
-	} else {
-		//RunNavigationSM(Event);
-	}
-	return(ReturnEvent);
-}
-
-static ES_Event DuringStraight2(ES_Event Event) {
-	ES_Event ReturnEvent = Event; // Assume no re-mapping or consumption
-	// Process ES_ENTRY, ES_ENTRY_HISTORY & ES_EXIT events
-	if ((Event.EventType == ES_ENTRY) || (Event.EventType == ES_ENTRY_HISTORY)) {
-		if(DisplayEntryStateTransitions && DisplaySM_Racing) printf("SM3_Racing: STRAIGHT2\r\n");
-		if (WillBallLaunch && Event.EventType == ES_ENTRY_HISTORY) {
+		// If we just exited out of the ball launch area,
+		// then let's not trip the ball launch again
+		if (WillBallLaunch && Event.EventType == ES_ENTRY_HISTORY && CurrentStraight == Straight2) {
 			WillBallLaunch = false;
+			SetPIDgains(0.1, 0.5, 0);
+			DriveForwardWithSetDistance(500, 400);
+			
+		// If we are triggering a encoder movement towards the obstacle
+		} else if (CurrentStraight == Straight3 && WillCrossObstacle) {
+			SetPIDgains(0.05, 0.02, 0);
+			DriveForwardWithSetDistance(200, 1300);
+			
+		// Standard encoder movement for any other lap leg
+		} else {
+			SetPIDgains(0.1, 0.5, 0);
+			DriveForwardWithSetDistance(500, 1000);
 		}
-			//ES_Event Event = {E_BALL_LAUNCHING_ENTRY};
-			//PostMasterSM(Event);
-	//	} else {
-			//SetTargetTheta(North);
-			//SetTargetPosition(Corner2X, Corner2Y);
-			//StartNavigationSM(Event);
-		//DriveForward(100, 0);
-		DriveForwardWithBias(100, 100, 0);
-		//DriveForwardWithBiasAndSetDistance(210, 200, 850);
-		//DriveForwardWithSetDistance(200, 800);
-		//DriveForwardWithBiasAndSetDistance(155, 150, 800);
-			//StopMotors();
-		//}
 	} else if ( Event.EventType == ES_EXIT ) {
-		
 	} else {
-		//RunNavigationSM(Event);
 	}
 	return(ReturnEvent);
 }
 
-static ES_Event DuringCorner2(ES_Event Event) {
+static ES_Event DuringCorner(ES_Event Event) {
 	ES_Event ReturnEvent = Event; // Assume no re-mapping or consumption
 	// Process ES_ENTRY, ES_ENTRY_HISTORY & ES_EXIT events
 	if ((Event.EventType == ES_ENTRY) || (Event.EventType == ES_ENTRY_HISTORY)) {
-		if(DisplayEntryStateTransitions && DisplaySM_Racing) printf("SM3_Racing: CORNER2\r\n");
-		//SetTargetTheta(West);
-		//SetTargetPosition(Corner3X, Corner3Y);
-		//StartNavigationSM(Event);
+		if(DisplayEntryStateTransitions && DisplaySM_Racing) printf("SM3_Racing: CORNER (%s)\r\n", GamefieldPositionString(CurrentStraight));
+		// Drive backwards a little bit
 		DriveBackwardsWithBias(100, 100, 25);
+		MotorTimeoutCase = 0;
 	} else if ( Event.EventType == ES_EXIT ) {
-		
 	} else {
-		//RunNavigationSM(Event);
-	}
-	return(ReturnEvent);
-}
-
-static ES_Event DuringStraight3(ES_Event Event) {
-	ES_Event ReturnEvent = Event; // Assume no re-mapping or consumption
-	// Process ES_ENTRY, ES_ENTRY_HISTORY & ES_EXIT events
-	if ((Event.EventType == ES_ENTRY) || (Event.EventType == ES_ENTRY_HISTORY)) {
-		if(DisplayEntryStateTransitions && DisplaySM_Racing) printf("SM3_Racing: STRAIGHT3\r\n");
-		//if (WillCrossObstacle) {
-		//	ES_Event Event = {E_OBSTACLE_CROSSING_ENTRY};
-		//	PostMasterSM(Event);
-		//} else {
-			//SetTargetTheta(West);
-			//SetTargetPosition(Corner3X, Corner3Y);
-			//StartNavigationSM(Event);
-		//DriveForward(100, 0);
-		//DriveForwardWithBias(205, 200, 0);
-		//DriveForwardWithSetDistance(200, 800);
-		DriveForwardWithBias(110, 100, 0);
-		//DriveForwardWithBiasAndSetDistance(210, 200, 850);
-		//}
-	} else if ( Event.EventType == ES_EXIT ) {
-		
-	} else {
-		//RunNavigationSM(Event);
-	}
-	return(ReturnEvent);
-}
-
-static ES_Event DuringCorner3(ES_Event Event) {
-	ES_Event ReturnEvent = Event; // Assume no re-mapping or consumption
-	// Process ES_ENTRY, ES_ENTRY_HISTORY & ES_EXIT events
-	if ((Event.EventType == ES_ENTRY) || (Event.EventType == ES_ENTRY_HISTORY)) {
-		if(DisplayEntryStateTransitions && DisplaySM_Racing) printf("SM3_Racing: CORNER3\r\n");
-		//SetTargetTheta(South);
-		//SetTargetPosition(Corner4X, Corner4Y);
-		//StartNavigationSM(Event);
-		DriveBackwardsWithBias(100, 100, 25);
-	} else if ( Event.EventType == ES_EXIT ) {
-		
-	} else {
-		//RunNavigationSM(Event);
-	}
-	return(ReturnEvent);
-}
-
-static ES_Event DuringStraight4(ES_Event Event) {
-	ES_Event ReturnEvent = Event; // Assume no re-mapping or consumption
-	// Process ES_ENTRY, ES_ENTRY_HISTORY & ES_EXIT events
-	if ((Event.EventType == ES_ENTRY) || (Event.EventType == ES_ENTRY_HISTORY)) {
-		if(DisplayEntryStateTransitions && DisplaySM_Racing) printf("SM_Racing3: STRAIGHT4\r\n");
-		//SetTargetTheta(South);
-		//SetTargetPosition(Corner4X, Corner4Y);
-		//StartNavigationSM(Event);
-		//DriveForward(100, 0);
-		DriveForwardWithBias(110, 100, 0);
-		//DriveForwardWithBiasAndSetDistance(210, 200, 850);
-		//DriveForwardWithSetDistance(200, 800);
-		//DriveForwardWithBiasAndSetDistance(205, 200, 800);
-	} else if ( Event.EventType == ES_EXIT ) {
-		
-	} else {
-		//RunNavigationSM(Event);
-	}
-	return(ReturnEvent);
-}
-
-static ES_Event DuringCorner4(ES_Event Event) {
-	ES_Event ReturnEvent = Event; // Assume no re-mapping or consumption
-	// Process ES_ENTRY, ES_ENTRY_HISTORY & ES_EXIT events
-	if ((Event.EventType == ES_ENTRY) || (Event.EventType == ES_ENTRY_HISTORY)) {
-		if(DisplayEntryStateTransitions && DisplaySM_Racing) printf("SM3_Racing: CORNER4\r\n");
-		//SetTargetTheta(East);
-		//SetTargetPosition(Corner1X, Corner1Y);
-		//StartNavigationSM(Event);
-		DriveBackwardsWithBias(100, 100, 25);
-	} else if ( Event.EventType == ES_EXIT ) {
-		
-	} else {
-		//RunNavigationSM(Event);
 	}
 	return(ReturnEvent);
 }

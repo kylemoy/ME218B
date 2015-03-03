@@ -77,9 +77,12 @@ bool CheckIRSensor(void) {
 		ES_Event Event = {E_IR_BEACON_DETECTED, 0};
 		PostMasterSM(Event);
 		return true;
-	} else if (!IsBeaconSensed()){
-		//printf("IR sensor lost the signal.\r\n");
+	} else if (LastIRstate && !IsBeaconSensed()){
+		printf("IR sensor lost the signal.\r\n");
 		LastIRstate = false;
+		ES_Event Event = {E_IR_BEACON_LOST, 0};
+		PostMasterSM(Event);
+		return true;
 	}
 	return false;
 }

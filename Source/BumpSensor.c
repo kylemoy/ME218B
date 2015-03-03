@@ -43,9 +43,9 @@ Description:	Initializes the hardware for the bump sensors
 void InitializeBumpSensors(void) {
 	// Initialization of the bump sensor
 	HWREG(SYSCTL_RCGCGPIO) |= SYSCTL_RCGCGPIO_R3; // Port D
-	HWREG(GPIO_PORTD_BASE+GPIO_O_DEN) |= GPIO_PIN_1; // Enable Pin D2 for Digital I/O
-	HWREG(GPIO_PORTD_BASE+GPIO_O_DIR) &= ~GPIO_PIN_1; // Enable Pin B2 as Input
-	HWREG(GPIO_PORTD_BASE+GPIO_O_PUR) |=  GPIO_PIN_1; // Enable Pull Down Resistor on Pin B2
+	HWREG(GPIO_PORTD_BASE+GPIO_O_DEN) |= GPIO_PIN_1; // Enable Pin D1 for Digital I/O
+	HWREG(GPIO_PORTD_BASE+GPIO_O_DIR) &= ~GPIO_PIN_1; // Enable Pin D1 as Input
+	HWREG(GPIO_PORTD_BASE+GPIO_O_PUR) |=  GPIO_PIN_1; // Enable Pull Up Resistor on Pin D1
 }
 
 

@@ -41,6 +41,10 @@ void RotateCCWwithDuty(uint16_t Duty, uint16_t Duration);
 void DriveForwardWithDuty(uint16_t TargetRPM, uint16_t Duration);
 void DriveForwardWithBiasWithDuty(uint16_t TargetRPML, uint16_t TargetRPMR, uint16_t Duration);
 
+void PivotCWwithSetTicks(uint16_t TargetRPM, uint32_t Ticks);
+void PivotCCWwithSetTicks(uint16_t TargetRPM, uint32_t Ticks);
+
+
 void DriveForwardWithSetDistance(uint16_t TargetRPM, uint32_t DistanceInMM);
 void DriveForwardWithBiasAndSetDistance(uint16_t TargetRPML, uint16_t TargetRPMR, uint32_t DistanceInMM);
 #endif /* DriveMotors_H */

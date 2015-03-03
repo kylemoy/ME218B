@@ -58,10 +58,10 @@ ES_Event RunMapKeys(ES_Event ThisEvent) {
 		switch (toupper(ThisEvent.EventParam)) {
 			
 			// Drive Command Triggers
-			case 'W': DriveForward(100, 100); break;
+			case 'W': DriveForwardWithSetDistance(100, 1000); break;
 			case 'S': DriveBackward(100, 100); break;
-			case 'D': RotateCWwithDuty(40, 5); break; //DriveForwardWithBias(70, 30, 50); break; //RotateCW(150, 5); break;
-			case 'A': RotateCCWwithDuty(40, 5); break; //DriveForwardWithBias(30, 70, 50); break; //RotateCCW(150, 5); break;
+			case 'D': PivotCWwithSetTicks(150, 18); break; // RotateCWwithDuty(40, 5); break; //DriveForwardWithBias(70, 30, 50); break; //RotateCW(150, 5); break;
+			case 'A': PivotCCWwithSetTicks(150, 18); break;// RotateCCWwithDuty(40, 5); break; //DriveForwardWithBias(30, 70, 50); break; //RotateCCW(150, 5); break;
 			case ' ': StopMotors(); break;
 			
 			// Shooter Motor Command Triggers
@@ -79,19 +79,12 @@ ES_Event RunMapKeys(ES_Event ThisEvent) {
 			case 'V': ThisEvent.EventType = E_BALL_LAUNCHING_ENTRY; break;
 			case 'B': ThisEvent.EventType = E_BALL_LAUNCHING_EXIT; break;
 			case 'N': ThisEvent.EventType = E_BALL_LAUNCHING_COMPLETE; break;
-			case 'M': ThisEvent.EventType = E_BALL_LAUNCHING_COMPLETE2; break;
 			case 'F': ThisEvent.EventType = E_OBSTACLE_CROSSING_ENTRY; break;
 			case 'G': ThisEvent.EventType = E_OBSTACLE_CROSSING_EXIT; break;
 			
 			// (1)SM_Master->(2)SM_Playing->(3)SM_Racing Event Triggers
-			case '1': ThisEvent.EventType = E_CORNER1_ENTRY; break;
-			case '2': ThisEvent.EventType = E_CORNER1_EXIT; break;
-			case '3': ThisEvent.EventType = E_CORNER2_ENTRY; break;
-			case '4': ThisEvent.EventType = E_CORNER2_EXIT; break;
-			case '5': ThisEvent.EventType = E_CORNER3_ENTRY; break;
-			case '6': ThisEvent.EventType = E_CORNER3_EXIT; break;
-			case '7': ThisEvent.EventType = E_CORNER4_ENTRY; break;
-			case '8': ThisEvent.EventType = E_CORNER4_EXIT; break;
+			case '1': ThisEvent.EventType = E_BUMP_DETECTED; break;
+			case '2': ThisEvent.EventType = E_IR_BEACON_DETECTED; break;
 			
 			// Information Queries
 			case ',':
@@ -111,22 +104,6 @@ ES_Event RunMapKeys(ES_Event ThisEvent) {
 					GetKartData(3).KartX, GetKartData(3).KartY, GetKartData(3).KartTheta, GetKartData(3).LapsRemaining, \
 					GetKartData(3).ObstacleCompleted, GetKartData(3).TargetSuccess, \
 					GamefieldPositionString(GetKartData(3).GamefieldPosition));
-				break;
-			
-			case ';':
-				switch (GetMyKart().GamefieldPosition) {
-					case Straight1: case Corner1:
-						printf("Target Angle to Corner 1 = %f\r\n", GetAngle(GetMyKart().KartX, GetMyKart().KartY, Corner1X, Corner1Y)); break;
-					case Straight2: case Corner2:
-						printf("Target Angle to Corner 2 = %f\r\n", GetAngle(GetMyKart().KartX, GetMyKart().KartY, Corner2X, Corner2Y)); break;
-					case Straight3: case Corner3:
-						printf("Target Angle to Corner 3 = %f\r\n", GetAngle(GetMyKart().KartX, GetMyKart().KartY, Corner3X, Corner3Y)); break;
-					case Straight4: case Corner4:
-						printf("Target Angle to Corner 4 = %f\r\n", GetAngle(GetMyKart().KartX, GetMyKart().KartY, Corner4X, Corner4Y)); break;
-					default:
-						printf("Unable to find a target corner\r\n");
-						break;
-				}
 				break;
 		}
 		PostMasterSM(ThisEvent);
